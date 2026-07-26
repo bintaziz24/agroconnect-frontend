@@ -1,0 +1,172 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center py-5"
+  style="background:linear-gradient(135deg, var(--vert-d, #0F5235) 0%, #1A7C4F 100%)">
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+
+        <!-- Bouton retour à l'accueil -->
+        <div class="mb-3">
+          <a routerLink="/" class="text-white text-decoration-none d-inline-flex align-items-center gap-1 fw-medium" style="font-size:14px; opacity:0.9;">
+            ← {{ 'cart_back_home' | translate }}
+          </a>
+        </div>
+
+        <!-- Logo -->
+        <div class="text-center mb-4">
+          <a routerLink="/"
+            style="font-family:'Playfair Display',serif;color:white;font-size:28px;font-weight:600;text-decoration:none">
+            <span style="color:var(--or, #E8A020)">●</span> AgroConnect
+          </a>
+          <p style="color:rgba(255,255,255,.85);font-size:14px;margin-top:6px">
+            {{ 'reg_subtitle' | translate }}
+          </p>
+        </div>
+
+        <!-- Carte formulaire -->
+        <div style="background:white;border-radius:18px;padding:2rem;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+
+          <h4 class="fw-bold mb-1" style="color:var(--vert-d, #0F5235)">{{ 'reg_title' | translate }}</h4>
+          <p class="text-muted mb-4" style="font-size:13px">
+            {{ 'reg_already_account' | translate }}
+            <a routerLink="/login" style="color:var(--vert, #1A7C4F);font-weight:500">{{ 'se_connecter' | translate }}</a>
+          </p>
+
+          <!-- Message Succès -->
+          <div *ngIf="succes" class="alert alert-success py-3 px-3 mb-3 border-0 rounded-3 shadow-sm text-center fw-medium"
+            style="background:#E8F5EE; color:#0F5235; font-size:14px">
+            {{ succes }}
+          </div>
+
+          <!-- Message Erreur -->
+          <div *ngIf="erreur" class="alert alert-danger py-2 px-3 mb-3"
+            style="font-size:13px;border-radius:10px">
+            ⚠️ {{ erreur }}
+          </div>
+
+          <!-- Formulaire -->
+          <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+
+            <!-- Choix du rôle -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:13px">
+                {{ 'reg_role_label' | translate }}
+              </label>
+              <div class="d-flex gap-2">
+                <label class="flex-fill text-center p-2 border rounded-3"
+                  style="cursor:pointer;transition:all .2s"
+                  [style.border-color]="formData.role === 'client' ? 'var(--vert, #1A7C4F)' : '#ddd'"
+                  [style.background]="formData.role === 'client' ? '#E8F5EE' : 'white'">
+                  <input type="radio" name="role" value="client"
+                    [(ngModel)]="formData.role" class="d-none">
+                  <div style="font-size:24px">🛒</div>
+                  <div style="font-size:12px;font-weight:600;color:var(--vert-d, #0F5235)">{{ 'espace_client' | translate }}</div>
+                </label>
+                <label class="flex-fill text-center p-2 border rounded-3"
+                  style="cursor:pointer;transition:all .2s"
+                  [style.border-color]="formData.role === 'agriculteur' ? 'var(--vert, #1A7C4F)' : '#ddd'"
+                  [style.background]="formData.role === 'agriculteur' ? '#E8F5EE' : 'white'">
+                  <input type="radio" name="role" value="agriculteur"
+                    [(ngModel)]="formData.role" class="d-none">
+                  <div style="font-size:24px">🌾</div>
+                  <div style="font-size:12px;font-weight:600;color:var(--vert-d, #0F5235)">{{ 'espace_agriculteur' | translate }}</div>
+                </label>
+                <label class="flex-fill text-center p-2 border rounded-3"
+                  style="cursor:pointer;transition:all .2s"
+                  [style.border-color]="formData.role === 'livreur' ? 'var(--vert, #1A7C4F)' : '#ddd'"
+                  [style.background]="formData.role === 'livreur' ? '#E8F5EE' : 'white'">
+                  <input type="radio" name="role" value="livreur"
+                    [(ngModel)]="formData.role" class="d-none">
+                  <div style="font-size:24px">🚚</div>
+                  <div style="font-size:12px;font-weight:600;color:var(--vert-d, #0F5235)">{{ 'espace_livreur' | translate }}</div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Nom et Prénom -->
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label fw-semibold" style="font-size:13px">{{ 'reg_nom_label' | translate }}</label>
+                <input type="text" class="form-control"
+                  placeholder="Diallo"
+                  [(ngModel)]="formData.nom"
+                  name="nom" required
+                  style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold" style="font-size:13px">{{ 'reg_prenom_label' | translate }}</label>
+                <input type="text" class="form-control"
+                  placeholder="Mamadou"
+                  [(ngModel)]="formData.prenom"
+                  name="prenom" required
+                  style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:13px">{{ 'login_email_label' | translate }}</label>
+              <input type="email" class="form-control"
+                placeholder="exemple@email.com"
+                [(ngModel)]="formData.email"
+                name="email" required
+                style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
+            </div>
+
+            <!-- Téléphone -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:13px">{{ 'reg_phone_label' | translate }}</label>
+              <input type="tel" class="form-control"
+                placeholder="+221 77 000 00 00"
+                [(ngModel)]="formData.telephone"
+                name="telephone" required
+                style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:13px">
+                {{ 'login_password_label' | translate }}
+              </label>
+              <input type="password" class="form-control"
+                placeholder="Minimum 8 caractères"
+                [(ngModel)]="formData.password"
+                name="password" required
+                style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
+            </div>
+
+            <!-- Confirmation -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold" style="font-size:13px">
+                {{ 'reg_confirm_password_label' | translate }}
+              </label>
+              <input type="password" class="form-control"
+                placeholder="{{ 'reg_repeat_password_placeholder' | translate }}"
+                [(ngModel)]="formData.password_confirmation"
+                name="password_confirmation" required
+                style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
+            </div>
+
+            <button type="submit"
+              class="btn text-white w-100 py-2 fw-semibold"
+              style="background:var(--vert, #1A7C4F);border-radius:10px;font-size:15px"
+              [disabled]="chargement">
+              <span *ngIf="chargement">
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                {{ 'reg_submitting' | translate }}
+              </span>
+              <span *ngIf="!chargement">{{ 'reg_submit_btn' | translate }}</span>
+            </button>
+
+          </form>
+
+          <hr class="my-3">
+          <div class="text-center" style="font-size:12px;color:#666">
+            🔒 {{ 'reg_secure_footer' | translate }}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

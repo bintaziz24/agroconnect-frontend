@@ -1,0 +1,146 @@
+<!-- BANNIÈRE EN-TÊTE -->
+<div class="container py-4">
+  <div class="p-4 rounded-4 text-white position-relative overflow-hidden" 
+       style="background: #0f5235; min-height: 180px; display: flex; flex-direction: column; justify-content: center;">
+    <!-- Grid overlay -->
+    <div class="position-absolute w-100 h-100 top-0 start-0 opacity-10" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+    
+    <div class="row align-items-center position-relative">
+      <div class="col-md-9 text-start">
+        <span class="badge rounded-pill px-3 py-2 mb-2 d-inline-block fw-bold text-uppercase" 
+              style="background: #FFA000; color: white; font-size: 11px; letter-spacing: 0.05em;">
+          {{ 'cat_direct_ferme' | translate }}
+        </span>
+        <h1 class="fw-bold mb-2" style="font-family:'Playfair Display',serif; font-size: 2.2rem;">
+          {{ 'cat_produits_agri' | translate }}
+        </h1>
+        <p class="mb-0 text-white-50" style="font-size: 14px; max-width: 600px;">
+          {{ 'cat_desc' | translate }}
+        </p>
+      </div>
+      
+      <div class="col-md-3 text-end d-none d-md-block">
+        <div class="d-inline-block text-center p-3 rounded-3" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+          <h2 class="fw-bold text-warning mb-0">{{ produitsFiltres.length }}</h2>
+          <small class="text-white-50 fw-semibold text-uppercase" style="font-size: 10px; letter-spacing: 0.02em;">{{ 'cat_dispo' | translate }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BARRE DE RECHERCHE & FILTRES HORIZONTAUX -->
+<div class="container mb-4">
+  <div class="bg-white p-3 rounded-4 shadow-sm border">
+    <div class="row g-3 align-items-center">
+      <!-- Search input -->
+      <div class="col-lg-6 col-md-5">
+        <div class="d-flex align-items-center bg-light px-3 py-2 rounded-3 border">
+          <span class="text-muted me-2">🔍</span>
+          <input
+            type="text"
+            class="form-control border-0 bg-transparent p-0 shadow-none"
+            placeholder="{{ 'cat_search_placeholder' | translate }}"
+            [(ngModel)]="recherche"
+            (input)="appliquerFiltres()"
+            style="font-size: 14px;"
+          />
+        </div>
+      </div>
+      <!-- Region dropdown -->
+      <div class="col-lg-3 col-md-3">
+        <div class="d-flex align-items-center gap-2">
+          <span class="text-muted fw-medium text-nowrap" style="font-size: 13px;">{{ 'cat_region_label' | translate }}</span>
+          <select
+            class="form-select border-light-subtle rounded-3 cursor-pointer"
+            [(ngModel)]="regionSelectee"
+            (change)="appliquerFiltres()"
+            style="font-size: 13px;"
+          >
+            <option value="">{{ 'cat_all_regions' | translate }}</option>
+            <option *ngFor="let r of regions" [value]="r">{{ r }}</option>
+          </select>
+        </div>
+      </div>
+      <!-- Sort dropdown -->
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex align-items-center gap-2">
+          <span class="text-muted fw-medium text-nowrap" style="font-size: 13px;">{{ 'cat_sort_label' | translate }}</span>
+          <select
+            class="form-select border-light-subtle rounded-3 cursor-pointer"
+            [(ngModel)]="trierPar"
+            (change)="trierProduits()"
+            style="font-size: 13px;"
+          >
+            <option value="popularite">{{ 'cat_sort_rating' | translate }}</option>
+            <option value="prix_asc">{{ 'cat_sort_price_asc' | translate }}</option>
+            <option value="prix_desc">{{ 'cat_sort_price_desc' | translate }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Tabs & Bio Toggle -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-3 pt-3 border-top">
+      <!-- Category tabs -->
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <button 
+          (click)="categorieSelectee = ''; appliquerFiltres()"
+          class="btn btn-sm px-3 py-2 rounded-pill fw-semibold border-0 text-nowrap"
+          [style.background]="!categorieSelectee ? '#1A7C4F' : '#E9ECEF'"
+          [style.color]="!categorieSelectee ? 'white' : '#4A4A48'"
+          style="font-size: 13px; transition: all 0.2s;"
+        >
+          {{ 'cat_all_categories' | translate }}
+        </button>
+        <button 
+          *ngFor="let cat of categories"
+          (click)="categorieSelectee = cat.nom; appliquerFiltres()"
+          class="btn btn-sm px-3 py-2 rounded-pill fw-semibold border-0 text-nowrap"
+          [style.background]="categorieSelectee === cat.nom ? '#1A7C4F' : '#E9ECEF'"
+          [style.color]="categorieSelectee === cat.nom ? 'white' : '#4A4A48'"
+          style="font-size: 13px; transition: all 0.2s;"
+        >
+          {{ cat.nom | translate }}
+        </button>
+      </div>
+      
+      <!-- Bio Switch checkbox -->
+      <div class="d-flex align-items-center px-3 py-2 rounded-pill" style="background: #E8F6F0; border: 1px solid #D1EDE1;">
+        <div class="form-check form-switch mb-0 d-flex align-items-center gap-2">
+          <input 
+            class="form-check-input mt-0 cursor-pointer" 
+            type="checkbox" 
+            id="bioSwitch" 
+            [(ngModel)]="bioUniquement"
+            (change)="appliquerFiltres()"
+            style="accent-color: #1A7C4F;"
+          />
+          <label class="form-check-label fw-bold text-success cursor-pointer" for="bioSwitch" style="font-size: 12px; user-select: none;">
+            {{ 'cat_bio_only' | translate }}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GRILLE PRODUITS -->
+<div class="container pb-5">
+  <!-- Aucun résultat -->
+  <div *ngIf="produitsFiltres.length === 0" class="text-center py-5 bg-white border rounded-4 shadow-sm">
+    <span class="fs-1 d-block mb-3">🔍</span>
+    <h5 class="fw-bold text-dark">{{ 'cat_no_products' | translate }}</h5>
+    <p class="text-muted small">{{ 'cat_reset_tip' | translate }}</p>
+    <button class="btn btn-vert px-4 rounded-pill" (click)="reinitialiserFiltres()">
+      {{ 'cat_reset_btn' | translate }}
+    </button>
+  </div>
+
+  <!-- Grille -->
+  <div class="row g-4" *ngIf="produitsFiltres.length > 0">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let produit of produitsFiltres">
+      <app-card-produit [produit]="produit"></app-card-produit>
+    </div>
+  </div>
+</div>

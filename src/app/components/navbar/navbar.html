@@ -1,0 +1,365 @@
+<!-- BANNIÈRE DÉMO MULTI-RÔLES -->
+<div class="demo-banner py-2 px-4 text-white d-flex flex-wrap align-items-center justify-content-between gap-2" 
+     style="background: #063c24; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+  <div class="d-flex align-items-center gap-2">
+    <span class="fw-bold" style="color: #4cd964;">⚙️ {{ t('Mode Démo Multi-Rôles') }}</span>
+    <span class="opacity-75">| {{ t('Changer de perspective :') }}</span>
+  </div>
+  
+  <div class="d-flex align-items-center gap-2 flex-wrap">
+    <button (click)="selectRole('public')" class="btn btn-sm btn-perspective" [class.active]="!isLoggedIn">
+      🌐 {{ t('Site Public') }}
+    </button>
+    <button (click)="selectRole('client')" class="btn btn-sm btn-perspective" [class.active]="isLoggedIn && user?.role === 'client'">
+      👤 {{ t('Acheteur / Client') }}
+    </button>
+    <button (click)="selectRole('agriculteur')" class="btn btn-sm btn-perspective" [class.active]="isLoggedIn && user?.role === 'agriculteur'">
+      👨‍🌾 {{ t('Agriculteur') }}
+    </button>
+    <button (click)="selectRole('livreur')" class="btn btn-sm btn-perspective" [class.active]="isLoggedIn && user?.role === 'livreur'">
+      🚚 {{ t('Livreur') }}
+    </button>
+    <button (click)="selectRole('admin')" class="btn btn-sm btn-perspective" [class.active]="isLoggedIn && user?.role === 'admin'">
+      🛡️ {{ t('Administrateur') }}
+    </button>
+  </div>
+</div>
+
+<!-- BARRE DE NAVIGATION PRINCIPALE -->
+<nav class="navbar navbar-expand-lg sticky-top px-4 bg-white border-bottom shadow-sm py-2" style="position: sticky; top: 0; z-index: 1020;">
+  <div class="container-fluid">
+    
+    <!-- Logo & Badges -->
+    <div class="d-flex align-items-center gap-2">
+      <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" routerLink="/">
+        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #1A7C4F;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#FFC107" class="bi bi-leaf-fill" viewBox="0 0 16 16">
+            <path d="M1.5 10.5a8.5 8.5 0 0 1 15-5.25 8.5 8.5 0 0 1-15 5.25z" opacity="0.15" />
+            <path d="M8 2c.002-.593.18-1.205.514-1.77.377-.638.93-1.215 1.502-1.659 1.115-.867 2.587-1.321 3.866-1.258 1.114.055 2.217.49 3.033 1.27.839.801 1.247 1.93 1.257 3.074.01 1.213-.425 2.62-1.24 3.702-.455.604-1.02 1.12-1.666 1.45-.584.299-1.254.453-1.84.453-.79 0-1.579-.2-2.228-.687a3.619 3.619 0 0 1-1.393-2.162c-.32-.904-.32-1.897-.156-2.996.016-.104.034-.207.054-.312a29.1 29.1 0 0 0-.256-.23c-.156.108-.314.216-.47.328-.543.39-1.093.84-1.47 1.387-.384.557-.58 1.206-.576 1.884a3.7 3.7 0 0 0 .565 1.958c.224.364.503.69.83.96a.5.5 0 1 1-.648.762 4.7 4.7 0 0 1-1.082-1.266A4.7 4.7 0 0 1 1.5 9.2z"/>
+          </svg>
+        </div>
+        <div>
+          <span class="fs-4 fw-bold text-success" style="font-family: 'Playfair Display', serif; color: #0F5235 !important;">AgroConnect</span>
+          <span class="badge ms-1 px-2 py-1 bg-success-subtle text-success border border-success-subtle" style="font-size: 9px; vertical-align: middle;">SN SN</span>
+          <small class="d-block text-muted" style="font-size: 10px; margin-top: -3px;">{{ t('Du Champ à votre Table') }}</small>
+        </div>
+      </a>
+      
+      <!-- Pill Badge next to logo (Marche Sénégalais when guest, User Space when logged in) -->
+      <span *ngIf="!isLoggedIn" class="badge bg-light text-muted border px-2.5 py-1.5 rounded-pill ms-2" style="font-size: 11px;">
+        {{ t('Marche Sénégalais') }}
+      </span>
+
+      <ng-container *ngIf="isLoggedIn">
+        <a *ngIf="user?.role === 'agriculteur'" routerLink="/agriculteur/dashboard" 
+           class="badge text-decoration-none px-2.5 py-1.5 rounded-pill ms-2 border d-inline-flex align-items-center gap-1" 
+           style="font-size: 11px; background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; cursor: pointer;">
+          👨‍🌾 {{ t('espace_agriculteur') }}
+        </a>
+        <a *ngIf="user?.role === 'livreur'" routerLink="/livreur/dashboard" 
+           class="badge text-decoration-none px-2.5 py-1.5 rounded-pill ms-2 border d-inline-flex align-items-center gap-1" 
+           style="font-size: 11px; background: #e3f2fd; color: #1565c0; border-color: #bbdefb; cursor: pointer;">
+          🚚 {{ t('espace_livreur') }}
+        </a>
+        <a *ngIf="user?.role === 'admin'" routerLink="/admin/dashboard" 
+           class="badge text-decoration-none px-2.5 py-1.5 rounded-pill ms-2 border d-inline-flex align-items-center gap-1" 
+           style="font-size: 11px; background: #ffebee; color: #c62828; border-color: #ffcdd2; cursor: pointer;">
+          🛡️ {{ t('espace_admin') }}
+        </a>
+        <a *ngIf="user?.role === 'client'" routerLink="/commandes" 
+           class="badge text-decoration-none px-2.5 py-1.5 rounded-pill ms-2 border d-inline-flex align-items-center gap-1" 
+           style="font-size: 11px; background: #e8f5e9; color: #1a7c4f; border-color: #d1ede1; cursor: pointer;">
+          👤 {{ t('espace_client') }}
+        </a>
+      </ng-container>
+    </div>
+
+    <!-- Mobile Toggler -->
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menu items & actions -->
+    <div class="collapse navbar-collapse" id="navContent">
+      
+      <!-- Horizontal search input in navbar -->
+      <div class="mx-auto my-2 my-lg-0 px-lg-2 flex-grow-1 d-none d-lg-block" style="max-width: 200px;">
+        <div class="d-flex align-items-center bg-light px-3 py-1 rounded-pill border">
+          <span class="text-muted me-2">🔍</span>
+          <input type="text" class="form-control border-0 bg-transparent p-1 shadow-none" 
+                 [placeholder]="t('recherche_placeholder')" 
+                 style="font-size: 13px;">
+        </div>
+      </div>
+
+      <!-- Navigation links based on role -->
+      <ul class="navbar-nav me-3 mb-2 mb-lg-0 gap-1 align-items-lg-center" style="font-size: 13.5px;">
+        <li class="nav-item">
+          <a class="nav-link px-2.5 rounded-3 text-success fw-bold bg-light text-nowrap d-inline-flex align-items-center" 
+             routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" style="height: 34px;">
+            {{ t('accueil') }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-2.5 rounded-3 fw-medium text-dark text-nowrap d-inline-flex align-items-center" 
+             routerLink="/catalogue" routerLinkActive="active" style="height: 34px;">
+            {{ t('produits') }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-2.5 rounded-3 fw-medium text-dark text-nowrap d-inline-flex align-items-center" 
+             routerLink="/" fragment="a-propos" style="height: 34px;">
+            {{ t('apropos') }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-2.5 rounded-3 fw-medium text-dark text-nowrap d-inline-flex align-items-center" 
+             routerLink="/" fragment="faq" style="height: 34px;">
+            {{ t('faq') }}
+          </a>
+        </li>
+      </ul>
+
+      <!-- Action items on the right -->
+      <div class="d-flex align-items-center gap-2">
+        <!-- Icons (only when logged in or public with cart) -->
+        <div class="d-flex align-items-center gap-3 text-muted">
+          <!-- Shopping Bag (Cart) -->
+          <a *ngIf="!isLoggedIn || user?.role === 'client'" routerLink="/panier" class="position-relative text-decoration-none text-secondary d-flex align-items-center hover-success">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span *ngIf="cartCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" 
+                  style="font-size: 9px; padding: 4px 6px;">
+              {{ cartCount }}
+            </span>
+          </a>
+
+          <!-- Message chat icon -->
+          <a (click)="showChat = !showChat; $event.preventDefault()" class="text-decoration-none text-secondary d-flex align-items-center hover-success" style="cursor: pointer;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </a>
+
+          <!-- Notification bell -->
+          <a (click)="showNotifications = !showNotifications; $event.preventDefault()" class="position-relative text-decoration-none text-secondary d-flex align-items-center hover-success" style="cursor: pointer;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" 
+                  style="font-size: 8px; padding: 3px 5px; margin-top: -2px; margin-left: -2px;">
+              1
+            </span>
+          </a>
+        </div>
+
+        <!-- Authentication Buttons / User profile -->
+         <div class="border-start ps-2 d-flex align-items-center gap-1.5">
+          
+          <!-- Not logged in -->
+          <ng-container *ngIf="!isLoggedIn">
+            <a routerLink="/login" class="btn btn-sm btn-vert-outline me-1 px-3 text-nowrap" 
+               style="border-radius: 20px; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; height: 34px;">
+              {{ t('se_connecter') }}
+            </a>
+            <a routerLink="/register" class="btn btn-sm btn-vert px-3 text-nowrap" 
+               style="border-radius: 20px; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; height: 34px;">
+              {{ t('s_inscrire') }}
+            </a>
+          </ng-container>
+          
+          <!-- Logged in -->
+          <ng-container *ngIf="isLoggedIn">
+
+            <div class="dropdown">
+              <button class="btn btn-sm border-0 d-flex align-items-center gap-2 dropdown-toggle shadow-none" type="button" data-bs-toggle="dropdown" 
+                      style="border: 1px solid #e2e8f0; border-radius: 24px; padding: 4px 12px; height: 34px;">
+                <!-- User Avatar -->
+                <img [src]="user.avatar || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop'" 
+                     alt="Avatar" class="rounded-circle" style="width: 24px; height: 24px; object-fit: cover;">
+                <span class="fw-bold text-dark d-none d-md-inline" style="font-size: 13px;">{{ user.name }}</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-light-subtle rounded-4 p-3 text-start" style="min-width: 240px;">
+                <!-- Header inside dropdown -->
+                <li class="px-2 pb-2 mb-2 border-bottom">
+                  <small class="text-muted d-block" style="font-size: 11px;">Connecté en tant que</small>
+                  <strong class="text-dark d-block" style="font-size: 14px;">{{ user.name }}</strong>
+                  <small class="text-success fw-medium d-block mt-0.5" style="font-size: 11.5px;">
+                    📍 Région {{ user.localisation || 'Dakar' }}
+                  </small>
+                </li>
+                
+                <!-- Links -->
+                <li>
+                  <a *ngIf="user?.role === 'agriculteur'" routerLink="/agriculteur/dashboard" class="dropdown-item py-2 rounded-3" style="font-size: 13px;">
+                    👨‍🌾 {{ t('espace_agriculteur') }}
+                  </a>
+                </li>
+                <li>
+                  <a *ngIf="user?.role === 'admin'" routerLink="/admin/dashboard" class="dropdown-item py-2 rounded-3" style="font-size: 13px;">
+                    🛡️ {{ t('espace_admin') }}
+                  </a>
+                </li>
+                <li>
+                  <a *ngIf="user?.role === 'livreur'" routerLink="/livreur/dashboard" class="dropdown-item py-2 rounded-3" style="font-size: 13px;">
+                    🚚 {{ t('espace_livreur') }}
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item py-2 rounded-3" style="font-size: 13px; cursor: pointer;">
+                    👤 Mon Profil & Paramètres
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/commandes" class="dropdown-item py-2 rounded-3" style="font-size: 13px;">
+                    📦 Historique de mes commandes
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <button (click)="logout()" class="dropdown-item text-danger py-2 rounded-3" style="font-size: 13px;">
+                    🚪 Déconnexion
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </ng-container>
+
+          <!-- Language selector -->
+          <div class="dropdown ms-1">
+            <button class="btn btn-sm btn-light border d-flex align-items-center gap-1 shadow-none px-2 rounded-pill" type="button" data-bs-toggle="dropdown" style="font-size: 11.5px; height: 34px; font-weight: 500;">
+              <span *ngIf="trans.getLanguage() === 'fr'">🇫🇷 FR</span>
+              <span *ngIf="trans.getLanguage() === 'en'">🇬🇧 EN</span>
+              <span *ngIf="trans.getLanguage() === 'wo'">🇸🇳 WO</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-light-subtle rounded-3 p-1" style="min-width: 90px;">
+              <li><a (click)="changeLang('fr')" class="dropdown-item py-1.5 rounded-2 cursor-pointer d-flex align-items-center gap-1.5" style="font-size: 12px;">🇫🇷 FR</a></li>
+              <li><a (click)="changeLang('en')" class="dropdown-item py-1.5 rounded-2 cursor-pointer d-flex align-items-center gap-1.5" style="font-size: 12px;">🇬🇧 EN</a></li>
+              <li><a (click)="changeLang('wo')" class="dropdown-item py-1.5 rounded-2 cursor-pointer d-flex align-items-center gap-1.5" style="font-size: 12px;">🇸🇳 WO</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</nav>
+
+<!-- MODAL NOTIFICATIONS POP-UP -->
+<div *ngIf="showNotifications" class="modal-backdrop fade show" style="background: rgba(0,0,0,0.5); z-index: 1040; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;"></div>
+<div *ngIf="showNotifications" class="modal fade show d-block" tabindex="-1" style="z-index: 1050;">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg bg-white">
+      
+      <!-- Header -->
+      <div class="modal-header p-3 border-bottom d-flex justify-content-between align-items-center border-0">
+        <div class="d-flex align-items-center gap-2">
+          <div class="rounded-circle d-flex align-items-center justify-content-center text-success" style="width: 36px; height: 36px; background: #e8f6f0; font-size: 16px;">
+            🔔
+          </div>
+          <div class="text-start">
+            <h6 class="fw-bold mb-0 text-dark" style="font-size: 15px;">Notifications</h6>
+            <small class="text-muted" style="font-size: 11px;">Alertes en temps réel AgroConnect</small>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button (click)="showNotifications = false" class="btn btn-link btn-sm text-decoration-none text-success fw-bold p-0 me-2 shadow-none" style="font-size: 12px; border: none;">
+            ✓ Tout marquer comme lu
+          </button>
+          <button (click)="showNotifications = false" class="btn-close shadow-none" type="button"></button>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body p-3 bg-light text-start">
+        <div class="p-3 rounded-4 bg-white border border-success-subtle d-flex gap-3 align-items-start text-start animate-fade-in" style="background: #f4fbf7 !important;">
+          <span class="fs-4">🚚</span>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-1">
+              <strong class="text-dark" style="font-size: 13px;">Mise à jour Livraison #AGC-9021</strong>
+              <small class="text-muted" style="font-size: 10px;">Il y a 10 minutes</small>
+            </div>
+            <p class="text-muted mb-0" style="font-size: 12px; line-height: 1.4;">
+              Le livreur <strong>Ibrahima Faye</strong> est en route vers <strong>Sacré-Cœur 3</strong> (Arrivée estimée dans 35 min).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer p-2.5 bg-white justify-content-center border-0">
+        <small class="text-muted" style="font-size: 10px;">AgroConnect • Notifications Push SMS / WhatsApp Activées</small>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DISCUSSION CHAT -->
+<div *ngIf="showChat" class="modal-backdrop fade show" style="background: rgba(0,0,0,0.5); z-index: 1040; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;"></div>
+<div *ngIf="showChat" class="modal fade show d-block" tabindex="-1" style="z-index: 1050;">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg bg-white">
+      
+      <!-- Header -->
+      <div class="modal-header p-3 text-white border-0 d-flex justify-content-between align-items-center" style="background: #1A7C4F;">
+        <div class="d-flex align-items-center gap-2">
+          <div class="rounded-circle d-flex align-items-center justify-content-center bg-white text-success" style="width: 36px; height: 36px; font-size: 16px;">
+            💬
+          </div>
+          <div class="text-start">
+            <h6 class="fw-bold mb-0 text-white" style="font-size: 15px;">Discussion Instantanée</h6>
+            <small class="text-white-50" style="font-size: 11px;">Service Client & Producteurs AgroConnect</small>
+          </div>
+        </div>
+        <button (click)="showChat = false" class="btn-close btn-close-white shadow-none" type="button"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body p-3 bg-light text-start" style="height: 300px; overflow-y: auto;">
+        <div class="d-flex flex-column gap-3">
+          <!-- Message 1 (Incoming) -->
+          <div class="d-flex flex-column align-items-start text-start" style="max-width: 85%;">
+            <small class="text-muted mb-1 ms-1">Assistance AgroConnect</small>
+            <div class="p-3 rounded-4 bg-white border text-dark shadow-sm" style="border-top-left-radius: 4px !important; font-size: 13px; line-height: 1.4;">
+              Bonjour ! Comment pouvons-nous vous aider aujourd'hui sur la plateforme ? N'hésitez pas à nous poser des questions sur vos produits ou vos commandes.
+            </div>
+            <small class="text-muted mt-1 ms-1" style="font-size: 9px;">10:45</small>
+          </div>
+
+          <!-- Dynamic messages -->
+          <div *ngFor="let msg of chatMessages" class="d-flex flex-column" [class.align-items-end]="msg.estMe" [class.align-items-start]="!msg.estMe" style="max-width: 85%;" [class.ms-auto]="msg.estMe">
+            <small class="text-muted mb-1 ms-1" *ngIf="!msg.estMe">{{ msg.auteur }}</small>
+            <div class="p-3 rounded-4 shadow-sm" 
+                 [class.bg-success]="msg.estMe" [class.text-white]="msg.estMe" [class.border-0]="msg.estMe"
+                 [class.bg-white]="!msg.estMe" [class.text-dark]="!msg.estMe" [class.border]="!msg.estMe"
+                 [style.border-top-right-radius]="msg.estMe ? '4px' : '16px'"
+                 [style.border-top-left-radius]="!msg.estMe ? '4px' : '16px'"
+                 style="font-size: 13px; line-height: 1.4; background-color: #1A7C4F !important; color: white !important;">
+              {{ msg.texte }}
+            </div>
+            <small class="text-muted mt-1 ms-1" style="font-size: 9px;">{{ msg.heure }}</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer / Form -->
+      <div class="modal-footer p-2.5 bg-white border-top">
+        <form (submit)="envoyerMessage($event)" class="d-flex w-100 gap-2">
+          <input type="text" [(ngModel)]="nouveauMessage" name="nouveauMessage" placeholder="Écrivez votre message..." 
+                 class="form-control border rounded-pill px-3 shadow-none" style="font-size: 13px;">
+          <button type="submit" class="btn btn-success rounded-circle d-flex align-items-center justify-content-center p-0" 
+                  style="width: 36px; height: 36px; background: #1A7C4F; border: none; flex-shrink: 0;">
+            🚀
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

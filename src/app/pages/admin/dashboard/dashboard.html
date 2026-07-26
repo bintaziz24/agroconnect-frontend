@@ -1,0 +1,288 @@
+<div class="container py-5" style="max-width: 1100px;">
+  
+  <!-- Bandeau Supervision Nationale -->
+  <div class="p-4 mb-4 text-white rounded-4 shadow-sm position-relative overflow-hidden" 
+       style="background: linear-gradient(135deg, #091729 0%, #152d4a 100%); min-height: 180px;">
+    
+    <!-- Grid points layout -->
+    <div class="position-absolute w-100 h-100 top-0 start-0 opacity-5" 
+         style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+    <div class="d-flex flex-column justify-content-between align-items-start gap-2 position-relative">
+      <span class="badge px-3 py-1.5 rounded-pill mb-2" style="background: rgba(138, 75, 237, 0.25); color: #c4a1ff; font-size: 11px; border: 1px solid rgba(138, 75, 237, 0.4);">
+        🛡️ ADMINISTRATION GÉNÉRALE &nbsp;📍 AgroConnect Sénégal Governance
+      </span>
+      <h2 class="fw-bold mb-2" style="font-family:'Playfair Display',serif; font-size: 32px;">Supervision Nationale</h2>
+      <p class="text-white-50 mb-0 small" style="max-width: 600px;">
+        Pilotez les flux commerciaux entre agriculteurs, consommateurs et livreurs à travers le Sénégal.
+      </p>
+    </div>
+  </div>
+
+  <!-- Cartes d'indicateurs (Stats) -->
+  <div class="row g-3 mb-4 text-start">
+    
+    <!-- volume des transactions -->
+    <div class="col-6 col-md-3">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Volume des transactions</small>
+          <span class="fs-5">💰</span>
+        </div>
+        <div>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">56 000 FCFA</h4>
+          <small class="text-success fw-semibold" style="font-size: 11px;">📈 Commissions plateforme: 5%</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Producteurs actifs -->
+    <div class="col-6 col-md-3">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Producteurs Actifs</small>
+          <span class="fs-5">👨‍🌾</span>
+        </div>
+        <div>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">1 240</h4>
+          <small class="text-success fw-semibold" style="font-size: 11px;">🟢 Couvrant 14 régions</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flotte de livreurs -->
+    <div class="col-6 col-md-3">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Flotte de Livreurs</small>
+          <span class="fs-5">🚚</span>
+        </div>
+        <div>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">350 Drivers</h4>
+          <small class="text-muted" style="font-size: 11px;">Motos & Camionnettes</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Validations en attente -->
+    <div class="col-6 col-md-3">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Validations en attente</small>
+          <span class="fs-5">⏱️</span>
+        </div>
+        <div>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">0</h4>
+          <small class="text-muted" style="font-size: 11px;">Nouveaux produits soumis</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ONGLET APERÇU GÉNÉRAL (DASHBOARD) -->
+  <div *ngIf="menuActif === 'dashboard'">
+    <div class="row g-4 mb-4">
+      
+      <!-- Graphique Pie Chart -->
+      <div class="col-md-6 text-start">
+        <div class="bg-white rounded-4 border p-4 shadow-sm h-100">
+          <h6 class="fw-bold text-dark mb-4">Répartition des Ventes par Catégorie</h6>
+          
+          <div class="d-flex justify-content-center align-items-center mb-4 position-relative" style="height: 160px;">
+            <svg class="h-100" viewBox="0 0 160 160" style="transform: rotate(-90deg);">
+              <!-- Total values = 35 + 25 + 20 + 12 + 8 = 100% -->
+              <!-- Slice 1 (Légumes - 35%): Dark green -->
+              <circle r="60" cx="80" cy="80" fill="transparent"
+                      stroke="#0F5235" stroke-width="25"
+                      stroke-dasharray="219.9 376.99"/>
+              
+              <!-- Slice 2 (Fruits - 25%): Medium green -->
+              <circle r="60" cx="80" cy="80" fill="transparent"
+                      stroke="#1A7C4F" stroke-width="25"
+                      stroke-dasharray="157.07 376.99"
+                      stroke-dashoffset="-219.91"/>
+              
+              <!-- Slice 3 (Céréales - 20%): Light green -->
+              <circle r="60" cx="80" cy="80" fill="transparent"
+                      stroke="#4CD964" stroke-width="25"
+                      stroke-dasharray="125.66 376.99"
+                      stroke-dashoffset="-376.99"/>
+
+              <!-- Slice 4 (Tubercules - 12%): Semi-light green -->
+              <circle r="60" cx="80" cy="80" fill="transparent"
+                      stroke="#8cd8a5" stroke-width="25"
+                      stroke-dasharray="75.39 376.99"
+                      stroke-dashoffset="-502.65"/>
+
+              <!-- Slice 5 (Épices & Bissap - 8%): Very light green -->
+              <circle r="60" cx="80" cy="80" fill="transparent"
+                      stroke="#d1f2dc" stroke-width="25"
+                      stroke-dasharray="50.26 376.99"
+                      stroke-dashoffset="-578.04"/>
+            </svg>
+            
+            <!-- Labels values indicators -->
+            <div class="position-absolute" style="left: 65%; top: 25%; font-size: 11px; font-weight: bold; color: white;">35</div>
+            <div class="position-absolute" style="left: 20%; top: 40%; font-size: 11px; font-weight: bold; color: white;">25</div>
+            <div class="position-absolute" style="left: 45%; top: 85%; font-size: 11px; font-weight: bold; color: white;">20</div>
+            <div class="position-absolute" style="left: 72%; top: 72%; font-size: 10px; font-weight: bold; color: #000;">12</div>
+            <div class="position-absolute" style="left: 74%; top: 52%; font-size: 10px; font-weight: bold; color: #000;">8</div>
+          </div>
+
+          <!-- Legend -->
+          <div class="d-flex flex-wrap justify-content-center gap-3 pt-2" style="font-size: 12px;">
+            <div class="d-flex align-items-center gap-1.5">
+              <span class="d-inline-block rounded-circle" style="width: 10px; height: 10px; background: #4CD964;"></span>
+              <span class="text-muted">Céréales</span>
+            </div>
+            <div class="d-flex align-items-center gap-1.5">
+              <span class="d-inline-block rounded-circle" style="width: 10px; height: 10px; background: #1A7C4F;"></span>
+              <span class="text-muted">Fruits</span>
+            </div>
+            <div class="d-flex align-items-center gap-1.5">
+              <span class="d-inline-block rounded-circle" style="width: 10px; height: 10px; background: #0F5235;"></span>
+              <span class="text-muted">Légumes</span>
+            </div>
+            <div class="d-flex align-items-center gap-1.5">
+              <span class="d-inline-block rounded-circle" style="width: 10px; height: 10px; background: #8cd8a5;"></span>
+              <span class="text-muted">Tubercules</span>
+            </div>
+            <div class="d-flex align-items-center gap-1.5">
+              <span class="d-inline-block rounded-circle" style="width: 10px; height: 10px; background: #d1f2dc;"></span>
+              <span class="text-muted">Épices & Bissap</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dernières Activités Plateforme -->
+      <div class="col-md-6 text-start">
+        <div class="bg-white rounded-4 border p-4 shadow-sm h-100">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold text-dark mb-0">Dernières Activités Plateforme</h6>
+          </div>
+          
+          <div class="d-flex flex-column gap-3 text-start">
+            
+            <!-- Commande #AGC-9021 -->
+            <div class="p-3 rounded-4 border d-flex flex-column gap-2 bg-light bg-opacity-50">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Commande #AGC-9021</h6>
+                  <small class="text-muted" style="font-size: 11px;">Khadija Sy ➔ Mamadou Sow (Ferme Vallée Bio)</small>
+                </div>
+                <span class="badge py-1.5 px-3 rounded-pill text-info bg-info-subtle border border-info-subtle fw-semibold" style="font-size: 11px;">
+                  🚚 En cours de livraison
+                </span>
+              </div>
+            </div>
+
+            <!-- Commande #AGC-8842 -->
+            <div class="p-3 rounded-4 border d-flex flex-column gap-2 bg-light bg-opacity-50">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Commande #AGC-8842</h6>
+                  <small class="text-muted" style="font-size: 11px;">Babacar Ndiaye (Restaurant Le Lagon) ➔ Aïssatou Diallo (Coopérative Niayes Vert)</small>
+                </div>
+                <span class="badge py-1.5 px-3 rounded-pill text-warning bg-warning-subtle border border-warning-subtle fw-semibold" style="font-size: 11px;">
+                  ⏰ En attente
+                </span>
+              </div>
+            </div>
+
+            <!-- Commande #AGC-7719 -->
+            <div class="p-3 rounded-4 border d-flex flex-column gap-2 bg-light bg-opacity-50">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Commande #AGC-7719</h6>
+                  <small class="text-muted" style="font-size: 11px;">Aminata Touré ➔ Cheikh Ndiaye (Riziculture Saint-Louis)</small>
+                </div>
+                <span class="badge py-1.5 px-3 rounded-pill text-success bg-success-subtle border border-success-subtle fw-semibold" style="font-size: 11px;">
+                  ✅ Livrée avec succès
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ONGLET VALIDATIONS PRODUITS -->
+  <div *ngIf="menuActif === 'validations'">
+    <div class="bg-white rounded-4 border p-5 shadow-sm text-start mb-4">
+      <div class="mb-4">
+        <small class="text-success fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.05em;">Modération & Qualité</small>
+        <h3 class="fw-bold text-dark mb-1" style="font-family:'Playfair Display',serif;">Validation des Récoltes Proposées</h3>
+        <p class="text-muted mb-0 small">Vérifiez l'origine locale, les prix FCFA et la qualité des annonces soumises par les agriculteurs.</p>
+      </div>
+      
+      <!-- Card empty validations -->
+      <div class="text-center py-5 border-top">
+        <div class="rounded-circle bg-success-subtle d-inline-flex align-items-center justify-content-center mb-3" style="width: 54px; height: 54px; background: #e8f6f0 !important; color: #1a7c4f;">
+          <span class="fs-4">✓</span>
+        </div>
+        <h5 class="fw-bold text-dark mb-1" style="font-size: 16px;">Toutes les soumissions sont traitées</h5>
+        <p class="text-muted mb-0 small">Aucun produit en attente de modération pour le moment.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ONGLET UTILISATEURS / AGRICULTEURS LIST -->
+  <div *ngIf="menuActif === 'utilisateurs'">
+    <div class="bg-white rounded-4 border p-4 shadow-sm text-start">
+      <h5 class="fw-bold text-dark mb-3">Validation des agriculteurs & Utilisateurs</h5>
+      
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
+          <thead class="table-light">
+            <tr>
+              <th>Agriculteur</th>
+              <th>Localisation</th>
+              <th>Email</th>
+              <th>Statut</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let agri of agriculteurs">
+              <td>
+                <div class="d-flex align-items-center gap-3">
+                  <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" 
+                       style="width: 36px; height: 36px; font-size: 14px; background: linear-gradient(135deg, #1A7C4F 0%, #0d5235 100%);">
+                    {{ (agri.nom ? agri.nom[0] : 'U') | uppercase }}
+                  </div>
+                  <span class="fw-bold text-dark">{{ agri.nom }}</span>
+                </div>
+              </td>
+              <td>📍 {{ agri.localisation }}</td>
+              <td class="text-muted">{{ agri.email }}</td>
+              <td>
+                <span class="badge px-2.5 py-1.5" [style]="getStatutStyle(agri.statut)">
+                  {{ getStatutLabel(agri.statut) }}
+                </span>
+              </td>
+              <td class="text-end">
+                <div class="d-flex gap-2 justify-content-end">
+                  <button *ngIf="agri.statut === 'en_attente'" (click)="validerAgriculteur(agri.id)"
+                          class="btn btn-sm btn-success rounded-pill px-3 py-1.5 border-0 text-white" style="background: #1A7C4F; font-size: 12px;">
+                    Valider
+                  </button>
+                  <button *ngIf="agri.statut === 'en_attente'" (click)="rejeterAgriculteur(agri.id)"
+                          class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1.5" style="font-size: 12px;">
+                    Rejeter
+                  </button>
+                  <span *ngIf="agri.statut !== 'en_attente'" class="text-muted small">Aucune action</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

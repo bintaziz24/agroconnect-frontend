@@ -1,0 +1,219 @@
+<div class="container py-5">
+
+  <!-- ÉTAPE 1: MON PANIER -->
+  <div *ngIf="etape === 'panier'">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="fw-bold" style="font-family:'Playfair Display',serif">{{ 'cart_title' | translate }}</h2>
+        <p class="text-muted mb-0">{{ items.length }} {{ 'cart_selected_items' | translate }}</p>
+      </div>
+      <a routerLink="/catalogue" class="btn btn-outline-secondary btn-sm">← {{ 'cart_continue' | translate }}</a>
+    </div>
+
+    <!-- PANIER VIDE -->
+    <div *ngIf="items.length === 0" class="text-center py-5 bg-white rounded-3 border">
+      <div style="font-size: 4rem;">🧺</div>
+      <h4 class="mt-3 fw-bold">{{ 'cart_empty' | translate }}</h4>
+      <p class="text-muted">{{ 'cart_empty_desc' | translate }}</p>
+      <a routerLink="/catalogue" class="btn px-4 py-2 mt-2 text-white fw-semibold" style="background:var(--vert, #1A7C4F); border-radius:10px">
+        {{ 'cart_explore' | translate }}
+      </a>
+    </div>
+
+    <!-- AVEC ARTICLES -->
+    <div *ngIf="items.length > 0" class="row g-4">
+      <!-- LISTE DES ARTICLES -->
+      <div class="col-lg-8">
+        <div class="bg-white rounded-3 border p-3">
+          <div *ngFor="let item of items; let last = last" class="d-flex align-items-center gap-3 py-3" [class.border-bottom]="!last">
+            <img [src]="item.produit.image" [alt]="item.produit.nom" (error)="onImageError($event)"
+              class="rounded object-fit-cover" style="width: 80px; height: 80px;" />
+
+            <div class="flex-grow-1">
+              <h6 class="fw-bold mb-1">{{ item.produit.nom }}</h6>
+              <small class="text-muted d-block mb-1">
+                🌾 {{ item.produit.agriculteur?.nom || item.produit.agriculteur || 'Producteur' }}
+              </small>
+              <strong style="color:var(--vert, #1A7C4F)">{{ item.produit.prix | number }} FCFA / {{ item.produit.unite || 'kg' }}</strong>
+            </div>
+
+            <!-- QUANTITÉ -->
+            <div class="d-flex align-items-center gap-2 border rounded-pill px-2 py-1">
+              <button class="btn btn-sm btn-light rounded-circle p-0" style="width:28px;height:28px" (click)="modifierQuantite(item.produit.id, -1)">-</button>
+              <span class="fw-bold px-2">{{ item.quantite }}</span>
+              <button class="btn btn-sm btn-light rounded-circle p-0" style="width:28px;height:28px" (click)="modifierQuantite(item.produit.id, 1)">+</button>
+            </div>
+
+            <div class="text-end" style="min-width: 100px;">
+              <strong class="d-block">{{ (item.produit.prix * item.quantite) | number }} FCFA</strong>
+              <button class="btn btn-link text-danger text-decoration-none p-0" style="font-size: 13px;" (click)="supprimer(item.produit.id)">
+                {{ 'cart_remove' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RÉSUMÉ DU PANIER -->
+      <div class="col-lg-4">
+        <div class="bg-white rounded-3 border p-4 sticky-top" style="top: 100px;">
+          <h5 class="fw-bold mb-3">{{ 'cart_summary' | translate }}</h5>
+          
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">{{ 'cart_subtotal' | translate }}</span>
+            <strong>{{ sousTotal | number }} FCFA</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-3">
+            <span class="text-muted">{{ 'cart_shipping' | translate }}</span>
+            <strong>{{ fraisLivraison | number }} FCFA</strong>
+          </div>
+
+          <hr />
+
+          <div class="d-flex justify-content-between mb-4">
+            <span class="fw-bold text-dark fs-5">{{ 'cart_total' | translate }}</span>
+            <strong class="fs-5" style="color:var(--vert, #1A7C4F)">{{ total | number }} FCFA</strong>
+          </div>
+
+          <button (click)="passerALivraison()" class="btn w-100 py-3 text-white fw-bold shadow-sm"
+            style="background:var(--vert, #1A7C4F); border-radius: 10px;">
+            {{ 'cart_checkout' | translate }} →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 2: ADRESSE & PAIEMENT -->
+  <div *ngIf="etape === 'livraison'" class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="bg-white rounded-3 border p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="fw-bold mb-0">{{ 'cart_ship_pay' | translate }}</h4>
+          <button (click)="etape = 'panier'" class="btn btn-outline-secondary btn-sm">← {{ 'cart_back' | translate }}</button>
+        </div>
+
+        <div *ngIf="erreur" class="alert alert-danger py-2 mb-3">
+          {{ erreur }}
+        </div>
+
+        <form (ngSubmit)="validerCommande()">
+          <!-- COORDONNÉES -->
+          <h6 class="fw-semibold text-uppercase text-muted mb-3" style="font-size:12px; letter-spacing: 0.05em;">{{ 'cart_ship_details' | translate }}</h6>
+          
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-medium">{{ 'cart_fullname' | translate }}</label>
+              <input type="text" class="form-control" [(ngModel)]="formLivraison.nom" name="nom" required placeholder="ex: Mamadou Ndiaye">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-medium">{{ 'cart_phone' | translate }}</label>
+              <input type="tel" class="form-control" [(ngModel)]="formLivraison.telephone" name="telephone" required placeholder="ex: 77 123 45 67">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-medium">{{ 'cat_region_label' | translate }}</label>
+              <select class="form-select" [(ngModel)]="formLivraison.region" name="region">
+                <option *ngFor="let r of regions" [value]="r">{{ r }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-medium">{{ 'cart_address' | translate }}</label>
+              <input type="text" class="form-control" [(ngModel)]="formLivraison.adresse" name="adresse" required placeholder="Quartier, rue, villa n°...">
+            </div>
+          </div>
+
+          <!-- MODE DE PAIEMENT -->
+          <h6 class="fw-semibold text-uppercase text-muted mb-3" style="font-size:12px; letter-spacing: 0.05em;">{{ 'cart_pay_method' | translate }}</h6>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <label class="border rounded p-3 d-flex align-items-center gap-2 w-100 cursor-pointer" [class.border-success]="formLivraison.modePaiement === 'wave'" [class.bg-light]="formLivraison.modePaiement === 'wave'">
+                <input type="radio" name="modePaiement" value="wave" [(ngModel)]="formLivraison.modePaiement">
+                <div>
+                  <strong class="d-block text-primary d-flex align-items-center gap-1.5" style="color: #00b0ff !important;">
+                    <img src="/assets/wave.png" alt="Wave Logo" style="width: 18px; height: 18px; object-fit: contain; border-radius: 3px;">
+                    Wave
+                  </strong>
+                  <small class="text-muted">{{ 'cart_wave_desc' | translate }}</small>
+                </div>
+              </label>
+            </div>
+
+            <div class="col-md-4">
+              <label class="border rounded p-3 d-flex align-items-center gap-2 w-100 cursor-pointer" [class.border-success]="formLivraison.modePaiement === 'orange_money'" [class.bg-light]="formLivraison.modePaiement === 'orange_money'">
+                <input type="radio" name="modePaiement" value="orange_money" [(ngModel)]="formLivraison.modePaiement">
+                <div>
+                  <strong class="d-block text-warning d-flex align-items-center gap-1.5" style="color: #ff6600 !important;">
+                    <img src="/assets/om.png" alt="Orange Money Logo" style="width: 18px; height: 18px; object-fit: contain; border-radius: 3px;">
+                    Orange Money
+                  </strong>
+                  <small class="text-muted">{{ 'cart_om_desc' | translate }}</small>
+                </div>
+              </label>
+            </div>
+
+            <div class="col-md-4">
+              <label class="border rounded p-3 d-flex align-items-center gap-2 w-100 cursor-pointer" [class.border-success]="formLivraison.modePaiement === 'cash'" [class.bg-light]="formLivraison.modePaiement === 'cash'">
+                <input type="radio" name="modePaiement" value="cash" [(ngModel)]="formLivraison.modePaiement">
+                <div>
+                  <strong class="d-block text-dark">{{ 'cart_cash_title' | translate }}</strong>
+                  <small class="text-muted">{{ 'cart_cash_desc' | translate }}</small>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded mb-4 border d-flex justify-content-between align-items-center">
+            <span>{{ 'cart_total_pay' | translate }}</span>
+            <strong class="fs-4" style="color:var(--vert, #1A7C4F)">{{ total | number }} FCFA</strong>
+          </div>
+
+          <button type="submit" [disabled]="chargement" class="btn w-100 py-3 text-white fw-bold shadow-sm"
+            style="background:var(--vert, #1A7C4F); border-radius: 10px;">
+            <span *ngIf="chargement">{{ 'cart_validating' | translate }}</span>
+            <span *ngIf="!chargement">{{ 'cart_confirm' | translate }} ({{ total | number }} FCFA) →</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3: CONFIRMATION -->
+  <div *ngIf="etape === 'confirmation'" class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <div class="bg-white rounded-3 border p-5 shadow-sm">
+        <div style="font-size: 4.5rem;" class="mb-3">🎉</div>
+        <h3 class="fw-bold text-success mb-2">{{ 'cart_confirmed' | translate }}</h3>
+        <p class="text-muted mb-4">{{ 'cart_thanks' | translate }}</p>
+
+        <div class="p-3 bg-light rounded text-start mb-4 border">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">{{ 'cart_ord_no' | translate }}</span>
+            <strong>#AGC-{{ commandeSuccess?.id || '2025-01' }}</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">{{ 'cart_tot_paid' | translate }}</span>
+            <strong class="text-success">{{ commandeSuccess?.montant_total | number }} FCFA</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">{{ 'cart_pay_method' | translate }}</span>
+            <span class="badge bg-secondary text-uppercase">{{ commandeSuccess?.mode_paiement || formLivraison.modePaiement }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="text-muted">{{ 'cart_ship_to' | translate }}</span>
+            <span>{{ formLivraison.adresse }}, {{ formLivraison.region }}</span>
+          </div>
+        </div>
+
+        <div class="d-flex gap-3 justify-content-center">
+          <a routerLink="/" class="btn btn-outline-secondary px-4 py-2">{{ 'cart_back_home' | translate }}</a>
+          <a routerLink="/catalogue" class="btn text-white px-4 py-2" style="background:var(--vert, #1A7C4F); border-radius: 8px;">{{ 'cart_continue' | translate }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

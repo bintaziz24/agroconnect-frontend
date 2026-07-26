@@ -1,0 +1,32 @@
+.badge-livree {
+  background: #E8F6F0 !important;
+  border-color: #D1EDE1 !important;
+  color: #1A7C4F !important;
+}
+
+.badge-attente {
+  background: #FFF9E6 !important;
+  border-color: #FFEBB3 !important;
+  color: #8A6D00 !important;
+}
+
+.badge-encours {
+  background: #EBF3FC !important;
+  border-color: #D2E4F9 !important;
+  color: #1A5FB4 !important;
+}
+
+.badge-annulee {
+  background: #FDF2F2 !important;
+  border-color: #FBD5D5 !important;
+  color: #9B1C1C !important;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,373 @@
+<div class="container py-5" style="max-width: 1100px;">
+  
+  <!-- Bandeau Exploitation Agricole -->
+  <div class="p-4 mb-4 text-white rounded-4 shadow-sm position-relative overflow-hidden" 
+       style="background: linear-gradient(135deg, #0f5235 0%, #17704b 100%); min-height: 180px;">
+    
+    <!-- Grid points layout -->
+    <div class="position-absolute w-100 h-100 top-0 start-0 opacity-5" 
+         style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 position-relative">
+      <div class="text-start">
+        <span class="badge px-3 py-1.5 rounded-pill mb-3" style="background: rgba(255,255,255,0.15); font-size: 11px;">
+          🌾 ESPACE EXPLOITATION AGRICOLE &nbsp;📍 Ferme Vallée Bio Casamance
+        </span>
+        <h2 class="fw-bold mb-2" style="font-family:'Playfair Display',serif; font-size: 32px;">Bonjour, {{ user?.name || 'Mamadou Sow' }}</h2>
+        <p class="text-white-50 mb-0 small" style="max-width: 550px;">
+          Gérez votre stock récolté, validez les commandes de vos clients et maximisez vos revenus agricoles.
+        </p>
+      </div>
+      
+      <button (click)="afficherModalForm = true" class="btn btn-light px-4 py-2.5 rounded-pill fw-bold text-success border-0 shadow-sm text-nowrap"
+              style="font-size: 13px; color: #1a7c4f !important;">
+        ➕ Ajouter une Récolte
+      </button>
+    </div>
+  </div>
+
+  <!-- Cartes d'indicateurs (Stats) -->
+  <div class="row g-3 mb-4 text-start">
+    
+    <!-- Chiffre d'affaires -->
+    <div class="col-6 col-md-3">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Chiffre d'affaires</small>
+          <span class="fs-5">💰</span>
+        </div>
+        <div>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.revenus | number }} FCFA</h4>
+          <small class="text-success fw-semibold" style="font-size: 11px;">📈 +18.5% ce mois-ci</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Commandes reçues -->
+    <div class="col-6 col-md-3">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Commandes Reçues</small>
+          <span class="fs-5">📦</span>
+        </div>
+        <div>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.commandes }}</h4>
+          <small class="text-success fw-semibold" style="font-size: 11px;">🟢 0 en attente d'action</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Produits en stock -->
+    <div class="col-6 col-md-3">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Produits en stock</small>
+          <span class="fs-5">🌱</span>
+        </div>
+        <div>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.produits }}</h4>
+          <small class="text-success fw-semibold" style="font-size: 11px;">🟢 {{ stats.produits }} validés en ligne</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Note Producteur -->
+    <div class="col-6 col-md-3">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Note Producteur</small>
+          <span class="fs-5">⭐</span>
+        </div>
+        <div>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">4.9 / 5</h4>
+          <small class="text-muted" style="font-size: 11px;">Basé sur 120+ avis clients</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Graphique des Ventes Hebdomadaires -->
+  <div class="bg-white rounded-4 border p-4 mb-4 shadow-sm text-start">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="fw-bold text-dark mb-0">Évolution des Ventes Hebdomadaires (FCFA)</h5>
+        <small class="text-muted">Revenus générés par jour sur la plateforme</small>
+      </div>
+      <span class="badge px-3 py-2 rounded-pill text-success bg-success-subtle border border-success-subtle fw-semibold" style="font-size: 11px;">
+        Semaine en cours
+      </span>
+    </div>
+
+    <!-- SVG Graph -->
+    <div class="position-relative" style="height: 220px; width: 100%;">
+      <svg class="w-100 h-100" viewBox="0 0 800 200" preserveAspectRatio="none">
+        <!-- Grid lines -->
+        <line x1="50" y1="30" x2="750" y2="30" stroke="#f1f5f9" stroke-width="1"/>
+        <line x1="50" y1="80" x2="750" y2="80" stroke="#f1f5f9" stroke-width="1"/>
+        <line x1="50" y1="130" x2="750" y2="130" stroke="#f1f5f9" stroke-width="1"/>
+        <line x1="50" y1="170" x2="750" y2="170" stroke="#e2e8f0" stroke-width="1.5"/>
+
+        <!-- Y-Axis labels -->
+        <text x="15" y="35" fill="#94a3b8" font-size="9">160k</text>
+        <text x="15" y="85" fill="#94a3b8" font-size="9">120k</text>
+        <text x="15" y="135" fill="#94a3b8" font-size="9">80k</text>
+        <text x="15" y="175" fill="#94a3b8" font-size="9">0k</text>
+
+        <!-- Chart line filled with gradient -->
+        <defs>
+          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1A7C4F" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#1A7C4F" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Area path -->
+        <path d="M 50,150 C 120,130 180,120 250,140 C 350,160 450,110 550,90 C 650,50 700,60 750,110 L 750,170 L 50,170 Z" 
+              fill="url(#chartGrad)"/>
+
+        <!-- Stroke path -->
+        <path d="M 50,150 C 120,130 180,120 250,140 C 350,160 450,110 550,90 C 650,50 700,60 750,110" 
+              fill="none" stroke="#1A7C4F" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- Dots -->
+        <circle cx="50" cy="150" r="4" fill="#1A7C4F"/>
+        <circle cx="250" cy="140" r="4" fill="#1A7C4F"/>
+        <circle cx="550" cy="90" r="5" fill="#1A7C4F" stroke="#ffffff" stroke-width="2"/>
+        <circle cx="750" cy="110" r="4" fill="#1A7C4F"/>
+
+        <!-- Verticalline for Friday hover point -->
+        <line x1="550" y1="30" x2="550" y2="170" stroke="#94a3b8" stroke-dasharray="4,4" stroke-width="1"/>
+      </svg>
+      
+      <!-- Chart Tooltip -->
+      <div class="position-absolute bg-white border rounded shadow-sm px-3 py-2 text-start" 
+           style="left: calc(68% - 50px); top: 35px; transform: translate(-50%, -50%); z-index: 10;">
+        <span class="fw-bold text-muted d-block" style="font-size: 10px;">Ven</span>
+        <strong class="text-success" style="font-size: 12px; color: #1a7c4f !important;">Ventes : 11 000 FCFA</strong>
+      </div>
+
+      <!-- X-Axis Labels -->
+      <div class="d-flex justify-content-between mt-1 px-5 text-muted" style="font-size: 10px;">
+        <span>Lun</span>
+        <span>Mar</span>
+        <span>Mer</span>
+        <span>Jeu</span>
+        <span class="fw-bold text-dark">Ven</span>
+        <span>Sam</span>
+        <span>Dim</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sections conditionnelles d'onglets (Produits / Commandes) -->
+  
+  <!-- Onglet Produits -->
+  <div *ngIf="ongletActif === 'apercu' || ongletActif === 'produits'" class="bg-white rounded-4 border p-4 mb-4 shadow-sm text-start">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold text-dark mb-0">Mes produits en stock</h5>
+      <button (click)="afficherModalForm = true" class="btn btn-outline-success btn-sm px-3 py-1.5" style="border-radius: 20px;">
+        + Nouveau produit
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
+        <thead class="table-light">
+          <tr>
+            <th>Produit</th>
+            <th>Catégorie</th>
+            <th>Prix unitaire</th>
+            <th>Stock disponible</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of produits">
+            <td>
+              <div class="d-flex align-items-center gap-3">
+                <img [src]="p.image" [alt]="p.nom" (error)="onImageError($event)" class="rounded-3" style="width:44px; height:44px; object-fit:cover;" />
+                <div>
+                  <strong class="text-dark d-block">{{ p.nom }}</strong>
+                  <small class="text-muted">ID: #PROD-{{ p.id }}</small>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="badge bg-secondary bg-opacity-10 text-dark px-2.5 py-1.5" style="font-size: 11px;">
+                {{ p.categorie }}
+              </span>
+            </td>
+            <td>
+              <strong class="text-success">{{ p.prix | number }} FCFA</strong> / {{ p.unite }}
+            </td>
+            <td>
+              <span class="badge px-2.5 py-1.5" [class.bg-success]="p.stock > 10" [class.bg-warning]="p.stock <= 10 && p.stock > 0" [class.bg-danger]="p.stock === 0" style="font-size: 11px;">
+                {{ p.stock }} {{ p.unite }}s
+              </span>
+            </td>
+            <td class="text-end">
+              <button (click)="supprimerProduit(p.id)" class="btn btn-sm btn-outline-danger px-3 py-1.5" style="border-radius: 20px;">
+                Supprimer
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Onglet Commandes Reçues -->
+  <div *ngIf="ongletActif === 'apercu' || ongletActif === 'commandes'" class="bg-white rounded-4 border p-4 shadow-sm text-start">
+    <h5 class="fw-bold text-dark mb-3">Dernières commandes reçues</h5>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
+        <thead class="table-light">
+          <tr>
+            <th>N° Commande</th>
+            <th>Client</th>
+            <th>Produits</th>
+            <th>Adresse</th>
+            <th>Total</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of commandes">
+            <td><strong>#AGC-{{ c.id }}</strong></td>
+            <td>{{ c.client?.name || c.client || 'Client AgroConnect' }}</td>
+            <td>
+              <span class="text-muted" *ngIf="!c.lignes_commande && c.produit">{{ c.produit }}</span>
+              <div *ngIf="c.lignes_commande" class="d-flex flex-wrap gap-1">
+                <span *ngFor="let lc of c.lignes_commande" class="badge bg-light text-dark border px-2 py-1">
+                  {{ lc.produit?.nom }} x{{ lc.quantite }}
+                </span>
+              </div>
+            </td>
+            <td><small class="text-muted">{{ c.livraison?.adresse || c.adresse || 'Dakar, Sénégal' }}</small></td>
+            <td><strong class="text-success">{{ (c.total || c.montant_total) | number }} FCFA</strong></td>
+            <td>
+              <span class="badge py-1.5 px-2.5 bg-warning text-dark border border-warning" *ngIf="c.statut === 'en_attente'" style="font-size: 11px;">En attente</span>
+              <span class="badge py-1.5 px-2.5 bg-info text-white border border-info" *ngIf="c.statut === 'en_cours'" style="font-size: 11px;">En cours</span>
+              <span class="badge py-1.5 px-2.5 bg-success text-white border border-success" *ngIf="c.statut === 'livree' || c.statut === 'livre'" style="font-size: 11px;">Livré</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL FORMULAIRE AJOUT PRODUIT (RÉCOLTE) -->
+<div *ngIf="afficherModalForm" class="modal-backdrop fade show" style="background: rgba(0,0,0,0.5); z-index: 1040; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;"></div>
+<div *ngIf="afficherModalForm" class="modal fade show d-block" tabindex="-1" style="z-index: 1050; overflow-y: auto;">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden bg-white">
+      
+      <!-- Header -->
+      <div class="modal-header text-white border-0 p-3" style="background: #0f5235; border-bottom: 1px solid rgba(255,255,255,0.1) !important;">
+        <h5 class="modal-header-title fw-bold mb-0 d-flex align-items-center gap-2" style="font-size: 16px;">
+          🌾 Mettre en Vente une Récolte
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="afficherModalForm = false"></button>
+      </div>
+
+      <form (ngSubmit)="ajouterProduit()">
+        <div class="modal-body p-4 text-start" style="max-height: 70vh; overflow-y: auto;">
+          
+          <!-- Nom du Produit et Nom Local -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-dark" style="font-size: 13px;">Nom du Produit *</label>
+              <input type="text" class="form-control rounded-3 py-2" [(ngModel)]="nouveauProduit.nom" name="nom" required placeholder="Ex: Mangues Kent de Casamance">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-dark" style="font-size: 13px;">Nom Local (Wolof / Serere / Pulaar)</label>
+              <input type="text" class="form-control rounded-3 py-2" [(ngModel)]="nouveauProduit.nomLocal" name="nomLocal" placeholder="Ex: Màngu, Sooble, Malo">
+            </div>
+          </div>
+
+          <!-- Catégorie et Région -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-dark" style="font-size: 13px;">Catégorie Agricole</label>
+              <select class="form-select rounded-3 py-2" [(ngModel)]="nouveauProduit.categorie" name="categorie">
+                <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-dark" style="font-size: 13px;">Région de Récolte</label>
+              <select class="form-select rounded-3 py-2" [(ngModel)]="nouveauProduit.region" name="region">
+                <option *ngFor="let reg of regions" [value]="reg">{{ reg }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Prix, Unité, et Quantité -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label fw-bold text-dark" style="font-size: 13px;">Prix (FCFA) *</label>
+              <input type="number" class="form-control rounded-3 py-2" [(ngModel)]="nouveauProduit.prix" name="prix" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-bold text-dark" style="font-size: 13px;">Unité</label>
+              <select class="form-select rounded-3 py-2" [(ngModel)]="nouveauProduit.unite" name="unite">
+                <option value="kg">kg</option>
+                <option value="sac">sac</option>
+                <option value="caisson">caisson</option>
+                <option value="botte">botte</option>
+                <option value="pièce">pièce</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-bold text-dark" style="font-size: 13px;">Quantité Récoltée</label>
+              <input type="number" class="form-control rounded-3 py-2" [(ngModel)]="nouveauProduit.stock" name="stock" required>
+            </div>
+          </div>
+
+          <!-- Illustration selection -->
+          <div class="mb-3">
+            <label class="form-label fw-bold text-dark d-block" style="font-size: 13px;">Choisir l'Illustration du Produit</label>
+            <div class="d-flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
+              <div *ngFor="let ill of illustrations" 
+                   (click)="selectIllustration(ill.id)"
+                   class="flex-shrink-0 border rounded-3 p-1 text-center position-relative" 
+                   [style.border-color]="illustrationSelectionnee === ill.id ? '#1A7C4F' : '#dee2e6'"
+                   [style.background]="illustrationSelectionnee === ill.id ? '#f4fbf7' : 'transparent'"
+                   style="width: 85px; cursor: pointer; transition: all 0.15s;">
+                
+                <!-- checkmark for selected state -->
+                <div *ngIf="illustrationSelectionnee === ill.id" 
+                     class="position-absolute top-0 end-0 bg-success text-white rounded-circle d-flex align-items-center justify-content-center" 
+                     style="width: 14px; height: 14px; font-size: 8px; transform: translate(3px, -3px);">
+                  ✓
+                </div>
+
+                <img [src]="ill.url" class="rounded-2 mb-1 w-100" style="height: 48px; object-fit: cover;">
+                <div style="font-size: 10px; font-weight: 600; color: #333;">{{ ill.nom }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description/Conseils de conservation -->
+          <div class="mb-3">
+            <label class="form-label fw-bold text-dark" style="font-size: 13px;">Description / Conseils de conservation</label>
+            <textarea class="form-control rounded-3" [(ngModel)]="nouveauProduit.description" name="description" rows="3"></textarea>
+          </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer bg-light border-0 p-3">
+          <button type="button" class="btn btn-light rounded-pill px-4" (click)="afficherModalForm = false" style="font-size: 13px;">Annuler</button>
+          <button type="submit" class="btn text-white fw-bold rounded-pill px-4" style="background:#1A7C4F; border: none; font-size: 13px;">
+            Publier ma Récolte
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

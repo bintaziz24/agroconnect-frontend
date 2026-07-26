@@ -1,0 +1,96 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center py-5"
+  style="background:linear-gradient(135deg, var(--vert-d, #0F5235) 0%, #1A7C4F 100%)">
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-5 col-lg-4">
+
+        <!-- Bouton retour à l'accueil -->
+        <div class="mb-3">
+          <a routerLink="/" class="text-white text-decoration-none d-inline-flex align-items-center gap-1 fw-medium" style="font-size:14px; opacity:0.9;">
+            ← {{ 'cart_back_home' | translate }}
+          </a>
+        </div>
+
+        <!-- Logo -->
+        <div class="text-center mb-4">
+          <a routerLink="/"
+            style="font-family:'Playfair Display',serif;color:white;font-size:28px;font-weight:600;text-decoration:none">
+            <span style="color:var(--or, #E8A020)">●</span> AgroConnect
+          </a>
+          <p style="color:rgba(255,255,255,.85);font-size:14px;margin-top:6px">
+            {{ 'login_subtitle' | translate }}
+          </p>
+        </div>
+
+        <!-- Carte formulaire -->
+        <div style="background:white;border-radius:18px;padding:2rem;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+
+          <h4 class="fw-bold mb-1" style="color:var(--vert-d, #0F5235)">{{ 'login_title' | translate }}</h4>
+          <p class="text-muted mb-4" style="font-size:13px">
+            {{ 'login_no_account' | translate }}
+            <a routerLink="/register" style="color:var(--vert, #1A7C4F);font-weight:500">{{ 's_inscrire' | translate }}</a>
+          </p>
+
+          <!-- Message erreur -->
+          <div *ngIf="erreur" class="alert alert-danger py-2 px-3 mb-3"
+            style="font-size:13px;border-radius:10px">
+            ⚠️ {{ erreur }}
+          </div>
+
+          <!-- Formulaire -->
+          <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" style="font-size:13px">
+                {{ 'login_email_label' | translate }}
+              </label>
+              <input
+                type="email"
+                class="form-control"
+                placeholder="exemple@email.com"
+                [(ngModel)]="formData.email"
+                name="email"
+                required
+                style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold" style="font-size:13px">
+                {{ 'login_password_label' | translate }}
+              </label>
+              <input
+                type="password"
+                class="form-control"
+                placeholder="••••••••"
+                [(ngModel)]="formData.password"
+                name="password"
+                required
+                style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
+            </div>
+
+            <button
+              type="submit"
+              class="btn text-white w-100 py-2 fw-semibold"
+              style="background:var(--vert, #1A7C4F);border-radius:10px;font-size:15px"
+              [disabled]="chargement">
+              <span *ngIf="chargement">
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                {{ 'login_connecting' | translate }}
+              </span>
+              <span *ngIf="!chargement">{{ 'se_connecter' | translate }}</span>
+            </button>
+
+          </form>
+
+          <hr class="my-3">
+
+          <div class="text-center" style="font-size:12px;color:#666">
+            🔒 {{ 'login_secure_footer' | translate }}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

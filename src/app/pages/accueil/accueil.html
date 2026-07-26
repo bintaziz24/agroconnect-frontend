@@ -1,0 +1,311 @@
+<!-- HERO -->
+<section class="hero-section py-5 text-white" style="background: linear-gradient(145deg, #0f5235 0%, #186b45 100%); position: relative; overflow: hidden;">
+  <!-- Grid dots overlay -->
+  <div class="position-absolute w-100 h-100 top-0 start-0 opacity-10" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+  
+  <div class="container position-relative py-4">
+    <div class="row align-items-center g-5">
+      <!-- Left content -->
+      <div class="col-lg-7 text-start">
+        <span class="badge rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-1"
+          style="background:rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); font-size:11px; letter-spacing:.08em; color: #FFF3DC;">
+          {{ t('hero_tag') }}
+        </span>
+        <h1 class="fw-bold mb-3 display-4" style="font-family:'Playfair Display',serif; line-height: 1.25;" [innerHTML]="t('hero_title')">
+        </h1>
+        <p class="mb-4 text-white-50" style="font-size:16px; line-height:1.6; max-width: 600px;">
+          {{ t('hero_desc') }}
+        </p>
+        
+        <!-- White search bar -->
+        <div class="bg-white p-2 rounded-pill shadow d-flex align-items-center mb-4" style="max-width: 550px;">
+          <div class="d-flex align-items-center flex-grow-1 px-3">
+            <span class="text-muted fs-5 me-2">🔍</span>
+            <input type="text" class="form-control border-0 bg-transparent py-2 shadow-none" [placeholder]="t('hero_search')" style="font-size: 14px;">
+          </div>
+          <a routerLink="/catalogue" class="btn text-white fw-bold px-4 py-2" style="background: #1A7C4F; border-radius: 50px; font-size: 14px;">
+            {{ t('hero_button') }} →
+          </a>
+        </div>
+
+        <!-- Harvest regions -->
+        <div class="d-flex align-items-center gap-2 flex-wrap" style="font-size: 13px;">
+          <span class="text-white-50 me-1">{{ t('regions_recorte') }} :</span>
+          <span class="px-3 py-1 rounded-pill" style="background: rgba(255,255,255,0.15);">📍 Dakar</span>
+          <span class="px-3 py-1 rounded-pill" style="background: rgba(255,255,255,0.15);">📍 Thiès</span>
+          <span class="px-3 py-1 rounded-pill" style="background: rgba(255,255,255,0.15);">📍 Saint-Louis</span>
+          <span class="px-3 py-1 rounded-pill" style="background: rgba(255,255,255,0.15);">📍 Kaolack</span>
+          <span class="px-3 py-1 rounded-pill" style="background: rgba(255,255,255,0.15);">📍 Ziguinchor</span>
+        </div>
+      </div>
+      
+      <!-- Right image & floating cards -->
+      <div class="col-lg-5 position-relative d-none d-lg-block">
+        <div class="position-relative mx-auto" style="width: 380px; height: 380px;">
+          <!-- Rounded image of fresh tomatoes with float animation and hover lift -->
+          <div class="w-100 h-100 animate-float hero-image-hover" style="cursor: pointer;">
+            <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&h=600&fit=crop" 
+                 alt="Tomates fraîches" 
+                 class="rounded-4 w-100 h-100 object-fit-cover shadow" 
+                 style="border: 4px solid rgba(255,255,255,0.2);">
+          </div>
+          
+          <!-- Floating card 1 (Wave & OM) with float animation wrapper -->
+          <div class="position-absolute animate-float-delayed" style="top: 40px; left: -60px; z-index: 10;">
+            <!-- Inner card with hover effect -->
+            <div class="bg-white rounded-3 shadow p-3 d-flex align-items-center gap-3 floating-card-hover" 
+                 style="width: 220px; border-left: 4px solid #FFA000; cursor: pointer;">
+              <div class="d-flex align-items-center gap-1 bg-light rounded-3 p-1" style="flex-shrink: 0;">
+                <img src="/assets/wave.png" alt="Wave Logo" style="width: 20px; height: 20px; object-fit: contain;">
+                <img src="/assets/om.png" alt="OM Logo" style="width: 20px; height: 20px; object-fit: contain; border-radius: 2px;">
+              </div>
+              <div>
+                <strong class="text-dark d-block" style="font-size: 13px;">Paiement Wave & OM</strong>
+                <small class="text-muted" style="font-size: 11px;">Paiement facile en FCFA</small>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Floating card 2 (Deliveries) with float animation wrapper -->
+          <div class="position-absolute animate-float" style="bottom: 40px; right: -50px; z-index: 10;">
+            <!-- Inner card with hover effect -->
+            <div class="bg-white rounded-3 shadow p-3 d-flex align-items-center gap-3 floating-card-hover" 
+                 style="width: 230px; border-left: 4px solid #1A7C4F; cursor: pointer;">
+              <div class="fs-3">🚚</div>
+              <div>
+                <strong class="text-dark d-block" style="font-size: 13px;">{{ t('15 000+ Livraisons') }}</strong>
+                <small class="text-muted" style="font-size: 11px;">{{ t('Flotte de livreurs locaux') }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="py-4 bg-white">
+  <div class="container">
+    <div class="p-4 rounded-4 shadow-sm border text-center" style="background: #E8F6F0; border-color: #D1EDE1 !important;">
+      <div class="row g-4 justify-content-center">
+        <div class="col-6 col-md-3">
+          <h3 class="fw-bold mb-1" style="color: #0F5235; font-family:'Playfair Display',serif; font-size: 2.2rem;">1 200+</h3>
+          <small class="text-muted fw-semibold d-block">{{ t('Producteurs Référencés') }}</small>
+        </div>
+        <div class="col-6 col-md-3">
+          <h3 class="fw-bold mb-1" style="color: #FFA000; font-family:'Playfair Display',serif; font-size: 2.2rem;">14</h3>
+          <small class="text-muted fw-semibold d-block">{{ t('Régions du Sénégal') }}</small>
+        </div>
+        <div class="col-6 col-md-3">
+          <h3 class="fw-bold mb-1" style="color: #0F5235; font-family:'Playfair Display',serif; font-size: 2.2rem;">15 000+</h3>
+          <small class="text-muted fw-semibold d-block">{{ t('Commandes Honorées') }}</small>
+        </div>
+        <div class="col-6 col-md-3">
+          <h3 class="fw-bold mb-1" style="color: #0F5235; font-family:'Playfair Display',serif; font-size: 2.2rem;">4.9 / 5</h3>
+          <small class="text-muted fw-semibold d-block">{{ t('Satisfaction Consommateurs') }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="py-5 bg-white border-bottom">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <small class="text-success fw-bold text-uppercase d-block mb-1" style="font-size: 11px; letter-spacing: 0.05em;">{{ t('sec_categories_title') }}</small>
+        <h2 class="fw-bold mb-0 text-dark" style="font-family:'Playfair Display',serif;">{{ t('sec_categories_head') }}</h2>
+      </div>
+      <a routerLink="/catalogue" class="text-success fw-bold text-decoration-none" style="font-size: 14px;">
+        {{ t('sec_categories_all') }} &gt;
+      </a>
+    </div>
+    
+    <div class="row g-3">
+      <div class="col-6 col-sm-4 col-md-2" *ngFor="let cat of categories">
+        <div [routerLink]="['/catalogue']" [queryParams]="{ cat: cat.nom }" 
+             class="card border border-light-subtle rounded-4 p-3 text-center h-100 shadow-sm category-card" 
+             style="transition: all 0.3s ease; cursor: pointer;">
+          <div class="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px; background: #E8F6F0; color: #1A7C4F;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-leaf" viewBox="0 0 16 16">
+              <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708L7.293 10l-2.647 2.646a.5.5 0 0 0 .708.708L8 10.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 10l2.647-2.646z"/>
+              <path d="M8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293l-2.646-2.647a.5.5 0 0 0-.708.708L7.293 8 4.646 10.646a.5.5 0 0 0 .708.708L8 8.707z"/>
+            </svg>
+          </div>
+          <h6 class="fw-bold mb-1 text-dark" style="font-size: 14px;">{{ t(cat.nom) }}</h6>
+          <small class="text-muted" style="font-size: 11px;">{{ cat.count }} {{ t('produits_plural') }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS GRID -->
+<section class="py-5" style="background: #FAFBF9;">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <small class="text-success fw-bold text-uppercase d-block mb-1" style="font-size: 11px; letter-spacing: 0.05em;">{{ t('sec_harvest_title') }}</small>
+        <h2 class="fw-bold mb-0 text-dark" style="font-family:'Playfair Display',serif;">{{ t('sec_harvest_head') }}</h2>
+      </div>
+      <a routerLink="/catalogue" class="text-success fw-bold text-decoration-none" style="font-size: 14px;">
+        {{ t('sec_harvest_all') }} &gt;
+      </a>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let produit of produits">
+        <app-card-produit [produit]="produit"></app-card-produit>
+      </div>
+    </div>
+<!-- ECOSYSTEME NETWORK -->
+<section id="a-propos" class="py-5" style="background: #FAFBF9;">
+  <div class="container p-5 rounded-4 text-white shadow" style="background: #0b1329;">
+    <div class="text-center mb-5">
+      <small class="text-success fw-bold text-uppercase d-block mb-1" style="font-size: 11px; letter-spacing: 0.05em;">{{ t('eco_title') }}</small>
+      <h2 class="fw-bold mb-3" style="font-family:'Playfair Display',serif; font-size: 2.2rem;">{{ t('eco_head') }}</h2>
+      <p class="text-white-50 mx-auto" style="font-size: 14px; max-width: 600px;">{{ t('eco_desc') }}</p>
+    </div>
+    
+    <div class="row g-4">
+      <!-- Card 1: Acheteurs -->
+      <div class="col-md-4 text-start">
+        <div class="card h-100 p-4 border-0 rounded-4 text-white" style="background: #152243;">
+          <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 45px; height: 45px; background: rgba(26, 124, 79, 0.2); color: #1A7C4F; font-size: 20px;">
+            🛒
+          </div>
+          <h5 class="fw-bold mb-2">{{ t('eco_buyers_title') }}</h5>
+          <p class="text-white-50 mb-0" style="font-size: 13px; line-height: 1.6;">
+            {{ t('eco_buyers_desc') }}
+          </p>
+        </div>
+      </div>
+      <!-- Card 2: Agriculteurs -->
+      <div class="col-md-4 text-start">
+        <div class="card h-100 p-4 border-0 rounded-4 text-white" style="background: #152243;">
+          <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 45px; height: 45px; background: rgba(255, 160, 0, 0.2); color: #FFA000; font-size: 20px;">
+            🌾
+          </div>
+          <h5 class="fw-bold mb-2">{{ t('eco_farmers_title') }}</h5>
+          <p class="text-white-50 mb-0" style="font-size: 13px; line-height: 1.6;">
+            {{ t('eco_farmers_desc') }}
+          </p>
+        </div>
+      </div>
+      <!-- Card 3: Livreurs -->
+      <div class="col-md-4 text-start">
+        <div class="card h-100 p-4 border-0 rounded-4 text-white" style="background: #152243;">
+          <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 45px; height: 45px; background: rgba(27, 94, 166, 0.2); color: #1B5EA6; font-size: 20px;">
+            🚚
+          </div>
+          <h5 class="fw-bold mb-2">{{ t('eco_drivers_title') }}</h5>
+          <p class="text-white-50 mb-0" style="font-size: 13px; line-height: 1.6;">
+            {{ t('eco_drivers_desc') }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALL TO ACTION BANNER -->
+<section class="py-4" style="background: #FAFBF9;">
+  <div class="container p-4 rounded-4 text-white d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4 shadow-sm" 
+       style="background: #10663a;">
+    <div class="text-start">
+      <h4 class="fw-bold mb-2" style="font-family:'Playfair Display',serif;">{{ t('cta_title') }}</h4>
+      <p class="text-white-50 mb-0" style="font-size: 14px; max-width: 700px;">
+        {{ t('cta_desc') }}
+      </p>
+    </div>
+    <div class="d-flex gap-3">
+      <a routerLink="/catalogue" class="btn fw-bold px-4 py-2 text-dark" style="background: #FFA000; border-radius: 10px; font-size: 14px; text-decoration: none;">
+        {{ t('cta_btn_order') }}
+      </a>
+      <a routerLink="/register" class="btn text-white fw-bold px-4 py-2 border border-white-50" style="background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 14px; text-decoration: none;">
+        {{ t('cta_btn_more') }}
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION COMMENT ÇA MARCHE -->
+<section class="py-5" style="background:var(--vert-d);color:white">
+  <div class="container text-center">
+    <h2 style="font-family:'Playfair Display',serif;margin-bottom:.5rem">
+      {{ t('sec_how_title') }}
+    </h2>
+    <p style="opacity:.8;margin-bottom:2.5rem">{{ t('sec_how_subtitle') }}</p>
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div style="font-size:2.5rem;margin-bottom:.8rem">📝</div>
+        <h6 class="fw-bold">{{ t('how_step1_title') }}</h6>
+        <small style="opacity:.75">{{ t('how_step1_desc') }}</small>
+      </div>
+      <div class="col-md-3">
+        <div style="font-size:2.5rem;margin-bottom:.8rem">🔍</div>
+        <h6 class="fw-bold">{{ t('how_step2_title') }}</h6>
+        <small style="opacity:.75">{{ t('how_step2_desc') }}</small>
+      </div>
+      <div class="col-md-3">
+        <div style="font-size:2.5rem;margin-bottom:.8rem">📱</div>
+        <h6 class="fw-bold">{{ t('how_step3_title') }}</h6>
+        <small style="opacity:.75">{{ t('how_step3_desc') }}</small>
+      </div>
+      <div class="col-md-3">
+        <div style="font-size:2.5rem;margin-bottom:.8rem">🚚</div>
+        <h6 class="fw-bold">{{ t('how_step4_title') }}</h6>
+        <small style="opacity:.75">{{ t('how_step4_desc') }}</small>
+      </div>
+    </div>
+    <div class="mt-4">
+      <a routerLink="/register" class="btn px-4 py-2"
+        style="background:var(--or);color:white;border-radius:10px;font-size:15px;font-weight:500">
+        {{ t('how_btn') }} →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOIRE AUX QUESTIONS (FAQ) -->
+<section id="faq" class="py-5 bg-light">
+  <div class="container" style="max-width: 900px;">
+    <h2 class="text-center fw-bold mb-4" style="font-family:'Playfair Display',serif">{{ t('faq_head') }}</h2>
+    
+    <div class="d-flex flex-column gap-3 mb-4">
+      <div *ngFor="let faq of faqs; let i = index" class="bg-white rounded-3 border shadow-sm">
+        <!-- HEADER ACCORDEON -->
+        <div class="d-flex justify-content-between align-items-center p-3 cursor-pointer select-none" 
+             (click)="toggleFaq(i)" style="outline: none;">
+          <h6 class="fw-bold mb-0 text-dark" style="font-size:15px; line-height: 1.4;">{{ t('faq_q' + (i+1)) }}</h6>
+          <span class="fs-5 text-muted transition-transform" [style.transform]="faq.open ? 'rotate(180deg)' : 'rotate(0deg)'"
+                style="display: inline-block; transition: transform 0.2s ease;">
+            ▾
+          </span>
+        </div>
+        <!-- CONTENU ACCORDEON -->
+        <div *ngIf="faq.open" class="px-3 pb-3 border-top pt-3 bg-light-subtle text-muted" style="font-size:14px; line-height: 1.6;">
+          {{ t('faq_a' + (i+1)) }}
+        </div>
+      </div>
+    </div>
+
+    <!-- BANDEAU CONTACT -->
+    <div class="rounded-4 p-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3" 
+         style="background: #E8F6F0; border: 1px solid #D1EDE1;">
+      <div>
+        <h6 class="fw-bold mb-1 text-dark" style="font-size:15px;">{{ t('faq_contact_title') }}</h6>
+        <p class="text-muted mb-0" style="font-size:13px; line-height: 1.4;">
+          {{ t('faq_contact_desc') }}
+        </p>
+      </div>
+      <a href="tel:+221338000000" class="btn text-white fw-bold d-flex align-items-center gap-2 px-4 py-2" 
+         style="background: #1A7C4F; border-radius: 10px; font-size: 14px;">
+        📞 +221 33 800 00 00
+      </a>
+    </div>
+
+  </div>
+</section>
