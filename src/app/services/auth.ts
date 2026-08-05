@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
@@ -37,13 +37,15 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/logout`, {}).pipe(
-      tap(() => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        this.userSubject.next(null);
-      })
-    );
+    // Déconnexion instantanée côté client (0ms de latence)
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.userSubject.next(null);
+
+    // Notification asynchrone du backend sans bloquer l'interface
+    this.http.post(`${this.apiUrl}/logout`, {}).subscribe({ error: () => {} });
+
+    return of({ success: true });
   }
 
   private setSession(res: any) {
