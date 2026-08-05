@@ -32,7 +32,7 @@
     <div>
       <!-- Localisation de récolte -->
       <small class="text-success fw-semibold d-block mb-1" style="font-size: 12px;">
-        📍 Récolté à {{ produit.agriculteur?.localisation || 'Sénégal' }}
+        📍 Récolté à {{ getLocalisationAgriculteur(produit) }}
       </small>
       
       <!-- Titre du produit -->
@@ -56,7 +56,7 @@
       <div class="d-flex justify-content-between align-items-end mb-3 border-top pt-2">
         <div style="max-width: 55%;">
           <small class="text-muted d-block" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.02em;">Producteur</small>
-          <strong class="text-dark d-block text-truncate" style="font-size: 13px;">{{ produit.agriculteur?.nom || 'Producteur local' }}</strong>
+          <strong class="text-dark d-block text-truncate" style="font-size: 13px;" [title]="getNomAgriculteur(produit)">👨‍🌾 {{ getNomAgriculteur(produit) }}</strong>
         </div>
         <div class="text-end">
           <strong style="color: #1A7C4F; font-size: 18px; font-weight: bold;">
@@ -69,7 +69,7 @@
 
       <!-- Boutons d'action -->
       <div class="d-flex gap-2">
-        <button class="btn btn-outline-secondary btn-sm flex-grow-1 py-2" style="border-radius: 20px; font-size: 12px; font-weight: 600;">
+        <button (click)="modalOuvert = true" class="btn btn-outline-secondary btn-sm flex-grow-1 py-2" style="border-radius: 20px; font-size: 12px; font-weight: 600;">
           Détails & Origine
         </button>
         <button
@@ -83,5 +83,82 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- MODAL DETAILS & ORIGINE -->
+<div *ngIf="modalOuvert" class="modal-backdrop fade show" style="background: rgba(0,0,0,0.5); z-index: 1040; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;"></div>
+<div *ngIf="modalOuvert" class="modal fade show d-block" tabindex="-1" style="z-index: 1050; position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: auto;">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg bg-white">
+      
+      <!-- Image de couverture du modal -->
+      <div class="position-relative" style="height: 220px; background: #f8f9fa;">
+        <img [src]="produit.image" [alt]="produit.nom" (error)="onImageError($event)" class="w-100 h-100 object-fit-cover" />
+        <button (click)="modalOuvert = false" class="btn-close position-absolute top-0 end-0 m-3 bg-white p-2 rounded-circle shadow-sm" type="button" style="z-index: 10;"></button>
+        
+        <div class="position-absolute bottom-0 start-0 m-3 text-white">
+          <span class="badge bg-success mb-1 text-uppercase">{{ produit.categorie }}</span>
+          <h4 class="fw-bold mb-0 text-shadow text-white" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">{{ produit.nom }}</h4>
+        </div>
+      </div>
+
+      <!-- Corps du modal -->
+      <div class="modal-body p-4 text-start">
+        
+        <!-- Caractéristiques rapides -->
+        <div class="row g-2 mb-4 text-center">
+          <div class="col-4">
+            <div class="bg-light p-2 rounded-3">
+              <small class="text-muted d-block" style="font-size: 10px;">PRIX</small>
+              <strong class="text-success" style="font-size: 14px;">{{ produit.prix | number }} FCFA</strong>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="bg-light p-2 rounded-3">
+              <small class="text-muted d-block" style="font-size: 10px;">UNITÉ</small>
+              <strong class="text-dark" style="font-size: 14px;">Par {{ produit.unite || 'kg' }}</strong>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="bg-light p-2 rounded-3">
+              <small class="text-muted d-block" style="font-size: 10px;">STOCK</small>
+              <strong class="text-warning" style="font-size: 14px;">{{ produit.stock }} dispo</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <h6 class="fw-bold text-dark mb-2">Description du produit</h6>
+        <p class="text-muted small mb-4" style="line-height: 1.6;">
+          {{ produit.description || 'Ce produit frais a été récolté selon des méthodes traditionnelles respectueuses de l\'environnement par nos producteurs partenaires.' }}
+        </p>
+
+        <!-- Origine & Producteur -->
+        <h6 class="fw-bold text-dark mb-3">📍 Origine & Producteur</h6>
+        <div class="bg-light p-3 rounded-4 border">
+          <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle d-flex align-items-center justify-content-center bg-success text-white fw-bold fs-5" style="width: 45px; height: 45px; background: #e8f6f0 !important; color: #1A7C4F !important;">
+              🧑‍🌾
+            </div>
+            <div>
+              <h6 class="fw-bold text-dark mb-1" style="font-size: 14px;">{{ getNomAgriculteur(produit) }}</h6>
+              <small class="text-muted d-block" style="font-size: 12px;">Localisation : <strong>{{ getLocalisationAgriculteur(produit) }}</strong></small>
+              <small class="text-success fw-semibold d-block mt-0.5" style="font-size: 11px;">✓ Profil vérifié par la plateforme</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pied du modal -->
+      <div class="modal-footer p-3 bg-light border-0 d-flex justify-content-between">
+        <button (click)="modalOuvert = false" class="btn btn-secondary btn-sm px-4 rounded-pill" type="button">Fermer</button>
+        <button (click)="ajouterAuPanier($event); modalOuvert = false" class="btn btn-success btn-sm px-4 rounded-pill text-white border-0" style="background: #1A7C4F;">
+          Ajouter au panier
+        </button>
+      </div>
+
+    </div>
   </div>
 </div>

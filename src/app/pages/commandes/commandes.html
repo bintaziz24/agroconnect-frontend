@@ -65,8 +65,8 @@
               </span>
             </div>
             <small class="text-muted d-block mt-1">
-              {{ 'ord_producer_label' | translate }} : <strong>{{ cmd.lignes_commande?.[0]?.produit?.agriculteur?.user?.name || 'Agriculteur' }}</strong> 
-              ({{ cmd.lignes_commande?.[0]?.produit?.agriculteur?.localisation || 'Sénégal' }})
+              📅 <strong>{{ (cmd.created_at || cmd.date) | date:'dd/MM/yyyy à HH:mm' }}</strong> • {{ 'ord_producer_label' | translate }} : <strong>{{ getNomAgriculteur(cmd) }}</strong> 
+              ({{ getLocalisationAgriculteur(cmd) }})
             </small>
           </div>
         </div>
@@ -198,7 +198,7 @@
           <div class="fs-4">🚚</div>
           <div>
             <h6 class="fw-bold mb-0 text-white" style="font-size: 15px;">Commande #AGC-{{ commandeSelectionnee?.id }} <span class="badge bg-success text-white ms-1" style="font-size: 9px; background: rgba(255,255,255,0.2) !important;">En cours de livraison</span></h6>
-            <small class="text-white-50" style="font-size: 11px;">Acheté auprès de : {{ commandeSelectionnee?.lignes_commande?.[0]?.produit?.agriculteur?.user?.name || 'Mamadou Sow (Ferme Vallée Bio)' }} (Ziguinchor)</small>
+            <small class="text-white-50" style="font-size: 11px;">Acheté auprès de : {{ getNomAgriculteur(commandeSelectionnee) }} ({{ getLocalisationAgriculteur(commandeSelectionnee) }})</small>
           </div>
         </div>
         <button (click)="fermerSuivi()" class="btn-close btn-close-white shadow-none" type="button"></button>
@@ -211,102 +211,92 @@
         <div class="bg-white rounded-4 border p-3 mb-4 shadow-sm">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="fw-bold text-dark text-uppercase" style="font-size: 11px; letter-spacing: 0.05em;">Progression de la livraison</span>
-            <span class="fw-bold text-success" style="font-size: 12px; color: #1A7C4F;">ARRIVÉE ESTIMÉE: 35 MIN</span>
+            <span *ngIf="commandeSelectionnee?.statut !== 'livree'" class="fw-bold text-success" style="font-size: 12px; color: #1A7C4F;">ARRIVÉE ESTIMÉE: 35 MIN</span>
+            <span *ngIf="commandeSelectionnee?.statut === 'livree'" class="fw-bold text-success badge bg-success-subtle border border-success-subtle px-3 py-1.5 rounded-pill" style="font-size: 12px;">✅ COMMANDE LIVRÉE & ENCAISSÉE</span>
           </div>
           
           <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 text-center">
+            <!-- Step 1: Commande enregistrée -->
             <div class="d-flex flex-column align-items-center">
-              <span class="rounded-pill bg-success text-white px-2.5 py-1 fw-bold border border-success mb-1" style="font-size: 11px;">✓ Commande...</span>
+              <span class="rounded-pill bg-success text-white px-2.5 py-1 fw-bold border border-success mb-1" style="font-size: 11px;">
+                ✓ Commande...
+              </span>
             </div>
+
+            <!-- Step 2: Validée -->
             <div class="d-flex flex-column align-items-center">
-              <span class="rounded-pill bg-success text-white px-2.5 py-1 fw-bold border border-success mb-1" style="font-size: 11px;">✓ Validée par...</span>
+              <span class="rounded-pill bg-success text-white px-2.5 py-1 fw-bold border border-success mb-1" style="font-size: 11px;">
+                ✓ Validée par...
+              </span>
             </div>
+
+            <!-- Step 3: Préparation -->
             <div class="d-flex flex-column align-items-center">
-              <span class="rounded-pill bg-success text-white px-2.5 py-1 fw-bold border border-success mb-1" style="font-size: 11px;">✓ En Préparation</span>
+              <span class="rounded-pill bg-success text-white px-2.5 py-1 fw-bold border border-success mb-1" style="font-size: 11px;">
+                ✓ En Préparation
+              </span>
             </div>
+
+            <!-- Step 4: Livreur Assigné -->
             <div class="d-flex flex-column align-items-center">
-              <span class="rounded-pill bg-success text-white px-2.5 py-1 fw-bold border border-success mb-1" style="font-size: 11px;">✓ Livreur Assigné</span>
+              <span class="rounded-pill bg-success text-white px-2.5 py-1 fw-bold border border-success mb-1" style="font-size: 11px;">
+                ✓ Livreur Assigné
+              </span>
             </div>
+
+            <!-- Step 5: En cours -->
             <div class="d-flex flex-column align-items-center">
-              <span class="rounded-pill text-white px-2.5 py-1 fw-bold mb-1" style="font-size: 11px; background: #1A7C4F;">En Cours de...</span>
+              <span class="rounded-pill text-white px-2.5 py-1 fw-bold mb-1" 
+                    [style.background]="isStepCompleted(commandeSelectionnee, 5) ? '#1A7C4F' : '#6c757d'"
+                    style="font-size: 11px;">
+                {{ isStepCompleted(commandeSelectionnee, 5) ? '✓ En Cours de...' : 'En Cours de...' }}
+              </span>
             </div>
-            <div class="d-flex flex-column align-items-center opacity-50">
-              <span class="rounded-pill bg-light text-muted px-2.5 py-1 fw-bold border mb-1" style="font-size: 11px;">Livré & Encaissé</span>
+
+            <!-- Step 6: Livré & Encaissé -->
+            <div class="d-flex flex-column align-items-center">
+              <span class="rounded-pill px-2.5 py-1 fw-bold mb-1" 
+                    [class.bg-success]="isStepCompleted(commandeSelectionnee, 6)"
+                    [class.text-white]="isStepCompleted(commandeSelectionnee, 6)"
+                    [class.bg-light]="!isStepCompleted(commandeSelectionnee, 6)"
+                    [class.text-muted]="!isStepCompleted(commandeSelectionnee, 6)"
+                    [class.border]="!isStepCompleted(commandeSelectionnee, 6)"
+                    [style.background]="isStepCompleted(commandeSelectionnee, 6) ? '#1A7C4F' : ''"
+                    style="font-size: 11px;">
+                {{ isStepCompleted(commandeSelectionnee, 6) ? '✓ Livré & Encaissé' : 'Livré & Encaissé' }}
+              </span>
             </div>
           </div>
         </div>
 
-        <!-- Carte interactive simulée -->
-        <div class="bg-white rounded-4 border p-4 shadow-sm position-relative overflow-hidden" style="min-height: 300px; background: #0f241a !important;">
-          <!-- Grid lines -->
-          <div class="position-absolute w-100 h-100 top-0 start-0 opacity-5" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
-
-          <div class="d-flex justify-content-between align-items-center text-white mb-4 position-relative">
+        <!-- Carte interactive réelle Leaflet -->
+        <div class="bg-white rounded-4 border shadow-sm position-relative overflow-hidden mb-3">
+          <div class="p-3 bg-dark text-white d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-2">
               <span class="text-warning">⚡</span>
-              <strong style="font-size: 13px;">Carte Interactive de Livraison en Direct</strong>
+              <strong style="font-size: 13px;">Suivi GPS en Direct du Livreur</strong>
             </div>
             <div class="d-flex gap-2">
-              <span class="badge bg-success" style="font-size: 10px;">🛰️ Suivi GPS Actif</span>
-              <span class="badge bg-warning text-dark" style="font-size: 10px;">{{ progressPourcentage }}% Parcours</span>
+              <span class="badge bg-success" style="font-size: 10px;">🛰️ GPS Synchro</span>
+              <span class="badge" [class.bg-warning]="commandeSelectionnee?.statut !== 'livree'" [class.bg-success]="commandeSelectionnee?.statut === 'livree'" style="font-size: 10px;">
+                {{ commandeSelectionnee?.statut === 'livree' ? '100% Parcours (Arrivé)' : '39% Parcours' }}
+              </span>
             </div>
           </div>
 
-          <p class="text-white-50 text-start mb-4 position-relative" style="font-size: 11px;">
-            Acheminement en temps réel : Ziguinchor ➔ Villa 142, Sacré-Cœur 3, Dakar
-          </p>
+          <!-- Conteneur Leaflet Client -->
+          <div id="client-suivi-map" style="height: 350px; width: 100%; z-index: 1;"></div>
 
-          <!-- Carte routière schématique stylisée du Sénégal -->
-          <div class="position-relative mx-auto" style="width: 100%; max-width: 500px; height: 180px;">
-            <!-- Senegal shape route path -->
-            <svg class="w-100 h-100" viewBox="0 0 500 180">
-              <!-- Dotted path -->
-              <path d="M400,160 L380,120 L300,130 L220,110 L160,80 L200,30 L100,50" 
-                    fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="4" stroke-dasharray="6,6"/>
-              
-              <!-- Active progress line -->
-              <path [attr.stroke-dashoffset]="100 - progressPourcentage"
-                    d="M400,160 L380,120 L300,130 L220,110 L160,80 L200,30 L100,50" 
-                    fill="none" stroke="#1A7C4F" stroke-width="4" style="stroke-dasharray: 500; transition: stroke-dashoffset 0.8s ease-in-out;"/>
-              
-              <!-- Cities marker points -->
-              <circle cx="400" cy="160" r="5" fill="#FFA000"/>
-              <text x="390" y="175" fill="white" font-size="9" font-weight="bold">Ziguinchor</text>
-
-              <circle cx="300" cy="130" r="4" fill="#22c55e"/>
-              <text x="290" y="145" fill="white" font-size="8">Kaolack</text>
-
-              <circle cx="200" cy="30" r="4" fill="#22c55e"/>
-              <text x="185" y="20" fill="white" font-size="8">Saint-Louis</text>
-
-              <circle cx="160" cy="80" r="5" fill="#22c55e"/>
-              <text x="145" y="95" fill="white" font-size="9" font-weight="bold">Thiès</text>
-
-              <circle cx="100" cy="50" r="6" fill="#e11d48"/>
-              <text x="85" y="40" fill="white" font-size="10" font-weight="bold">Dakar</text>
-
-              <!-- Delivery Truck moving icon -->
-              <g [style.transform]="'translate(' + (400 - (300 * progressPourcentage / 100)) + 'px, ' + (160 - (110 * progressPourcentage / 100)) + 'px)'" 
-                 style="transition: transform 0.8s ease-in-out;">
-                <circle cx="0" cy="0" r="10" fill="#FFA000"/>
-                <text x="-6" y="3" font-size="8">🚚</text>
-              </g>
-            </svg>
-          </div>
-
-          <!-- Bottom driver info -->
-          <div class="position-absolute bottom-0 start-0 w-100 p-3 text-white d-flex justify-content-between align-items-center" 
-               style="background: rgba(0,0,0,0.5); font-size: 11px;">
+          <div class="p-2.5 bg-dark text-white d-flex justify-content-between align-items-center" style="font-size: 11px;">
             <div class="d-flex align-items-center gap-2 text-start">
-              <span>👤</span>
+              <span>🚚</span>
               <div>
-                <strong>Ibrahima Faye (Livreur Express)</strong>
-                <span class="d-block text-white-50">Véhicule : Moto Moto-G5</span>
+                <strong>Livreur Express</strong> · {{ commandeSelectionnee?.statut === 'livree' ? 'Colis remis en main propre au destinataire' : 'Thiès ➔ Sacré-Cœur 3, Dakar' }}
               </div>
             </div>
-            <strong class="text-warning">~ 25 - 35 Min</strong>
+            <strong class="text-success" *ngIf="commandeSelectionnee?.statut === 'livree'">🎉 Livré avec Succès</strong>
+            <strong class="text-warning" *ngIf="commandeSelectionnee?.statut !== 'livree'">~ 35 Min (Arrivée estimée)</strong>
           </div>
-
         </div>
 
         <!-- Spacer -->
@@ -321,14 +311,14 @@
               </div>
               <div class="text-start">
                 <small class="text-warning fw-bold text-uppercase d-block" style="font-size: 10px; letter-spacing: 0.05em; color: #FFA000 !important;">Livreur Désigné</small>
-                <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Ibrahima Faye (Express Dakar-Express)</h6>
-                <small class="text-muted" style="font-size: 11px;">Moto-Cargo TVS 200 • +221 78 999 88 77</small>
+                <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">{{ getNomLivreur(commandeSelectionnee) }}</h6>
+                <small class="text-muted" style="font-size: 11px;">Moto-Cargo TVS 200 • {{ getTelephoneLivreur(commandeSelectionnee) }}</small>
               </div>
             </div>
             <div class="d-flex gap-2">
-              <button class="btn btn-success btn-sm px-3 py-2 text-white border-0 d-flex align-items-center gap-1" style="background: #1A7C4F; border-radius: 20px; font-size: 12px;">
+              <a [href]="'tel:' + getTelephoneLivreur(commandeSelectionnee)" class="btn btn-success btn-sm px-3 py-2 text-white border-0 d-flex align-items-center gap-1" style="background: #1A7C4F; border-radius: 20px; font-size: 12px; text-decoration: none;">
                 📞 Appeler
-              </button>
+              </a>
               <button (click)="fermerSuivi(); ouvrirChat(commandeSelectionnee)" class="btn btn-warning btn-sm px-3 py-2 text-dark border-0 d-flex align-items-center gap-1" style="background: #FFA000; border-radius: 20px; font-size: 12px; font-weight: 600;">
                 💬 Chat Direct
               </button>

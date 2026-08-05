@@ -1,4 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
+@import 'leaflet/dist/leaflet.css';
+
+/* Fix Leaflet map rendering & tiles */
+#real-gps-map {
+  width: 100% !important;
+  height: 400px !important;
+  min-height: 400px !important;
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  font-family: inherit;
+}
 
 :root {
   --vert:   #1A7C4F;
@@ -10,13 +27,44 @@
   --or:     #E8A020;
   --gris:   #4A4A48;
   --gris-l: #F5F5F2;
+
+  /* Theme variables - Light Mode by default */
+  --bg-primary: #F0F0EC;
+  --bg-card: white;
+  --text-primary: #1A1A1A;
+  --text-secondary: #4A4A48;
+  --text-muted: rgba(0, 0, 0, 0.55);
+  --border-color: #ddd;
+  --bg-light: #F5F5F2;
+  --input-bg: white;
+  --input-border: #ddd;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="dark"] {
+  /* Theme variables - Dark Mode overrides */
+  --bg-primary: #0f172a;
+  --bg-card: #1e293b;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --bg-light: #1e293b;
+  --input-bg: #0f172a;
+  --input-border: #334155;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --gris-l: #334155;
 }
 
 html, body {
   font-family: 'DM Sans', sans-serif;
-  background: #F0F0EC;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   margin: 0;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .btn-vert {
@@ -48,15 +96,15 @@ html, body {
 .btn-vert-outline:hover { background: var(--vert-l); }
 
 .card-produit {
-  background: white;
-  border: 1px solid #ddd;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 14px;
   overflow: hidden;
-  transition: box-shadow .2s, transform .2s;
+  transition: box-shadow .2s, transform .2s, background-color 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
 }
 .card-produit:hover {
-  box-shadow: 0 8px 24px rgba(0,0,0,.1);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 .card-produit .prod-img {
@@ -85,14 +133,14 @@ html, body {
 }
 
 .feature-card {
-  background: white;
-  border: 1px solid #ddd;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 14px;
   padding: 1.5rem;
-  transition: box-shadow .2s;
+  transition: box-shadow .2s, background-color 0.3s ease, border-color 0.3s ease;
   height: 100%;
 }
-.feature-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+.feature-card:hover { box-shadow: var(--shadow-sm); }
 .feature-icon {
   width: 44px;
   height: 44px;
@@ -116,7 +164,7 @@ html, body {
   line-height: 1.2;
 }
 
-.nav-link { color: var(--gris) !important; font-weight: 500; }
+.nav-link { color: var(--text-secondary) !important; font-weight: 500; transition: color 0.2s ease; }
 .nav-link:hover { color: var(--vert) !important; }
 
 .sidebar-link:hover,
@@ -124,3 +172,149 @@ html, body {
   background: rgba(255,255,255,.1);
   border-left-color: var(--or) !important;
 }
+
+/* --- Animations Globales --- */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float-delayed {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float-delayed {
+  animation: float-delayed 5s ease-in-out infinite;
+}
+
+.floating-card-hover {
+  transition: all 0.3s ease-in-out;
+}
+
+.floating-card-hover:hover {
+  transform: scale(1.06) !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-slide-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-slide-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.animate-slide-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-slide-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* --- Overrides Bootstrap pour le Mode Sombre --- */
+.bg-white {
+  background-color: var(--bg-card) !important;
+}
+
+.text-dark {
+  color: var(--text-primary) !important;
+}
+
+.border, .border-bottom, .border-top, .border-start, .border-end {
+  border-color: var(--border-color) !important;
+}
+
+/* Champs de formulaires */
+.form-control, .form-select {
+  background-color: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--input-border) !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.7;
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--vert) !important;
+  box-shadow: 0 0 0 0.25rem rgba(26, 124, 79, 0.25) !important;
+}
+
+/* Modals et listes déroulantes */
+.modal-content {
+  background-color: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dropdown-menu {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.dropdown-item {
+  color: var(--text-secondary) !important;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  background-color: var(--bg-light) !important;
+  color: var(--vert) !important;
+}
+
+.dropdown-divider {
+  border-color: var(--border-color) !important;
+}
+
+/* Tables */
+.table {
+  color: var(--text-primary) !important;
+}
+
+.table th, .table td {
+  border-color: var(--border-color) !important;
+}
+
+/* Autres éléments spécifiques */
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+.bg-light {
+  background-color: var(--bg-light) !important;
+}
+
+html[data-theme="dark"] .navbar-toggler-icon {
+  filter: invert(1);
+}
+

@@ -1,7 +1,7 @@
 <div class="container py-5">
 
   <!-- ÉTAPE 1: MON PANIER -->
-  <div *ngIf="etape === 'panier'">
+  <div *ngIf="etape === 'panier'" class="animate-on-scroll">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h2 class="fw-bold" style="font-family:'Playfair Display',serif">{{ 'cart_title' | translate }}</h2>
@@ -85,7 +85,7 @@
   </div>
 
   <!-- ÉTAPE 2: ADRESSE & PAIEMENT -->
-  <div *ngIf="etape === 'livraison'" class="row justify-content-center">
+  <div *ngIf="etape === 'livraison'" class="row justify-content-center animate-on-scroll">
     <div class="col-lg-8">
       <div class="bg-white rounded-3 border p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -130,39 +130,45 @@
 
           <div class="row g-3 mb-4">
             <div class="col-md-4">
-              <label class="border rounded p-3 d-flex align-items-center gap-2 w-100 cursor-pointer" [class.border-success]="formLivraison.modePaiement === 'wave'" [class.bg-light]="formLivraison.modePaiement === 'wave'">
-                <input type="radio" name="modePaiement" value="wave" [(ngModel)]="formLivraison.modePaiement">
+              <div class="border rounded p-3 d-flex align-items-center gap-3 w-100 cursor-pointer"
+                   (click)="choisirModePaiement('wave')"
+                   [class.border-success]="formLivraison.modePaiement === 'wave'"
+                   [class.bg-light]="formLivraison.modePaiement === 'wave'"
+                   style="transition: all 0.2s ease;">
+                <input type="radio" name="modePaiement" value="wave" [checked]="formLivraison.modePaiement === 'wave'" (change)="choisirModePaiement('wave')" style="cursor: pointer;">
                 <div>
-                  <strong class="d-block text-primary d-flex align-items-center gap-1.5" style="color: #00b0ff !important;">
-                    <img src="/assets/wave.png" alt="Wave Logo" style="width: 18px; height: 18px; object-fit: contain; border-radius: 3px;">
-                    Wave
-                  </strong>
+                  <strong class="d-block text-primary" style="color: #00b0ff !important;">Wave</strong>
                   <small class="text-muted">{{ 'cart_wave_desc' | translate }}</small>
                 </div>
-              </label>
+              </div>
             </div>
 
             <div class="col-md-4">
-              <label class="border rounded p-3 d-flex align-items-center gap-2 w-100 cursor-pointer" [class.border-success]="formLivraison.modePaiement === 'orange_money'" [class.bg-light]="formLivraison.modePaiement === 'orange_money'">
-                <input type="radio" name="modePaiement" value="orange_money" [(ngModel)]="formLivraison.modePaiement">
+              <div class="border rounded p-3 d-flex align-items-center gap-3 w-100 cursor-pointer"
+                   (click)="choisirModePaiement('orange_money')"
+                   [class.border-success]="formLivraison.modePaiement === 'orange_money'"
+                   [class.bg-light]="formLivraison.modePaiement === 'orange_money'"
+                   style="transition: all 0.2s ease;">
+                <input type="radio" name="modePaiement" value="orange_money" [checked]="formLivraison.modePaiement === 'orange_money'" (change)="choisirModePaiement('orange_money')" style="cursor: pointer;">
                 <div>
-                  <strong class="d-block text-warning d-flex align-items-center gap-1.5" style="color: #ff6600 !important;">
-                    <img src="/assets/om.png" alt="Orange Money Logo" style="width: 18px; height: 18px; object-fit: contain; border-radius: 3px;">
-                    Orange Money
-                  </strong>
+                  <strong class="d-block text-warning" style="color: #ff6600 !important;">Orange Money</strong>
                   <small class="text-muted">{{ 'cart_om_desc' | translate }}</small>
                 </div>
-              </label>
+              </div>
             </div>
 
             <div class="col-md-4">
-              <label class="border rounded p-3 d-flex align-items-center gap-2 w-100 cursor-pointer" [class.border-success]="formLivraison.modePaiement === 'cash'" [class.bg-light]="formLivraison.modePaiement === 'cash'">
-                <input type="radio" name="modePaiement" value="cash" [(ngModel)]="formLivraison.modePaiement">
+              <div class="border rounded p-3 d-flex align-items-center gap-3 w-100 cursor-pointer"
+                   (click)="choisirModePaiement('cash')"
+                   [class.border-success]="formLivraison.modePaiement === 'cash'"
+                   [class.bg-light]="formLivraison.modePaiement === 'cash'"
+                   style="transition: all 0.2s ease;">
+                <input type="radio" name="modePaiement" value="cash" [checked]="formLivraison.modePaiement === 'cash'" (change)="choisirModePaiement('cash')" style="cursor: pointer;">
                 <div>
                   <strong class="d-block text-dark">{{ 'cart_cash_title' | translate }}</strong>
                   <small class="text-muted">{{ 'cart_cash_desc' | translate }}</small>
                 </div>
-              </label>
+              </div>
             </div>
           </div>
 
@@ -182,7 +188,7 @@
   </div>
 
   <!-- ÉTAPE 3: CONFIRMATION -->
-  <div *ngIf="etape === 'confirmation'" class="row justify-content-center">
+  <div *ngIf="etape === 'confirmation'" class="row justify-content-center animate-on-scroll">
     <div class="col-md-6 text-center">
       <div class="bg-white rounded-3 border p-5 shadow-sm">
         <div style="font-size: 4.5rem;" class="mb-3">🎉</div>
@@ -200,7 +206,14 @@
           </div>
           <div class="d-flex justify-content-between mb-2">
             <span class="text-muted">{{ 'cart_pay_method' | translate }}</span>
-            <span class="badge bg-secondary text-uppercase">{{ commandeSuccess?.mode_paiement || formLivraison.modePaiement }}</span>
+            <span class="badge text-uppercase px-2.5 py-1" 
+                  [style.background]="(commandeSuccess?.mode_paiement || formLivraison.modePaiement) === 'wave' ? '#00b0ff' : ((commandeSuccess?.mode_paiement || formLivraison.modePaiement) === 'orange_money' ? '#ff6600' : '#6c757d')">
+              {{ (commandeSuccess?.mode_paiement || formLivraison.modePaiement) === 'wave' ? 'Wave Mobile' : ((commandeSuccess?.mode_paiement || formLivraison.modePaiement) === 'orange_money' ? 'Orange Money' : 'Paiement à la livraison') }}
+            </span>
+          </div>
+          <div class="d-flex justify-content-between mb-2" *ngIf="commandeSuccess?.paiement?.transaction_id">
+            <span class="text-muted">Réf. Transaction Mobile :</span>
+            <strong class="text-dark" style="font-family: monospace; font-size: 13px;">{{ commandeSuccess.paiement.transaction_id }}</strong>
           </div>
           <div class="d-flex justify-content-between">
             <span class="text-muted">{{ 'cart_ship_to' | translate }}</span>

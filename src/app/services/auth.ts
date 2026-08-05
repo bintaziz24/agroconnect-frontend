@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  private apiUrl = environment.apiUrl;
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
 
@@ -16,14 +17,26 @@ export class AuthService {
   }
 
   register(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, data).pipe(
-      tap((res: any) => this.setSession(res))
+    const payload = { ...data };
+    if (payload.email) payload.email = payload.email.trim().toLowerCase();
+    return this.http.post(`${this.apiUrl}/register`, payload, {
+      headers: { 'Accept': 'application/json' }
+    }).pipe(
+      tap((res: any) => {
+        if (res && res.token) this.setSession(res);
+      })
     );
   }
 
   login(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, data).pipe(
-      tap((res: any) => this.setSession(res))
+    const payload = { ...data };
+    if (payload.email) payload.email = payload.email.trim().toLowerCase();
+    return this.http.post(`${this.apiUrl}/login`, payload, {
+      headers: { 'Accept': 'application/json' }
+    }).pipe(
+      tap((res: any) => {
+        if (res && res.token) this.setSession(res);
+      })
     );
   }
 

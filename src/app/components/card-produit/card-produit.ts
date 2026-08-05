@@ -12,6 +12,7 @@ import { PanierService } from '../../services/panier';
 export class CardProduit {
   @Input() produit: any;
   ajoute = false;
+  modalOuvert = false;
 
   constructor(private panierService: PanierService) {}
 
@@ -28,7 +29,31 @@ export class CardProduit {
     event.target.src = 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=200&fit=crop';
   }
 
+  getNomAgriculteur(produit: any): string {
+    if (!produit) return 'Producteur local';
+    if (typeof produit.agriculteur === 'string' && produit.agriculteur.trim()) {
+      return produit.agriculteur;
+    }
+    if (produit.agriculteur && typeof produit.agriculteur === 'object') {
+      return produit.agriculteur.user?.name || produit.agriculteur.user?.nom || produit.agriculteur.nom || produit.agriculteur.name || 'Producteur local';
+    }
+    return produit.producteur || 'Producteur local';
+  }
+
+  getLocalisationAgriculteur(produit: any): string {
+    if (!produit) return 'Sénégal';
+    if (typeof produit.region === 'string' && produit.region.trim()) {
+      return produit.region;
+    }
+    if (produit.agriculteur && typeof produit.agriculteur === 'object') {
+      return produit.agriculteur.localisation || produit.agriculteur.region || 'Sénégal';
+    }
+    return 'Sénégal';
+  }
+
   getNomLocal(nom: string): string {
+    if (!nom) return 'Produit local';
+    const nomLower = nom.toLowerCase();
     const nomsLocaux: Record<string, string> = {
       'carottes': 'Karott',
       'oignons': 'Sooble',
@@ -38,37 +63,43 @@ export class CardProduit {
       'maïs': 'Mbaxal',
       'poivrons': 'Poivron',
       'patates': 'Patat',
-      'aubergines': 'Bataanzé',
+      'aubergines': 'Batañse',
       'pastèques': 'Xal',
-      'gombo': 'Kandja',
+      'gombo': 'Kànja',
       'mil': 'Dugub',
       'poireaux': 'Poireau',
-      'bananes': 'Banan',
-      'arachides': 'Guerté',
-      'piment': 'Kaani',
-      'ignames': 'Igname',
-      'concombres': 'Concombre',
+      'bananes': 'Banaana',
+      'arachides': 'Gerté',
+      'piment': 'Kani',
+      'ignames': 'Ñàmbi',
+      'concombres': 'Kombomb',
       'lait': 'Meew',
-      'yaourt': 'Sow'
+      'yaourt': 'Sow',
+      'chou': 'Soof',
+      'épinards': 'Epinard',
+      'papayes': 'Papai',
+      'sorgho': 'Basi',
+      'courgettes': 'Courgette',
+      'ananas': 'Ananas',
+      'fromage': 'Fromage',
+      'citrons': 'Limon'
     };
 
-    const searchStr = nom.toLowerCase();
-    for (const key in nomsLocaux) {
-      if (searchStr.includes(key)) {
+    for (const key of Object.keys(nomsLocaux)) {
+      if (nomLower.includes(key)) {
         return nomsLocaux[key];
       }
     }
-    return 'Produit local';
-  }
-
-  getRating(produit: any): string {
-    if (produit.rating) return produit.rating;
-    const score = ((produit.id || 1) % 6) / 10 + 4.4;
-    return score.toFixed(1);
+    return nom;
   }
 
   isBio(produit: any): boolean {
-    const cat = (produit.categorie || '').toLowerCase();
-    return cat.includes('lég') || cat.includes('frui') || cat.includes('cér') || cat.includes('tub');
+    if (!produit) return false;
+    return !!(produit.is_bio || produit.bio || (produit.nom && produit.nom.toLowerCase().includes('bio')));
+  }
+
+  getRating(produit: any): string {
+    if (!produit) return '4.8';
+    return produit.rating ? produit.rating.toString() : '4.8';
   }
 }

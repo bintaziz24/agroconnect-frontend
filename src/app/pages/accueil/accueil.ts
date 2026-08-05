@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProduitService } from '../../services/produit';
@@ -11,8 +11,9 @@ import { TranslationService } from '../../services/translation';
   standalone: true,
   imports: [CommonModule, RouterLink, CardProduit],
   templateUrl: './accueil.html',
+  styleUrl: './accueil.scss',
 })
-export class AccueilComponent implements OnInit {
+export class AccueilComponent implements OnInit, AfterViewInit {
   produits: any[] = [];
 
   categories = [
@@ -105,8 +106,27 @@ export class AccueilComponent implements OnInit {
   constructor(
     private produitService: ProduitService,
     private panierService: PanierService,
-    public trans: TranslationService
+    public trans: TranslationService,
+    private el: ElementRef
   ) {}
+
+  ngAfterViewInit() {
+    if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.05
+      });
+
+      const elements = this.el.nativeElement.querySelectorAll('.animate-on-scroll');
+      elements.forEach((element: any) => observer.observe(element));
+    }
+  }
 
   t(key: string): string {
     return this.trans.translate(key);

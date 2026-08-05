@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { PanierService } from '../../services/panier';
+import { NotificationService } from '../../services/notification';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
@@ -29,12 +30,14 @@ export class RegisterComponent {
   constructor(
     private authService: AuthService,
     private panierService: PanierService,
+    private notificationService: NotificationService,
     private router: Router
   ) {}
 
   onSubmit() {
     this.erreur = '';
     this.succes = '';
+    this.formData.email = (this.formData.email || '').trim().toLowerCase();
 
     if (this.formData.password !== this.formData.password_confirmation) {
       this.erreur = 'Les mots de passe ne correspondent pas.';
@@ -47,23 +50,31 @@ export class RegisterComponent {
       next: (res) => {
         this.chargement = false;
         this.panierService.chargerPanier();
-        this.succes = '🎉 Inscription réussie ! Bienvenue sur AgroConnect. Redirection en cours...';
 
-        setTimeout(() => {
-          const role = res.user?.role || this.formData.role;
-          if (role === 'agriculteur') {
-            this.router.navigate(['/agriculteur/dashboard']);
-          } else if (role === 'admin') {
-            this.router.navigate(['/admin/dashboard']);
-          } else {
-            this.router.navigate(['/']);
-          }
-        }, 1500);
+        this.notificationService.ajouterNotification({
+          icon: '🌱',
+          titre: 'Bienvenue sur AgroConnect !',
+          temps: 'À l\'instant',
+          message: `Ravi de vous compter parmi nous, ${res.user?.prenom || this.formData.prenom || 'Client'}. Découvrez nos récoltes locales.`
+        });
+
+        const role = res.user?.role || this.formData.role;
+        if (role === 'agriculteur') {
+          this.router.navigate(['/agriculteur/dashboard']);
+        } else if (role === 'admin') {
+          this.router.navigate(['/admin/dashboard']);
+        } else if (role === 'livreur') {
+          this.router.navigate(['/livreur/dashboard']);
+        } else if (role === 'client') {
+          this.router.navigate(['/catalogue']);
+        } else {
+          this.router.navigate(['/']);
+        }
       },
       error: (err) => {
         this.chargement = false;
         this.erreur = err.error?.message ||
-          Object.values(err.error?.errors || {}).flat().join(' ') ||
+          (err.error?.errors ? Object.values(err.error.errors).flat().join(' ') : null) ||
           'Une erreur est survenue lors de l\'inscription.';
       }
     });

@@ -1,4 +1,4 @@
-<div class="container py-5" style="max-width: 1100px;">
+<div class="container py-5 animate-on-scroll" style="max-width: 1100px;">
   
   <!-- Bandeau Supervision Nationale -->
   <div class="p-4 mb-4 text-white rounded-4 shadow-sm position-relative overflow-hidden" 
@@ -10,13 +10,38 @@
 
     <div class="d-flex flex-column justify-content-between align-items-start gap-2 position-relative">
       <span class="badge px-3 py-1.5 rounded-pill mb-2" style="background: rgba(138, 75, 237, 0.25); color: #c4a1ff; font-size: 11px; border: 1px solid rgba(138, 75, 237, 0.4);">
-        🛡️ ADMINISTRATION GÉNÉRALE &nbsp;📍 AgroConnect Sénégal Governance
+        {{ 'admin_space' | translate }}
       </span>
-      <h2 class="fw-bold mb-2" style="font-family:'Playfair Display',serif; font-size: 32px;">Supervision Nationale</h2>
+      <h2 class="fw-bold mb-2" style="font-family:'Playfair Display',serif; font-size: 32px;">{{ 'admin_title' | translate }}</h2>
       <p class="text-white-50 mb-0 small" style="max-width: 600px;">
-        Pilotez les flux commerciaux entre agriculteurs, consommateurs et livreurs à travers le Sénégal.
+        {{ 'admin_subtitle' | translate }}
       </p>
     </div>
+  </div>
+
+  <!-- NAVIGATION D'ONGLETS ADMIN -->
+  <div class="d-flex align-items-center gap-2 mb-4 p-1 rounded-3 bg-white border shadow-sm flex-wrap" style="width: fit-content;">
+    <button (click)="menuActif = 'dashboard'" 
+            class="btn btn-sm px-3 py-2 rounded-2 fw-bold border-0 cursor-pointer" 
+            [style.background]="menuActif === 'dashboard' ? '#1A7C4F' : 'transparent'"
+            [style.color]="menuActif === 'dashboard' ? '#ffffff' : 'var(--text-secondary)'"
+            style="font-size: 13px; transition: all 0.2s;">
+      {{ 'admin_tab_dash' | translate }}
+    </button>
+    <button (click)="menuActif = 'utilisateurs'" 
+            class="btn btn-sm px-3 py-2 rounded-2 fw-bold border-0 cursor-pointer" 
+            [style.background]="menuActif === 'utilisateurs' ? '#1A7C4F' : 'transparent'"
+            [style.color]="menuActif === 'utilisateurs' ? '#ffffff' : 'var(--text-secondary)'"
+            style="font-size: 13px; transition: all 0.2s;">
+      {{ 'admin_tab_users' | translate }} ({{ agriculteurs.length }})
+    </button>
+    <button (click)="menuActif = 'validations'" 
+            class="btn btn-sm px-3 py-2 rounded-2 fw-bold border-0 cursor-pointer" 
+            [style.background]="menuActif === 'validations' ? '#1A7C4F' : 'transparent'"
+            [style.color]="menuActif === 'validations' ? '#ffffff' : 'var(--text-secondary)'"
+            style="font-size: 13px; transition: all 0.2s;">
+      {{ 'admin_tab_validations' | translate }} ({{ produitsModeration.length }})
+    </button>
   </div>
 
   <!-- Cartes d'indicateurs (Stats) -->
@@ -30,50 +55,50 @@
           <span class="fs-5">💰</span>
         </div>
         <div>
-          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">56 000 FCFA</h4>
-          <small class="text-success fw-semibold" style="font-size: 11px;">📈 Commissions plateforme: 5%</small>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.revenus | number }} FCFA</h4>
+          <small class="text-success fw-semibold" style="font-size: 11px;">📈 Commissions: {{ stats.commissions | number }} FCFA (5%)</small>
         </div>
       </div>
     </div>
 
     <!-- Producteurs actifs -->
-    <div class="col-6 col-md-3">
-      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+    <div class="col-6 col-md-3" (click)="menuActif = 'utilisateurs'" style="cursor: pointer;">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between floating-card-hover" style="min-height: 110px;">
         <div class="d-flex justify-content-between align-items-center mb-1">
           <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Producteurs Actifs</small>
           <span class="fs-5">👨‍🌾</span>
         </div>
         <div>
-          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">1 240</h4>
-          <small class="text-success fw-semibold" style="font-size: 11px;">🟢 Couvrant 14 régions</small>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.agriculteurs || agriculteurs.length }}</h4>
+          <small class="text-success fw-semibold" style="font-size: 11px;">🟢 Cliquez pour afficher</small>
         </div>
       </div>
     </div>
 
     <!-- Flotte de livreurs -->
-    <div class="col-6 col-md-3">
-      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+    <div class="col-6 col-md-3" (click)="menuActif = 'livreurs'" style="cursor: pointer;">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between floating-card-hover" style="min-height: 110px;">
         <div class="d-flex justify-content-between align-items-center mb-1">
           <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Flotte de Livreurs</small>
           <span class="fs-5">🚚</span>
         </div>
         <div>
-          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">350 Drivers</h4>
-          <small class="text-muted" style="font-size: 11px;">Motos & Camionnettes</small>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.livreurs || livreurs.length }} Livreurs</h4>
+          <small class="text-success fw-semibold" style="font-size: 11px;">🟢 Cliquez pour afficher la flotte</small>
         </div>
       </div>
     </div>
 
     <!-- Validations en attente -->
-    <div class="col-6 col-md-3">
-      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+    <div class="col-6 col-md-3" (click)="menuActif = 'utilisateurs'" style="cursor: pointer;">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between floating-card-hover" style="min-height: 110px;">
         <div class="d-flex justify-content-between align-items-center mb-1">
           <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Validations en attente</small>
           <span class="fs-5">⏱️</span>
         </div>
         <div>
-          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">0</h4>
-          <small class="text-muted" style="font-size: 11px;">Nouveaux produits soumis</small>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.validations_en_attente }}</h4>
+          <small class="text-muted" style="font-size: 11px;">Comptes en attente de modération</small>
         </div>
       </div>
     </div>
@@ -86,48 +111,47 @@
       
       <!-- Graphique Pie Chart -->
       <div class="col-md-6 text-start">
-        <div class="bg-white rounded-4 border p-4 shadow-sm h-100">
+        <div class="bg-white rounded-4 border p-4 shadow-sm">
           <h6 class="fw-bold text-dark mb-4">Répartition des Ventes par Catégorie</h6>
           
           <div class="d-flex justify-content-center align-items-center mb-4 position-relative" style="height: 160px;">
             <svg class="h-100" viewBox="0 0 160 160" style="transform: rotate(-90deg);">
               <!-- Total values = 35 + 25 + 20 + 12 + 8 = 100% -->
-              <!-- Slice 1 (Légumes - 35%): Dark green -->
               <circle r="60" cx="80" cy="80" fill="transparent"
                       stroke="#0F5235" stroke-width="25"
-                      stroke-dasharray="219.9 376.99"/>
+                      stroke-dasharray="219.9 376.99"
+                      class="pie-slice pie-slice-1"/>
               
-              <!-- Slice 2 (Fruits - 25%): Medium green -->
               <circle r="60" cx="80" cy="80" fill="transparent"
                       stroke="#1A7C4F" stroke-width="25"
                       stroke-dasharray="157.07 376.99"
-                      stroke-dashoffset="-219.91"/>
+                      stroke-dashoffset="-219.91"
+                      class="pie-slice pie-slice-2"/>
               
-              <!-- Slice 3 (Céréales - 20%): Light green -->
               <circle r="60" cx="80" cy="80" fill="transparent"
                       stroke="#4CD964" stroke-width="25"
                       stroke-dasharray="125.66 376.99"
-                      stroke-dashoffset="-376.99"/>
+                      stroke-dashoffset="-376.99"
+                      class="pie-slice pie-slice-3"/>
 
-              <!-- Slice 4 (Tubercules - 12%): Semi-light green -->
               <circle r="60" cx="80" cy="80" fill="transparent"
                       stroke="#8cd8a5" stroke-width="25"
                       stroke-dasharray="75.39 376.99"
-                      stroke-dashoffset="-502.65"/>
+                      stroke-dashoffset="-502.65"
+                      class="pie-slice pie-slice-4"/>
 
-              <!-- Slice 5 (Épices & Bissap - 8%): Very light green -->
               <circle r="60" cx="80" cy="80" fill="transparent"
                       stroke="#d1f2dc" stroke-width="25"
                       stroke-dasharray="50.26 376.99"
-                      stroke-dashoffset="-578.04"/>
+                      stroke-dashoffset="-578.04"
+                      class="pie-slice pie-slice-5"/>
             </svg>
             
-            <!-- Labels values indicators -->
-            <div class="position-absolute" style="left: 65%; top: 25%; font-size: 11px; font-weight: bold; color: white;">35</div>
-            <div class="position-absolute" style="left: 20%; top: 40%; font-size: 11px; font-weight: bold; color: white;">25</div>
-            <div class="position-absolute" style="left: 45%; top: 85%; font-size: 11px; font-weight: bold; color: white;">20</div>
-            <div class="position-absolute" style="left: 72%; top: 72%; font-size: 10px; font-weight: bold; color: #000;">12</div>
-            <div class="position-absolute" style="left: 74%; top: 52%; font-size: 10px; font-weight: bold; color: #000;">8</div>
+            <div class="position-absolute pie-label" style="left: 65%; top: 25%; font-size: 11px; font-weight: bold; color: white;">35</div>
+            <div class="position-absolute pie-label" style="left: 20%; top: 40%; font-size: 11px; font-weight: bold; color: white;">25</div>
+            <div class="position-absolute pie-label" style="left: 45%; top: 85%; font-size: 11px; font-weight: bold; color: white;">20</div>
+            <div class="position-absolute pie-label" style="left: 72%; top: 72%; font-size: 10px; font-weight: bold; color: #000;">12</div>
+            <div class="position-absolute pie-label" style="left: 74%; top: 52%; font-size: 10px; font-weight: bold; color: #000;">8</div>
           </div>
 
           <!-- Legend -->
@@ -158,48 +182,27 @@
 
       <!-- Dernières Activités Plateforme -->
       <div class="col-md-6 text-start">
-        <div class="bg-white rounded-4 border p-4 shadow-sm h-100">
+        <div class="bg-white rounded-4 border p-4 shadow-sm">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="fw-bold text-dark mb-0">Dernières Activités Plateforme</h6>
           </div>
           
-          <div class="d-flex flex-column gap-3 text-start">
+          <div class="d-flex flex-column gap-2 text-start overflow-y-auto" style="max-height: 270px;">
             
-            <!-- Commande #AGC-9021 -->
-            <div class="p-3 rounded-4 border d-flex flex-column gap-2 bg-light bg-opacity-50">
+            <div *ngIf="commandes.length === 0" class="p-3 text-center text-muted small border rounded-4">
+              Aucune activité récente enregistrée pour le moment.
+            </div>
+
+            <div *ngFor="let cmd of commandes" class="p-3 rounded-4 border d-flex flex-column gap-2 bg-light bg-opacity-50">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Commande #AGC-9021</h6>
-                  <small class="text-muted" style="font-size: 11px;">Khadija Sy ➔ Mamadou Sow (Ferme Vallée Bio)</small>
+                  <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Commande #AGC-{{ cmd.id }}</h6>
+                  <small class="text-muted" style="font-size: 11px;">
+                    {{ cmd.client?.name || 'Client' }} &bull; {{ cmd.montant_total | number }} FCFA
+                  </small>
                 </div>
                 <span class="badge py-1.5 px-3 rounded-pill text-info bg-info-subtle border border-info-subtle fw-semibold" style="font-size: 11px;">
-                  🚚 En cours de livraison
-                </span>
-              </div>
-            </div>
-
-            <!-- Commande #AGC-8842 -->
-            <div class="p-3 rounded-4 border d-flex flex-column gap-2 bg-light bg-opacity-50">
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Commande #AGC-8842</h6>
-                  <small class="text-muted" style="font-size: 11px;">Babacar Ndiaye (Restaurant Le Lagon) ➔ Aïssatou Diallo (Coopérative Niayes Vert)</small>
-                </div>
-                <span class="badge py-1.5 px-3 rounded-pill text-warning bg-warning-subtle border border-warning-subtle fw-semibold" style="font-size: 11px;">
-                  ⏰ En attente
-                </span>
-              </div>
-            </div>
-
-            <!-- Commande #AGC-7719 -->
-            <div class="p-3 rounded-4 border d-flex flex-column gap-2 bg-light bg-opacity-50">
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Commande #AGC-7719</h6>
-                  <small class="text-muted" style="font-size: 11px;">Aminata Touré ➔ Cheikh Ndiaye (Riziculture Saint-Louis)</small>
-                </div>
-                <span class="badge py-1.5 px-3 rounded-pill text-success bg-success-subtle border border-success-subtle fw-semibold" style="font-size: 11px;">
-                  ✅ Livrée avec succès
+                  {{ getStatutLabel(cmd.statut) }}
                 </span>
               </div>
             </div>
@@ -211,17 +214,74 @@
     </div>
   </div>
 
-  <!-- ONGLET VALIDATIONS PRODUITS -->
+  <!-- ONGLET VALIDATIONS PRODUITS (MODÉRATION) -->
   <div *ngIf="menuActif === 'validations'">
-    <div class="bg-white rounded-4 border p-5 shadow-sm text-start mb-4">
-      <div class="mb-4">
-        <small class="text-success fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.05em;">Modération & Qualité</small>
-        <h3 class="fw-bold text-dark mb-1" style="font-family:'Playfair Display',serif;">Validation des Récoltes Proposées</h3>
-        <p class="text-muted mb-0 small">Vérifiez l'origine locale, les prix FCFA et la qualité des annonces soumises par les agriculteurs.</p>
+    <div class="bg-white rounded-4 border p-4 shadow-sm text-start mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+          <small class="text-success fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.05em;">Modération & Qualité</small>
+          <h3 class="fw-bold text-dark mb-1" style="font-family:'Playfair Display',serif;">Validation & Supervision des Produits</h3>
+          <p class="text-muted mb-0 small">Supervisez l'ensemble des annonces d'agriculteurs publiées sur la plateforme AgroConnect.</p>
+        </div>
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold" style="font-size: 12px;">
+          📦 {{ produitsModeration.length }} Produits Référencés
+        </span>
+      </div>
+
+      <!-- Spinner chargement -->
+      <div *ngIf="chargementProduits" class="text-center py-4">
+        <div class="spinner-border text-success" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
       </div>
       
-      <!-- Card empty validations -->
-      <div class="text-center py-5 border-top">
+      <!-- Liste des produits pour modération -->
+      <div *ngIf="!chargementProduits && produitsModeration.length > 0" class="table-responsive">
+        <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
+          <thead class="table-light">
+            <tr>
+              <th>Produit</th>
+              <th>Catégorie</th>
+              <th>Producteur</th>
+              <th>Prix unitaire</th>
+              <th>Stock disponible</th>
+              <th class="text-end">Action Modération</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let prod of produitsModeration">
+              <td>
+                <div class="d-flex align-items-center gap-3">
+                  <img [src]="prod.photo || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=60&h=60&fit=crop'" 
+                       alt="Produit" class="rounded-3 border" style="width: 42px; height: 42px; object-fit: cover;">
+                  <div>
+                    <span class="fw-bold text-dark d-block">{{ prod.nom }}</span>
+                    <small class="text-muted" style="font-size: 11px;">#ID-{{ prod.id }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="badge bg-light text-dark border">{{ prod.categorie?.nom || 'Légumes / Fruits' }}</span>
+              </td>
+              <td>
+                <span class="fw-medium text-dark">{{ prod.agriculteur?.user?.name || 'Agriculteur Partenaire' }}</span>
+              </td>
+              <td class="fw-bold text-success">{{ prod.prix | number }} FCFA / {{ prod.unite || 'kg' }}</td>
+              <td>
+                <span class="badge bg-success-subtle text-success border border-success-subtle">{{ prod.stock }} {{ prod.unite || 'kg' }}</span>
+              </td>
+              <td class="text-end">
+                <button (click)="supprimerProduit(prod.id)" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1.5" style="font-size: 12px;">
+                  🗑️ Retirer du catalogue
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Card empty validations quand 0 produits -->
+      <div *ngIf="!chargementProduits && produitsModeration.length === 0" class="text-center py-5 border-top">
         <div class="rounded-circle bg-success-subtle d-inline-flex align-items-center justify-content-center mb-3" style="width: 54px; height: 54px; background: #e8f6f0 !important; color: #1a7c4f;">
           <span class="fs-4">✓</span>
         </div>
@@ -240,9 +300,10 @@
         <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
           <thead class="table-light">
             <tr>
-              <th>Agriculteur</th>
+              <th>Utilisateur</th>
+              <th>Rôle</th>
               <th>Localisation</th>
-              <th>Email</th>
+              <th>Email & Téléphone</th>
               <th>Statut</th>
               <th class="text-end">Actions</th>
             </tr>
@@ -255,11 +316,21 @@
                        style="width: 36px; height: 36px; font-size: 14px; background: linear-gradient(135deg, #1A7C4F 0%, #0d5235 100%);">
                     {{ (agri.nom ? agri.nom[0] : 'U') | uppercase }}
                   </div>
-                  <span class="fw-bold text-dark">{{ agri.nom }}</span>
+                  <span class="fw-bold" style="color: var(--text-primary);">{{ agri.nom }}</span>
                 </div>
               </td>
+              <td>
+                <span *ngIf="agri.role === 'client'" class="badge bg-light text-dark border">🛒 Client</span>
+                <span *ngIf="agri.role === 'agriculteur'" class="badge bg-success-subtle text-success border border-success-subtle">👨‍🌾 Agriculteur</span>
+                <span *ngIf="agri.role === 'livreur'" class="badge bg-info-subtle text-info border border-info-subtle">🚚 Livreur</span>
+                <span *ngIf="agri.role === 'admin'" class="badge bg-danger-subtle text-danger border border-danger-subtle">🛡️ Admin</span>
+                <span *ngIf="!['client','agriculteur','livreur','admin'].includes(agri.role)" class="badge bg-light text-dark border">{{ agri.role }}</span>
+              </td>
               <td>📍 {{ agri.localisation }}</td>
-              <td class="text-muted">{{ agri.email }}</td>
+              <td>
+                <div class="text-muted">{{ agri.email }}</div>
+                <small *ngIf="agri.telephone" class="text-primary fw-medium">{{ agri.telephone }}</small>
+              </td>
               <td>
                 <span class="badge px-2.5 py-1.5" [style]="getStatutStyle(agri.statut)">
                   {{ getStatutLabel(agri.statut) }}
@@ -267,15 +338,96 @@
               </td>
               <td class="text-end">
                 <div class="d-flex gap-2 justify-content-end">
-                  <button *ngIf="agri.statut === 'en_attente'" (click)="validerAgriculteur(agri.id)"
+                  <button *ngIf="agri.statut !== 'validé'" (click)="validerAgriculteur(agri.id)"
                           class="btn btn-sm btn-success rounded-pill px-3 py-1.5 border-0 text-white" style="background: #1A7C4F; font-size: 12px;">
-                    Valider
+                    ✓ Valider
                   </button>
-                  <button *ngIf="agri.statut === 'en_attente'" (click)="rejeterAgriculteur(agri.id)"
+                  <button *ngIf="agri.statut !== 'rejeté'" (click)="rejeterAgriculteur(agri.id)"
                           class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1.5" style="font-size: 12px;">
-                    Rejeter
+                    🚫 Rejeter
                   </button>
-                  <span *ngIf="agri.statut !== 'en_attente'" class="text-muted small">Aucune action</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ONGLET FLOTTE DE LIVREURS -->
+  <div *ngIf="menuActif === 'livreurs'">
+    <div class="bg-white rounded-4 border p-4 shadow-sm text-start">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div>
+          <h5 class="fw-bold mb-1" style="color: var(--text-primary);">Flotte de Livreurs Express & Logistique</h5>
+          <p class="text-muted mb-0 small">Supervisez tous les livreurs de la plateforme, leurs véhicules, leurs zones et leurs disponibilités.</p>
+        </div>
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold" style="font-size: 12px;">
+          🏍️ {{ livreurs.length }} Livreurs Enregistrés
+        </span>
+      </div>
+      
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
+          <thead class="table-light">
+            <tr>
+              <th>Livreur</th>
+              <th>Téléphone</th>
+              <th>Véhicule</th>
+              <th>Zone d'opération</th>
+              <th>Gains Jour</th>
+              <th>Évaluation</th>
+              <th>Statut</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let liv of livreurs">
+              <td>
+                <div class="d-flex align-items-center gap-3">
+                  <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" 
+                       style="width: 36px; height: 36px; font-size: 14px; background: linear-gradient(135deg, #1B5EA6 0%, #0D3A6B 100%);">
+                    🚚
+                  </div>
+                  <div>
+                    <span class="fw-bold d-block" style="color: var(--text-primary);">{{ liv.nom }}</span>
+                    <small class="text-muted" style="font-size: 11px;">{{ liv.coursesTotal }} courses réalisées</small>
+                  </div>
+                </div>
+              </td>
+              <td class="fw-medium text-primary">{{ liv.telephone }}</td>
+              <td><span class="badge bg-light text-dark border">{{ liv.vehicule }}</span></td>
+              <td>📍 {{ liv.zone }}</td>
+              <td class="fw-bold text-success">{{ liv.gainsJour | number }} FCFA</td>
+              <td><span class="fw-bold text-warning">{{ liv.note }}</span></td>
+              <td>
+                <span *ngIf="liv.statut === 'en_attente'" class="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1.5 rounded-pill">
+                  ⏱️ En attente de validation
+                </span>
+                <span *ngIf="liv.statut === 'en_course'" class="badge bg-info-subtle text-info border border-info-subtle px-2.5 py-1.5 rounded-pill">
+                  🚚 En course
+                </span>
+                <span *ngIf="liv.statut === 'disponible'" class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill">
+                  🟢 Disponible
+                </span>
+                <span *ngIf="liv.statut === 'hors_ligne' || liv.statut === 'rejeté'" class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1.5 rounded-pill">
+                  🔴 Non validé / Hors ligne
+                </span>
+              </td>
+              <td class="text-end">
+                <div class="d-flex gap-2 justify-content-end align-items-center">
+                  <button *ngIf="liv.statut !== 'disponible' && liv.statut !== 'validé'" (click)="validerAgriculteur(liv.id)"
+                          class="btn btn-sm btn-success rounded-pill px-3 py-1 border-0 text-white" style="background: #1A7C4F; font-size: 12px;">
+                    ✓ Valider
+                  </button>
+                  <button *ngIf="liv.statut !== 'rejeté' && liv.statut !== 'hors_ligne'" (click)="rejeterAgriculteur(liv.id)"
+                          class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1" style="font-size: 12px;">
+                    🚫 Rejeter
+                  </button>
+                  <a [href]="'tel:' + liv.telephone" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1 fw-medium" style="font-size: 12px;">
+                    📞 Appeler
+                  </a>
                 </div>
               </td>
             </tr>

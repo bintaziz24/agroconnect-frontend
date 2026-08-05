@@ -22,7 +22,7 @@ export class PanierComponent implements OnInit {
   formLivraison = {
     nom: '',
     telephone: '',
-    region: 'Dakar',
+    region: 'Thiès',
     adresse: '',
     modePaiement: 'wave',
     notes: '',
@@ -32,7 +32,7 @@ export class PanierComponent implements OnInit {
   erreur = '';
   commandeSuccess: any = null;
 
-  regions = ['Dakar', 'Thiès', 'Saint-Louis', 'Ziguinchor', 'Mbour', 'Kaolack', 'Louga', 'Diourbel'];
+  regions = ['Thiès', 'Dakar', 'Saint-Louis', 'Ziguinchor', 'Mbour', 'Kaolack', 'Louga', 'Diourbel', 'Fatick', 'Kolda', 'Matam', 'Tambacounda'];
 
   constructor(
     public panierService: PanierService,
@@ -51,6 +51,10 @@ export class PanierComponent implements OnInit {
       this.formLivraison.nom = user.name || '';
       this.formLivraison.telephone = user.telephone || '';
     }
+  }
+
+  choisirModePaiement(mode: string) {
+    this.formLivraison.modePaiement = mode;
   }
 
   modifierQuantite(produitId: number, delta: number) {
@@ -83,46 +87,81 @@ export class PanierComponent implements OnInit {
 
   validerCommande() {
     if (!this.formLivraison.nom || !this.formLivraison.telephone || !this.formLivraison.adresse) {
-      this.erreur = 'Veuillez remplir tous les champs obligatoires.';
+      this.erreur = 'Veuillez remplir tous les champs obligatoires (Nom, Téléphone, Adresse).';
       return;
     }
 
     this.erreur = '';
     this.chargement = true;
 
-    const payload = {
-      adresse_livraison: `${this.formLivraison.adresse}, ${this.formLivraison.region}`,
-      telephone: this.formLivraison.telephone,
-      mode_paiement: this.formLivraison.modePaiement,
-      montant_total: this.total,
-      lignes: this.items.map(item => ({
-        produit_id: item.produit.id,
-        quantite: item.quantite,
-        prix_unitaire: item.produit.prix
-      }))
-    };
-
-    this.commandeService.creerCommande(payload).subscribe({
-      next: (res) => {
+    try {
+      if (!this.items || this.items.length === 0) {
         this.chargement = false;
-        this.commandeSuccess = res;
-        this.panierService.viderPanier();
-        this.etape = 'confirmation';
-      },
-      error: (err) => {
-        this.chargement = false;
-        // En cas de backend de test sans DB active, on simule quand même le succès
-        this.commandeSuccess = {
-          id: Math.floor(100000 + Math.random() * 900000),
-          statut: 'en_attente',
-          montant_total: this.total,
-          adresse_livraison: payload.adresse_livraison,
-          mode_paiement: payload.mode_paiement,
-        };
-        this.panierService.viderPanier();
-        this.etape = 'confirmation';
+        this.erreur = 'Votre panier est vide.';
+        return;
       }
-    });
+
+      const lignes = this.items
+        .filter(item => item && (item.produit || (item as any).id))
+        .map(item => {
+          const p = item.produit || item;
+          return {
+            produit_id: Number(p.id || (p as any).produit_id),
+            quantite: Number(item.quantite || 1),
+            prix_unitaire: Number(p.prix || (p as any).prix_unitaire || 0)
+          };
+        })
+        .filter(l => l.produit_id && !isNaN(l.produit_id));
+
+      if (lignes.length === 0) {
+        this.chargement = false;
+        this.erreur = 'Votre panier ne contient aucun produit valide.';
+        return;
+      }
+
+      const payload = {
+        adresse_livraison: `${this.formLivraison.adresse}, ${this.formLivraison.region}`,
+        telephone: this.formLivraison.telephone,
+        mode_paiement: (this.formLivraison.modePaiement || 'wave').toLowerCase(),
+        montant_total: this.total,
+        lignes: lignes
+      };
+
+      this.commandeService.creerCommande(payload).subscribe({
+        next: (res) => {
+          this.chargement = false;
+          this.commandeSuccess = res;
+          
+          // Notification temps réel pour l'espace agriculteur
+          try {
+            localStorage.setItem('derniere_commande_timestamp', Date.now().toString());
+            window.dispatchEvent(new CustomEvent('nouvelle-commande', { detail: res }));
+          } catch(e) {}
+
+          this.panierService.viderPanier();
+          this.etape = 'confirmation';
+        },
+        error: (err) => {
+          this.chargement = false;
+          let msg = 'Une erreur est survenue lors de la création de la commande.';
+          if (err && err.error) {
+            if (typeof err.error.message === 'string' && err.error.message.trim()) {
+              msg = err.error.message;
+            } else if (err.error.errors && typeof err.error.errors === 'object') {
+              try {
+                msg = Object.values(err.error.errors).flat().join(' ');
+              } catch (e) {
+                msg = 'Erreur lors du traitement du paiement.';
+              }
+            }
+          }
+          this.erreur = msg;
+        }
+      });
+    } catch (e: any) {
+      this.chargement = false;
+      this.erreur = 'Une erreur est survenue : ' + (e?.message || 'Vérifiez les informations saisies.');
+    }
   }
 
   onImageError(event: any) {

@@ -1,76 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/auth';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './dashboard.html',
+  styleUrl: './dashboard.scss',
 })
 export class DashboardComponent implements OnInit {
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  private apiUrl = environment.apiUrl;
 
   user: any = null;
   menuActif = 'dashboard';
 
   stats = {
-    utilisateurs: 1248,
-    agriculteurs: 312,
-    commandes: 847,
-    revenus: 4250000,
+    utilisateurs: 0,
+    agriculteurs: 0,
+    livreurs: 0,
+    commandes: 0,
+    revenus: 0,
+    commissions: 0,
+    validations_en_attente: 0,
+    produits: 0
   };
 
-  agriculteurs = [
-    { id: 1, nom: 'Mamadou Diallo',   localisation: 'Thiès',       email: 'mamadou@test.com', statut: 'validé',     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop' },
-    { id: 2, nom: 'Fatou Seck',       localisation: 'Dakar',       email: 'fatou@test.com',   statut: 'en_attente', image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop' },
-    { id: 3, nom: 'Ibrahima Bâ',      localisation: 'Saint-Louis', email: 'ib@test.com',      statut: 'en_attente', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop' },
-    { id: 4, nom: 'Aïssatou Ndiaye',  localisation: 'Mbour',       email: 'ais@test.com',     statut: 'validé',     image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop' },
-    { id: 5, nom: 'Oumar Sy',         localisation: 'Ziguinchor',  email: 'oumar@test.com',   statut: 'rejeté',     image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=60&h=60&fit=crop' },
-  ];
-
-  commandes = [
-    { id: 101, client: 'Cheikh Fall',    produit: 'Carottes 3kg', montant: 1500, statut: 'livré',      date: '25/06/2025' },
-    { id: 102, client: 'Marie Dione',    produit: 'Oignons 5kg',  montant: 1750, statut: 'en_route',   date: '25/06/2025' },
-    { id: 103, client: 'Aliou Mbaye',    produit: 'Tomates 2kg',  montant: 1600, statut: 'en_attente', date: '24/06/2025' },
-    { id: 104, client: 'Rokhaya Ndiaye', produit: 'Mangues 3kg',  montant: 3600, statut: 'livré',      date: '24/06/2025' },
-    { id: 105, client: 'Seydou Diop',    produit: 'Laitue x5',    montant: 1250, statut: 'annulé',     date: '23/06/2025' },
-  ];
-
-  statsUtilisateurs = [
-    { label: 'Clients',      pct: 65, couleur: '#1B5EA6' },
-    { label: 'Agriculteurs', pct: 25, couleur: '#1A7C4F' },
-    { label: 'Livreurs',     pct: 10, couleur: '#E8A020' },
-  ];
-
-  statsCommandes = [
-    { label: 'Livrés',      pct: 72, couleur: '#1A7C4F' },
-    { label: 'En transit',  pct: 15, couleur: '#1B5EA6' },
-    { label: 'En attente',  pct: 10, couleur: '#E8A020' },
-    { label: 'Annulés',     pct: 3,  couleur: '#CC3333' },
-  ];
-
-  revenus = [
-    { mois: 'Jan', val: 280000, h: 40 },
-    { mois: 'Fév', val: 350000, h: 50 },
-    { mois: 'Mar', val: 420000, h: 60 },
-    { mois: 'Avr', val: 390000, h: 56 },
-    { mois: 'Mai', val: 510000, h: 73 },
-    { mois: 'Jun', val: 480000, h: 69 },
-    { mois: 'Jul', val: 620000, h: 89 },
-    { mois: 'Aoû', val: 580000, h: 83 },
-    { mois: 'Sep', val: 710000, h: 100 },
-    { mois: 'Oct', val: 650000, h: 93 },
-    { mois: 'Nov', val: 590000, h: 85 },
-    { mois: 'Déc', val: 750000, h: 100 },
-  ];
+  agriculteurs: any[] = [];
+  livreurs: any[] = [];
+  commandes: any[] = [];
+  produitsModeration: any[] = [];
+  chargementProduits = false;
 
   constructor(
     private authService: AuthService,
     private http: HttpClient,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -83,34 +53,91 @@ export class DashboardComponent implements OnInit {
       } else {
         this.menuActif = 'dashboard';
       }
+      this.cdr.detectChanges();
     });
   }
 
   chargerDonneesBackend() {
+    // Statistiques globales
     this.http.get<any>(`${this.apiUrl}/admin/statistiques`).subscribe({
       next: (data) => {
         if (data) {
-          this.stats.utilisateurs = data.utilisateurs || this.stats.utilisateurs;
-          this.stats.agriculteurs = data.agriculteurs || this.stats.agriculteurs;
-          this.stats.commandes = data.commandes || this.stats.commandes;
-          this.stats.revenus = data.revenus || this.stats.revenus;
+          this.stats = {
+            utilisateurs: data.utilisateurs || 0,
+            agriculteurs: data.agriculteurs || 0,
+            livreurs: data.livreurs || 0,
+            commandes: data.commandes || 0,
+            revenus: data.revenus || 0,
+            commissions: data.commissions || (data.revenus ? roundVal(data.revenus * 0.05) : 0),
+            validations_en_attente: data.validations_en_attente || 0,
+            produits: data.produits || 0
+          };
+          this.cdr.detectChanges();
         }
       },
       error: () => {}
     });
 
+    // Liste des utilisateurs
     this.http.get<any[]>(`${this.apiUrl}/admin/utilisateurs`).subscribe({
       next: (list) => {
-        if (Array.isArray(list) && list.length > 0) {
+        if (Array.isArray(list)) {
           this.agriculteurs = list.map(u => ({
             id: u.id,
             nom: u.name,
-            localisation: u.localisation || 'Sénégal',
+            role: u.role || 'client',
+            localisation: u.agriculteur?.localisation || u.localisation || u.region || 'Sénégal',
             email: u.email,
-            statut: u.statut_validation || 'en_attente',
+            telephone: u.telephone || '',
+            statut: u.statut_validation || (u.agriculteur ? u.agriculteur.statut_validation : null) || (['agriculteur', 'livreur'].includes(u.role) ? 'en_attente' : 'validé'),
             image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop'
           }));
+
+          // Mapping livreurs
+          const registeredLivreurs = list
+            .filter(u => u.role === 'livreur')
+            .map(u => ({
+              id: u.id,
+              nom: u.name,
+              telephone: u.telephone ? (u.telephone.startsWith('+221') ? u.telephone : '+221 ' + u.telephone) : '+221 77 000 00 00',
+              vehicule: 'Moto Cargo Express',
+              zone: u.localisation || 'Dakar & Régions',
+              statut: u.statut_validation === 'validé' ? 'disponible' : (u.statut_validation === 'rejeté' ? 'hors_ligne' : 'en_attente'),
+              gainsJour: 0,
+              coursesTotal: 0,
+              note: '5.0 ⭐ (Nouveau)'
+            }));
+
+          this.livreurs = registeredLivreurs;
+          this.cdr.detectChanges();
         }
+      },
+      error: () => {}
+    });
+
+    // Produits à modérer
+    this.chargementProduits = true;
+    this.http.get<any[]>(`${this.apiUrl}/admin/produits`).subscribe({
+      next: (list) => {
+        this.chargementProduits = false;
+        if (Array.isArray(list)) {
+          this.produitsModeration = list;
+        }
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.chargementProduits = false;
+        this.cdr.detectChanges();
+      }
+    });
+
+    // Commandes récentes
+    this.http.get<any[]>(`${this.apiUrl}/admin/commandes`).subscribe({
+      next: (list) => {
+        if (Array.isArray(list)) {
+          this.commandes = list.slice(0, 5);
+        }
+        this.cdr.detectChanges();
       },
       error: () => {}
     });
@@ -125,7 +152,7 @@ export class DashboardComponent implements OnInit {
       'livré':       'background:#E8F5EE;color:#0F5235',
       'annulé':      'background:#FCEBEB;color:#791F1F',
     };
-    return styles[statut] || '';
+    return styles[statut] || 'background:#E8F5EE;color:#0F5235';
   }
 
   getStatutLabel(statut: string): string {
@@ -137,15 +164,20 @@ export class DashboardComponent implements OnInit {
       'livré':       'Livré',
       'annulé':      'Annulé',
     };
-    return labels[statut] || statut;
+    return labels[statut] || statut || 'Validé';
   }
 
   validerAgriculteur(id: number) {
     const agri = this.agriculteurs.find(a => a.id === id);
     if (agri) agri.statut = 'validé';
 
+    const liv = this.livreurs.find(l => l.id === id);
+    if (liv) liv.statut = 'disponible';
+
     this.http.put(`${this.apiUrl}/admin/valider/${id}`, { statut: 'validé' }).subscribe({
-      next: () => {},
+      next: () => {
+        this.chargerDonneesBackend();
+      },
       error: () => {}
     });
   }
@@ -154,10 +186,27 @@ export class DashboardComponent implements OnInit {
     const agri = this.agriculteurs.find(a => a.id === id);
     if (agri) agri.statut = 'rejeté';
 
+    const liv = this.livreurs.find(l => l.id === id);
+    if (liv) liv.statut = 'hors_ligne';
+
     this.http.put(`${this.apiUrl}/admin/valider/${id}`, { statut: 'rejeté' }).subscribe({
-      next: () => {},
+      next: () => {
+        this.chargerDonneesBackend();
+      },
       error: () => {}
     });
+  }
+
+  supprimerProduit(id: number) {
+    if (confirm('Voulez-vous vraiment retirer ce produit de la plateforme ?')) {
+      this.http.delete(`${this.apiUrl}/admin/produits/${id}`).subscribe({
+        next: () => {
+          this.produitsModeration = this.produitsModeration.filter(p => p.id !== id);
+          this.stats.produits = Math.max(0, this.stats.produits - 1);
+        },
+        error: () => {}
+      });
+    }
   }
 
   logout() {
@@ -165,4 +214,8 @@ export class DashboardComponent implements OnInit {
       window.location.href = '/';
     });
   }
+}
+
+function roundVal(val: number): number {
+  return Math.round(val * 100) / 100;
 }

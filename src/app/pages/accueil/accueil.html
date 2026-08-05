@@ -53,15 +53,15 @@
           <!-- Floating card 1 (Wave & OM) with float animation wrapper -->
           <div class="position-absolute animate-float-delayed" style="top: 40px; left: -60px; z-index: 10;">
             <!-- Inner card with hover effect -->
-            <div class="bg-white rounded-3 shadow p-3 d-flex align-items-center gap-3 floating-card-hover" 
-                 style="width: 220px; border-left: 4px solid #FFA000; cursor: pointer;">
-              <div class="d-flex align-items-center gap-1 bg-light rounded-3 p-1" style="flex-shrink: 0;">
-                <img src="/assets/wave.png" alt="Wave Logo" style="width: 20px; height: 20px; object-fit: contain;">
-                <img src="/assets/om.png" alt="OM Logo" style="width: 20px; height: 20px; object-fit: contain; border-radius: 2px;">
+            <div class="bg-white rounded-3 shadow p-2 d-flex align-items-center gap-2 floating-card-hover" 
+                 style="width: 175px; border-left: 4px solid #FFA000; cursor: pointer;">
+              <div class="d-flex align-items-center gap-1 bg-light rounded-2 p-1" style="flex-shrink: 0;">
+                <img src="/assets/wave.png" alt="Wave Logo" style="width: 16px; height: 16px; object-fit: contain;">
+                <img src="/assets/om.png" alt="OM Logo" style="width: 16px; height: 16px; object-fit: contain; border-radius: 2px;">
               </div>
               <div>
-                <strong class="text-dark d-block" style="font-size: 13px;">Paiement Wave & OM</strong>
-                <small class="text-muted" style="font-size: 11px;">Paiement facile en FCFA</small>
+                <strong class="text-dark d-block" style="font-size: 11px; line-height: 1.2;">Paiement Wave & OM</strong>
+                <small class="text-muted" style="font-size: 9px; line-height: 1.1;">Paiement facile en FCFA</small>
               </div>
             </div>
           </div>
@@ -69,12 +69,12 @@
           <!-- Floating card 2 (Deliveries) with float animation wrapper -->
           <div class="position-absolute animate-float" style="bottom: 40px; right: -50px; z-index: 10;">
             <!-- Inner card with hover effect -->
-            <div class="bg-white rounded-3 shadow p-3 d-flex align-items-center gap-3 floating-card-hover" 
-                 style="width: 230px; border-left: 4px solid #1A7C4F; cursor: pointer;">
-              <div class="fs-3">🚚</div>
+            <div class="bg-white rounded-3 shadow p-2 d-flex align-items-center gap-2 floating-card-hover" 
+                 style="width: 175px; border-left: 4px solid #1A7C4F; cursor: pointer;">
+              <div class="fs-5">🚚</div>
               <div>
-                <strong class="text-dark d-block" style="font-size: 13px;">{{ t('15 000+ Livraisons') }}</strong>
-                <small class="text-muted" style="font-size: 11px;">{{ t('Flotte de livreurs locaux') }}</small>
+                <strong class="text-dark d-block" style="font-size: 11px; line-height: 1.2;">{{ t('15 000+ Livraisons') }}</strong>
+                <small class="text-muted" style="font-size: 9px; line-height: 1.1;">{{ t('Flotte de livreurs locaux') }}</small>
               </div>
             </div>
           </div>
@@ -85,7 +85,7 @@
 </section>
 
 <!-- STATS -->
-<section class="py-4 bg-white">
+<section class="py-4 bg-white animate-on-scroll">
   <div class="container">
     <div class="p-4 rounded-4 shadow-sm border text-center" style="background: #E8F6F0; border-color: #D1EDE1 !important;">
       <div class="row g-4 justify-content-center">
@@ -111,7 +111,7 @@
 </section>
 
 <!-- CATEGORIES -->
-<section class="py-5 bg-white border-bottom">
+<section class="py-5 bg-white border-bottom animate-on-scroll">
   <div class="container">
     <div class="d-flex justify-content-between align-items-end mb-4">
       <div>
@@ -143,7 +143,7 @@
 </section>
 
 <!-- PRODUCTS GRID -->
-<section class="py-5" style="background: #FAFBF9;">
+<section class="py-5 animate-on-scroll" style="background: #FAFBF9;">
   <div class="container">
     <div class="d-flex justify-content-between align-items-end mb-4">
       <div>
@@ -161,7 +161,7 @@
       </div>
     </div>
 <!-- ECOSYSTEME NETWORK -->
-<section id="a-propos" class="py-5" style="background: #FAFBF9;">
+<section id="a-propos" class="py-5 animate-on-scroll" style="background: #FAFBF9;">
   <div class="container p-5 rounded-4 text-white shadow" style="background: #0b1329;">
     <div class="text-center mb-5">
       <small class="text-success fw-bold text-uppercase d-block mb-1" style="font-size: 11px; letter-spacing: 0.05em;">{{ t('eco_title') }}</small>
@@ -211,7 +211,7 @@
 </section>
 
 <!-- CALL TO ACTION BANNER -->
-<section class="py-4" style="background: #FAFBF9;">
+<section class="py-4 animate-on-scroll" style="background: #FAFBF9;">
   <div class="container p-4 rounded-4 text-white d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4 shadow-sm" 
        style="background: #10663a;">
     <div class="text-start">
@@ -232,7 +232,7 @@
 </section>
 
 <!-- SECTION COMMENT ÇA MARCHE -->
-<section class="py-5" style="background:var(--vert-d);color:white">
+<section class="py-5 animate-on-scroll" style="background:var(--vert-d);color:white">
   <div class="container text-center">
     <h2 style="font-family:'Playfair Display',serif;margin-bottom:.5rem">
       {{ t('sec_how_title') }}
@@ -270,7 +270,7 @@
 </section>
 
 <!-- FOIRE AUX QUESTIONS (FAQ) -->
-<section id="faq" class="py-5 bg-light">
+<section id="faq" class="py-5 bg-light animate-on-scroll">
   <div class="container" style="max-width: 900px;">
     <h2 class="text-center fw-bold mb-4" style="font-family:'Playfair Display',serif">{{ t('faq_head') }}</h2>
     
@@ -301,9 +301,9 @@
           {{ t('faq_contact_desc') }}
         </p>
       </div>
-      <a href="tel:+221338000000" class="btn text-white fw-bold d-flex align-items-center gap-2 px-4 py-2" 
+      <a href="tel:+221777556815" class="btn text-white fw-bold d-flex align-items-center gap-2 px-4 py-2" 
          style="background: #1A7C4F; border-radius: 10px; font-size: 14px;">
-        📞 +221 33 800 00 00
+        📞 +221 77 755 68 15
       </a>
     </div>
 

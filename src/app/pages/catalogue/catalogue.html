@@ -1,5 +1,5 @@
 <!-- BANNIÈRE EN-TÊTE -->
-<div class="container py-4">
+<div class="container py-4 animate-on-scroll">
   <div class="p-4 rounded-4 text-white position-relative overflow-hidden" 
        style="background: #0f5235; min-height: 180px; display: flex; flex-direction: column; justify-content: center;">
     <!-- Grid overlay -->
@@ -30,7 +30,7 @@
 </div>
 
 <!-- BARRE DE RECHERCHE & FILTRES HORIZONTAUX -->
-<div class="container mb-4">
+<div class="container mb-4 animate-on-scroll" style="transition-delay: 100ms;">
   <div class="bg-white p-3 rounded-4 shadow-sm border">
     <div class="row g-3 align-items-center">
       <!-- Search input -->
@@ -126,7 +126,7 @@
 </div>
 
 <!-- GRILLE PRODUITS -->
-<div class="container pb-5">
+<div class="container pb-5 animate-on-scroll" style="transition-delay: 200ms;">
   <!-- Aucun résultat -->
   <div *ngIf="produitsFiltres.length === 0" class="text-center py-5 bg-white border rounded-4 shadow-sm">
     <span class="fs-1 d-block mb-3">🔍</span>

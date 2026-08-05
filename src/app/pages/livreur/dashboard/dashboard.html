@@ -1,4 +1,4 @@
-<div class="container py-5" style="max-width: 1100px;">
+<div class="container py-5 animate-on-scroll" style="max-width: 1100px;">
 
   <!-- ================= ONGLET MISSIONS DE LIVRAISON ================= -->
   <div *ngIf="menuActif === 'missions'">
@@ -16,218 +16,169 @@
           <span class="badge px-3 py-1.5 rounded-pill mb-3" style="background: rgba(255,255,255,0.1); font-size: 11px;">
             ⚡ ESPACE LIVREUR EXPRESS &nbsp;🏍️ TVS Moto Cargo 200cc
           </span>
-          <h2 class="fw-bold mb-2" style="font-family:'Playfair Display',serif; font-size: 32px;">Bonjour, Ibrahima Faye ⚡</h2>
+          <h2 class="fw-bold mb-2" style="font-family:'Playfair Display',serif; font-size: 32px;">Bonjour, {{ user?.name || user?.nom || 'Livreur' }} ⚡</h2>
           <p class="text-white-50 mb-0 small" style="max-width: 550px;">
             Effectuez vos missions de livraison urbaines et interrégionales au Sénégal et consultez vos gains journaliers.
           </p>
         </div>
         
         <div class="px-4 py-3 rounded-4 border border-secondary text-center text-md-end bg-dark bg-opacity-25" style="min-width: 180px;">
-          <h4 class="fw-bold mb-0 text-success" style="font-size: 24px;">1 500 FCFA</h4>
+          <h4 class="fw-bold mb-0 text-success" style="font-size: 24px;">{{ stats.weeklyGains | number }} FCFA</h4>
           <small class="text-white-50" style="font-size: 10px;">Gains Livraison Aujourd'hui</small>
         </div>
       </div>
     </div>
 
-    <!-- Alerte confirmation de livraison réussie -->
-    <div *ngIf="livraisonConfirmee" class="alert alert-success border-success-subtle rounded-4 p-3 mb-4 d-flex justify-content-between align-items-center text-start">
-      <div>
-        <strong class="text-success" style="font-size: 15px;">🎉 Mission accomplie avec succès !</strong>
-        <p class="mb-0 text-muted small mt-1">
-          La livraison de la commande #AGC-9021 a été confirmée. Votre gain de <strong>2 000 FCFA</strong> a été ajouté à votre solde hebdomadaire.
-        </p>
+    <!-- Message si aucune mission pour ce livreur -->
+    <div *ngIf="missions.length === 0" class="bg-white p-5 rounded-4 border text-center my-4 shadow-sm">
+      <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 text-success bg-success-subtle" style="width: 60px; height: 60px; font-size: 28px; background: #e8f6f0 !important;">
+        🏍️
       </div>
-      <button class="btn-close shadow-none" type="button" (click)="livraisonConfirmee = false"></button>
+      <h5 class="fw-bold text-dark mb-2">Aucune mission de livraison attribuée pour le moment</h5>
+      <p class="text-muted small mb-0 mx-auto" style="max-width: 480px;">
+        Votre compte livreur est prêt ! Dès qu'une commande sera validée sur la plateforme, les détails de la course et l'itinéraire s'afficheront automatiquement ici.
+      </p>
     </div>
 
-    <!-- Mission en cours section header -->
-    <div class="mb-4 text-start">
-      <small class="text-success fw-bold text-uppercase d-block mb-1" style="font-size: 10px; letter-spacing: 0.05em;">Mission en cours</small>
-      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <h4 class="fw-bold text-dark mb-0">Commande #AGC-9021</h4>
-        <span class="badge py-1.5 px-3 rounded-pill text-info bg-info-subtle border border-info-subtle fw-semibold" style="font-size: 11px;">
-          🚚 En cours de livraison
-        </span>
-      </div>
-    </div>
-
-    <!-- En-tête des points d'enlèvement et livraison -->
-    <div class="row g-3 mb-4 text-start">
-      
-      <!-- Point d'enlèvement (Producteur) -->
-      <div class="col-md-6">
-        <div class="bg-white p-3 rounded-4 border shadow-sm">
-          <small class="text-muted fw-bold text-uppercase d-block mb-2" style="font-size: 10px; letter-spacing: 0.05em;">Point d'enlèvement (Producteur)</small>
-          <h6 class="fw-bold text-dark mb-1" style="font-size: 15px;">Mamadou Sow (Ferme Vallée Bio)</h6>
-          <small class="text-muted d-block mb-3">📍 Région Ziguinchor</small>
-          <a href="tel:+221776543210" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-medium" style="font-size: 12px;">
-            📞 Appeler Producteur (+221 77 654 32 10)
-          </a>
-        </div>
-      </div>
-
-      <!-- Point de livraison (Client) -->
-      <div class="col-md-6">
-        <div class="bg-white p-3 rounded-4 border shadow-sm">
-          <small class="text-muted fw-bold text-uppercase d-block mb-2" style="font-size: 10px; letter-spacing: 0.05em;">Point de livraison (Client)</small>
-          <h6 class="fw-bold text-dark mb-1" style="font-size: 15px;">Khadija Sy</h6>
-          <small class="text-muted d-block mb-3">📍 Villa 142, Sacré-Cœur 3, Dakar</small>
-          <a href="tel:+221771112233" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-medium" style="font-size: 12px;">
-            📞 Appeler Client (+221 77 111 22 33)
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Carte Interactive de Livraison en Direct -->
-    <div class="bg-white rounded-4 border shadow-sm p-4 text-start mb-4">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h6 class="fw-bold text-dark mb-0"><span class="text-success">⚡</span> Carte Interactive de Livraison en Direct</h6>
-        <div class="d-flex gap-2">
-          <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill" style="font-size: 11px;">
-            🔄 Suivi GPS Actif
-          </span>
-          <span class="badge px-3 py-1.5 rounded-pill bg-warning text-dark fw-bold" style="font-size: 11px;">
-            {{ missions[0].parcoursPct }}% Parcours
+    <!-- Si au moins 1 mission existe -->
+    <div *ngIf="missions.length > 0">
+      <!-- Mission en cours section header -->
+      <div class="mb-4 text-start">
+        <small class="text-success fw-bold text-uppercase d-block mb-1" style="font-size: 10px; letter-spacing: 0.05em;">Mission en cours</small>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <h4 class="fw-bold text-dark mb-0">Commande #{{ missions[0].id }}</h4>
+          <span class="badge py-1.5 px-3 rounded-pill text-info bg-info-subtle border border-info-subtle fw-semibold" style="font-size: 11px;">
+            🚚 {{ missions[0].statut }}
           </span>
         </div>
       </div>
 
-      <!-- Sénégal Map Wrapper -->
-      <div class="p-3 rounded-4 position-relative overflow-hidden d-flex justify-content-center align-items-center" 
-           style="background: #062615; min-height: 380px;">
+      <!-- En-tête des points d'enlèvement et livraison -->
+      <div class="row g-3 mb-4 text-start">
         
-        <!-- SVG Map with custom paths and animated route -->
-        <svg class="w-100" style="max-width: 500px; height: 350px;" viewBox="0 0 500 350">
-          <rect width="500" height="350" fill="none"/>
-          <path d="M 50,0 Q 150,150 50,300" stroke="#004d40" stroke-width="2" fill="none" stroke-dasharray="4,4" />
-          <path d="M 50,220 L 150,225" stroke="#0288d1" stroke-width="3" />
+        <!-- Point d'enlèvement (Producteur) -->
+        <div class="col-md-6">
+          <div class="bg-white p-3 rounded-4 border shadow-sm">
+            <small class="text-muted fw-bold text-uppercase d-block mb-2" style="font-size: 10px; letter-spacing: 0.05em;">Point d'enlèvement (Producteur)</small>
+            <h6 class="fw-bold text-dark mb-1" style="font-size: 15px;">{{ missions[0].origine }}</h6>
+            <small class="text-muted d-block mb-3">📍 Région {{ missions[0].origineRegion }}</small>
+            <a [href]="'tel:' + missions[0].originePhone" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-medium" style="font-size: 12px;">
+              📞 Appeler Producteur ({{ missions[0].originePhone }})
+            </a>
+          </div>
+        </div>
 
-          <path d="M 40,80 C 100,50 200,60 300,40 C 400,20 480,100 450,180 C 430,220 480,260 400,320 C 350,340 280,310 200,300 C 150,330 100,290 80,260 C 60,240 50,180 40,80 Z" 
-                fill="none" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="4,3" />
+        <!-- Point de livraison (Client) -->
+        <div class="col-md-6">
+          <div class="bg-white p-3 rounded-4 border shadow-sm">
+            <small class="text-muted fw-bold text-uppercase d-block mb-2" style="font-size: 10px; letter-spacing: 0.05em;">Point de livraison (Client)</small>
+            <h6 class="fw-bold text-dark mb-1" style="font-size: 15px;">{{ missions[0].destinataire }}</h6>
+            <small class="text-muted d-block mb-3">📍 {{ missions[0].destinataireAdresse }}</small>
+            <a [href]="'tel:' + missions[0].destinatairePhone" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-medium" style="font-size: 12px;">
+              📞 Appeler Client ({{ missions[0].destinatairePhone }})
+            </a>
+          </div>
+        </div>
+      </div>
 
-          <path id="route-path" d="M 220,290 C 230,240 180,190 180,190 C 140,170 110,150 110,150 C 90,145 70,140 70,140" 
-                fill="none" stroke="#e8a020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <!-- Carte Interactive de Livraison en Direct -->
+      <div class="bg-white rounded-4 border shadow-sm p-4 text-start mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="fw-bold text-dark mb-0"><span class="text-success">⚡</span> Carte Interactive de Livraison en Direct</h6>
+          <div class="d-flex gap-2">
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill" style="font-size: 11px;">
+              🔄 Suivi GPS Actif
+            </span>
+            <span class="badge px-3 py-1.5 rounded-pill bg-warning text-dark fw-bold" style="font-size: 11px;">
+              {{ missions[0].parcoursPct }}% Parcours
+            </span>
+          </div>
+        </div>
+
+        <!-- Sénégal Map Wrapper (Leaflet GPS Réel) -->
+        <div class="rounded-4 overflow-hidden position-relative shadow-sm border mb-3" style="min-height: 400px; background: #e5e5e5;">
           
-          <path d="M 220,290 C 230,240 180,190 180,190 C 140,170 110,150 110,150 C 90,145 70,140 70,140" 
-                fill="none" stroke="#4cd964" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                stroke-dasharray="350" [attr.stroke-dashoffset]="350 - (3.5 * missions[0].parcoursPct)" />
+          <!-- Conteneur Leaflet -->
+          <div id="real-gps-map" style="height: 400px; width: 100%; z-index: 1;"></div>
 
-          <!-- Cities dots -->
-          <circle cx="70" cy="140" r="6" fill="#00e676" stroke="#fff" stroke-width="1.5" />
-          <text x="60" y="125" fill="#fff" font-size="10" font-weight="bold" font-family="sans-serif">Dakar</text>
-          
-          <circle cx="110" cy="150" r="5" fill="#fff" />
-          <text x="110" y="142" fill="#ccc" font-size="9" font-family="sans-serif">Thiès</text>
-
-          <circle cx="140" cy="165" r="5" fill="#fff" />
-          <text x="145" y="168" fill="#ccc" font-size="9" font-family="sans-serif">Diourbel</text>
-
-          <circle cx="160" cy="65" r="5" fill="#fff" />
-          <text x="145" y="55" fill="#ccc" font-size="9" font-family="sans-serif">Saint-Louis</text>
-
-          <circle cx="150" cy="115" r="5" fill="#fff" />
-          <text x="140" y="108" fill="#ccc" font-size="9" font-family="sans-serif">Louga</text>
-
-          <circle cx="350" cy="120" r="5" fill="#fff" />
-          <text x="345" y="112" fill="#ccc" font-size="9" font-family="sans-serif">Matam</text>
-
-          <circle cx="340" cy="275" r="5" fill="#fff" />
-          <text x="290" y="270" fill="#ccc" font-size="9" font-family="sans-serif">Tambacounda</text>
-
-          <circle cx="270" cy="320" r="5" fill="#fff" />
-          <text x="260" y="335" fill="#ccc" font-size="9" font-family="sans-serif">Kolda</text>
-
-          <circle cx="180" cy="190" r="5" fill="#fff" />
-          <text x="185" y="185" fill="#ccc" font-size="9" font-family="sans-serif">Kaolack</text>
-
-          <circle cx="150" cy="210" r="5" fill="#fff" />
-          <text x="120" y="208" fill="#ccc" font-size="9" font-family="sans-serif">Fatick</text>
-
-          <circle cx="220" cy="290" r="6" fill="#00e676" stroke="#fff" stroke-width="1.5" />
-          <text x="210" y="308" fill="#fff" font-size="10" font-weight="bold" font-family="sans-serif">Ziguinchor</text>
-
-          <!-- Animated Truck Icon along path -->
-          <!-- Position at 39% (Thiès approach) -->
-          <g transform="translate(140, 165)">
-            <circle r="12" fill="#ff9100" opacity="0.3" class="animate-ping" />
-            <circle r="7" fill="#ff9100" stroke="#fff" stroke-width="1.5" />
-          </g>
-        </svg>
-
-        <!-- Legend info overlay at the bottom of map -->
-        <div class="position-absolute bottom-0 w-100 px-3 pb-3">
-          <div class="p-2.5 rounded-3 border border-dark text-white d-flex align-items-center gap-3 text-start" 
-               style="background: rgba(15, 28, 43, 0.9); font-size: 12px; backdrop-filter: blur(4px);">
-            <span class="fs-4">🚚</span>
-            <div>
-              <strong class="text-white">Ibrahima Faye (Livreur Express)</strong>
-              <div class="text-white-50 mt-0.5" style="font-size: 11px;">
-                En route vers <strong>Villa 142, Sacré-Cœur 3, Dakar</strong> · ~ 25 - 35 Min (Arrivée estimée)
+          <!-- Legend info overlay at the bottom of map -->
+          <div class="position-absolute bottom-0 w-100 px-3 pb-3" style="z-index: 1000; pointer-events: none;">
+            <div class="p-2.5 rounded-3 text-white d-flex align-items-center gap-3 text-start shadow" 
+                 style="background: rgba(9, 23, 41, 0.9); font-size: 12px; backdrop-filter: blur(6px); pointer-events: auto;">
+              <span class="fs-4">🚚</span>
+              <div>
+                <strong class="text-white">{{ user?.name || user?.nom || 'Livreur Express' }} (Livreur Express)</strong>
+                <div class="text-white-50 mt-0.5" style="font-size: 11px;">
+                  📍 Trajet GPS réel : <strong>{{ missions[0].origineRegion }} ➔ {{ missions[0].destinataireAdresse }}</strong>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Action buttons under the Map -->
-      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3 border-top">
-        <button class="btn btn-light border rounded-pill px-4 py-2 text-dark fw-bold d-flex align-items-center gap-2" style="font-size: 13px;">
-          💬 Ouvrir Chat Direct
-        </button>
-        <button *ngIf="missions[0].statut === 'En cours de livraison'" (click)="confirmerLivraison()" 
-                class="btn btn-success border-0 rounded-pill px-4 py-2 text-white fw-bold d-flex align-items-center gap-2" 
-                style="background: #1A7C4F; font-size: 13px;">
-          ✓ Confirmer la Livraison Réussie (+2000 FCFA)
-        </button>
-        <span *ngIf="missions[0].statut === 'Livrée avec succès'" class="badge px-4 py-2.5 rounded-pill bg-success-subtle text-success border border-success-subtle fw-bold" style="font-size: 13px;">
-          ✅ Mission Complétée avec Succès
-        </span>
+        <!-- Action buttons under the Map -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3 border-top">
+          <button (click)="ouvrirChatModal()" class="btn btn-light border rounded-pill px-4 py-2 text-dark fw-bold d-flex align-items-center gap-2 cursor-pointer" style="font-size: 13px;">
+            💬 Ouvrir Chat Direct
+          </button>
+          <button *ngIf="missions[0].estDisponible" (click)="accepterMission(missions[0])" class="btn btn-success border-0 rounded-pill px-4 py-2 text-white fw-bold d-flex align-items-center gap-2" style="background: #1A7C4F; font-size: 13px;">
+            ⚡ Accepter cette livraison (+1 000 FCFA)
+          </button>
+          <div class="d-flex gap-2 flex-wrap" *ngIf="!missions[0].estDisponible && missions[0].statut !== 'Livrée avec succès' && missions[0].statut !== 'Mission refusée'">
+            <button (click)="refuserLivraison(missions[0])" 
+                    class="btn btn-outline-danger rounded-pill px-3 py-2 fw-bold d-flex align-items-center gap-1" 
+                    style="font-size: 13px;">
+              🚫 Refuser la Mission
+            </button>
+            <button (click)="confirmerLivraison(missions[0])" 
+                    class="btn btn-success border-0 rounded-pill px-4 py-2 text-white fw-bold d-flex align-items-center gap-2" 
+                    style="background: #1A7C4F; font-size: 13px;">
+              ✓ Confirmer la Livraison Réussie (+1 000 FCFA)
+            </button>
+          </div>
+          <span *ngIf="missions[0].statut === 'Livrée avec succès'" class="badge px-4 py-2.5 rounded-pill bg-success-subtle text-success border border-success-subtle fw-bold" style="font-size: 13px;">
+            ✅ Mission Complétée avec Succès
+          </span>
+          <span *ngIf="missions[0].statut === 'Mission refusée'" class="badge px-4 py-2.5 rounded-pill bg-danger-subtle text-danger border border-danger-subtle fw-bold" style="font-size: 13px;">
+            🚫 Mission Déclinée / Refusée
+          </span>
+        </div>
       </div>
     </div>
 
     <!-- Section historique des missions -->
-    <div class="bg-white rounded-4 border shadow-sm p-4 text-start">
+    <div class="bg-white rounded-4 border shadow-sm p-4 text-start" *ngIf="missions.length > 0">
       <h6 class="fw-bold text-dark mb-3">Toutes mes Missions de Livraison</h6>
       
       <div class="d-flex flex-column gap-3">
-        <!-- Commande #AGC-9021 -->
-        <div class="p-3 rounded-4 border bg-light bg-opacity-50 text-start">
+        <div *ngFor="let m of missions" class="p-3 rounded-4 border bg-light bg-opacity-50 text-start">
           <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-              <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Commande #AGC-9021</h6>
+              <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Commande #{{ m.id }}</h6>
               <small class="text-muted" style="font-size: 11px;">
-                Origine: Mamadou Sow (Ferme Vallée Bio) (Ziguinchor) ➔ Destinataire: Khadija Sy (Villa 142, Sacré-Cœur 3, Dakar)
+                Origine: {{ m.origine }} ({{ m.origineRegion }}) ➔ Destinataire: {{ m.destinataire }} ({{ m.destinataireAdresse }})
               </small>
             </div>
             <div class="d-flex align-items-center gap-3">
-              <span class="fw-bold text-success" style="font-size: 14px;">Gain: 2 000 FCFA</span>
-              <span class="badge py-1.5 px-3 rounded-pill fw-semibold text-info bg-info-subtle border border-info-subtle fw-semibold" 
-                    style="font-size: 11px;" *ngIf="missions[0].statut === 'En cours de livraison'">
-                🚚 En cours de livraison
-              </span>
-              <span class="badge py-1.5 px-3 rounded-pill fw-semibold text-success bg-success-subtle border border-success-subtle fw-semibold" 
-                    style="font-size: 11px;" *ngIf="missions[0].statut === 'Livrée avec succès'">
+              <span class="fw-bold text-success" style="font-size: 14px;">Gain: {{ m.gain | number }} FCFA</span>
+              <button *ngIf="m.estDisponible" (click)="accepterMission(m)" class="btn btn-sm btn-success rounded-pill px-3 py-1.5 border-0 text-white fw-bold" style="background: #1A7C4F; font-size: 12px;">
+                ⚡ Accepter la livraison
+              </button>
+              <div *ngIf="!m.estDisponible && m.statut !== 'Livrée avec succès' && m.statut !== 'Mission refusée'" class="d-flex gap-1.5 align-items-center">
+                <button (click)="confirmerLivraison(m)" class="btn btn-sm btn-success rounded-pill px-3 py-1.5 border-0 text-white fw-bold" style="background: #1A7C4F; font-size: 12px;">
+                  ✓ Confirmer Livraison (+1 000 FCFA)
+                </button>
+                <button (click)="refuserLivraison(m)" class="btn btn-sm btn-outline-danger rounded-pill px-2.5 py-1.5 fw-bold" style="font-size: 12px;">
+                  🚫
+                </button>
+              </div>
+              <span class="badge py-1.5 px-3 rounded-pill fw-semibold text-success bg-success-subtle border border-success-subtle" 
+                    style="font-size: 11px;" *ngIf="m.statut === 'Livrée avec succès'">
                 ✅ Livrée avec succès
               </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Commande #AGC-7719 -->
-        <div class="p-3 rounded-4 border bg-light bg-opacity-50 text-start">
-          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <div>
-              <h6 class="fw-bold text-dark mb-0" style="font-size: 14px;">Commande #AGC-7719</h6>
-              <small class="text-muted" style="font-size: 11px;">
-                Origine: Cheikh Ndiaye (Riziculture Saint-Louis) (Saint-Louis) ➔ Destinataire: Aminata Touré (Cité Keur Gorgui, Immeuble A4, Dakar)
-              </small>
-            </div>
-            <div class="d-flex align-items-center gap-3">
-              <span class="fw-bold text-success" style="font-size: 14px;">Gain: 1 500 FCFA</span>
-              <span class="badge py-1.5 px-3 rounded-pill fw-semibold text-success bg-success-subtle border border-success-subtle fw-semibold" 
-                    style="font-size: 11px;">
-                ✅ Livrée avec succès
+              <span class="badge py-1.5 px-3 rounded-pill fw-semibold text-danger bg-danger-subtle border border-danger-subtle" 
+                    style="font-size: 11px;" *ngIf="m.statut === 'Mission refusée'">
+                🚫 Mission refusée
               </span>
             </div>
           </div>
@@ -295,6 +246,111 @@
           <small class="text-muted fw-bold mt-1" style="font-size: 11px;">{{ g.jour }}</small>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CHAT DIRECT LIVREUR -->
+<div *ngIf="modalChatOuvert" class="modal-backdrop fade show" style="background: rgba(0,0,0,0.6); z-index: 1040; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;"></div>
+<div *ngIf="modalChatOuvert" class="modal fade show d-block" tabindex="-1" style="z-index: 1050;">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden bg-white text-start">
+      
+      <!-- Header -->
+      <div class="modal-header text-white border-0 p-3" style="background: linear-gradient(135deg, #091729 0%, #152d4a 100%);">
+        <div>
+          <h6 class="fw-bold mb-0 text-white" style="font-size: 15px;">💬 Chat Direct - Mission #AGC-9021</h6>
+          <small class="text-white-50" style="font-size: 11px;">🟢 Client: Rokhaya Seck • Producteur: Mamadou Diallo</small>
+        </div>
+        <button (click)="modalChatOuvert = false" class="btn-close btn-close-white shadow-none" type="button"></button>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="p-2.5 bg-light border-bottom d-flex gap-2 justify-content-center flex-wrap">
+        <a href="https://wa.me/221777556815?text=Bonjour,%20je%20suis%20le%20livreur%20de%20la%20commande%20AGC-9021" target="_blank" 
+           class="btn btn-sm btn-success rounded-pill px-3 py-1.5 fw-bold text-white border-0 d-flex align-items-center gap-1" style="background: #25D366; font-size: 12px;">
+          🟢 WhatsApp Direct (77 755 68 15)
+        </a>
+        <a href="tel:+221771112233" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1.5 fw-bold" style="font-size: 12px;">
+          📞 Appeler Client
+        </a>
+      </div>
+
+      <!-- Style animations fluides chat -->
+      <style>
+        @keyframes msgPopIn {
+          0% { opacity: 0; transform: translateY(10px) scale(0.97); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .chat-bubble-animated {
+          animation: msgPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes typingPulse {
+          0%, 100% { opacity: 0.3; transform: scale(0.8); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+        .typing-dot {
+          width: 6px;
+          height: 6px;
+          background-color: #1A7C4F;
+          border-radius: 50%;
+          display: inline-block;
+          animation: typingPulse 1.2s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+      </style>
+
+      <!-- Messages body -->
+      <div id="chat-messages-container" class="modal-body p-3 bg-light bg-opacity-25" style="height: 330px; overflow-y: auto; scroll-behavior: smooth;">
+        <div class="d-flex flex-column gap-3">
+          <div *ngFor="let msg of chatMessages" 
+               class="d-flex flex-column chat-bubble-animated" 
+               [class.align-items-end]="msg.estMe" 
+               [class.align-items-start]="!msg.estMe">
+            
+            <small class="text-muted mb-1" style="font-size: 10px;">{{ msg.auteur }} • {{ msg.temps }}</small>
+            
+            <div class="p-3 rounded-4 shadow-sm" 
+                 [style.background]="msg.estMe ? 'linear-gradient(135deg, #1A7C4F 0%, #115c39 100%)' : '#ffffff'" 
+                 [style.color]="msg.estMe ? '#ffffff' : '#212529'"
+                 [style.border-bottom-right-radius]="msg.estMe ? '4px' : '1rem'"
+                 [style.border-bottom-left-radius]="!msg.estMe ? '4px' : '1rem'"
+                 style="max-width: 82%; font-size: 13px; border: 1px solid rgba(0,0,0,0.06); transition: all 0.2s ease;">
+              {{ msg.texte }}
+            </div>
+          </div>
+
+          <!-- Indicateur "Rokhaya est en train d'écrire..." -->
+          <div *ngIf="estEnTrainDecrire" class="d-flex flex-column align-items-start chat-bubble-animated">
+            <small class="text-muted mb-1" style="font-size: 10px;">Rokhaya Seck (Client) tape un message...</small>
+            <div class="p-2.5 px-3 rounded-4 bg-white shadow-sm border d-flex align-items-center gap-1.5" style="border-bottom-left-radius: 4px;">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input footer -->
+      <form (ngSubmit)="envoyerMessage()" class="modal-footer bg-white border-top p-2.5 d-flex gap-2">
+        <input type="text" 
+               class="form-control rounded-pill border px-3 py-2 text-dark shadow-none" 
+               style="font-size: 13px;" 
+               placeholder="Tapez un message..." 
+               [(ngModel)]="nouveauMessage" 
+               name="nouveauMessage"
+               autocomplete="off"
+               required>
+        <button type="submit" class="btn btn-success rounded-circle p-0 d-flex align-items-center justify-content-center text-white border-0 flex-shrink-0 shadow-sm" 
+                style="width: 40px; height: 40px; background: #1A7C4F; transition: transform 0.15s ease;"
+                onmouseleave="this.style.transform='scale(1)'"
+                onmouseenter="this.style.transform='scale(1.08)'">
+          ➤
+        </button>
+      </form>
+
     </div>
   </div>
 </div>
