@@ -25,10 +25,36 @@ export class CommandesComponent implements OnInit {
 
   modalChatOuvert = false;
   modalSuiviOuvert = false;
+  modalAvisOuvert = false;
   commandeSelectionnee: any = null;
   messageSaisi = '';
   progressPourcentage = 15;
   timerSimulation: any = null;
+
+  noteEtoiles = 5;
+  commentaireAvis = '';
+  avisSoumis = false;
+
+  ouvrirModalAvis(cmd: any) {
+    this.commandeSelectionnee = cmd;
+    this.noteEtoiles = 5;
+    this.commentaireAvis = '';
+    this.avisSoumis = false;
+    this.modalAvisOuvert = true;
+  }
+
+  soumettreAvis() {
+    if (!this.commentaireAvis.trim()) {
+      alert('Veuillez saisir un court commentaire.');
+      return;
+    }
+    this.avisSoumis = true;
+    setTimeout(() => {
+      this.modalAvisOuvert = false;
+      alert(`Merci ! Votre avis (${this.noteEtoiles} ★) a été enregistré avec succès pour la commande #AGC-${this.commandeSelectionnee?.id}.`);
+    }, 800);
+  }
+
 
   chatMessages: (ChatMessage & { estMe?: boolean })[] = [];
 
