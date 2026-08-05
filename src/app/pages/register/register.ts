@@ -47,12 +47,22 @@ export class RegisterComponent {
     this.chargement = true;
 
     this.authService.register(this.formData).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         this.chargement = false;
-        this.router.navigate(['/login'], {
-          queryParams: { registered: 'true', email: this.formData.email }
-        });
+        this.panierService.chargerPanier();
+
+        const role = res?.user?.role || this.formData.role;
+        if (role === 'agriculteur') {
+          this.router.navigate(['/agriculteur/dashboard']);
+        } else if (role === 'livreur') {
+          this.router.navigate(['/livreur/dashboard']);
+        } else if (role === 'admin') {
+          this.router.navigate(['/admin/dashboard']);
+        } else {
+          this.router.navigate(['/catalogue']);
+        }
       },
+
       error: (err) => {
         this.chargement = false;
         this.erreur = err.error?.message ||

@@ -21,8 +21,13 @@ export class AuthService {
     if (payload.email) payload.email = payload.email.trim().toLowerCase();
     return this.http.post(`${this.apiUrl}/register`, payload, {
       headers: { 'Accept': 'application/json' }
-    });
+    }).pipe(
+      tap((res: any) => {
+        if (res && res.token) this.setSession(res);
+      })
+    );
   }
+
 
   login(data: any): Observable<any> {
     const payload = { ...data };
