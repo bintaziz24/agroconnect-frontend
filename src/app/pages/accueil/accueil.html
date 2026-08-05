@@ -40,9 +40,9 @@
         </div>
       </div>
       
-      <!-- Right image & floating cards -->
-      <div class="col-lg-5 position-relative d-none d-lg-block">
-        <div class="position-relative mx-auto" style="width: 380px; height: 380px;">
+      <!-- Right image & floating cards (visible on mobile and desktop) -->
+      <div class="col-lg-5 position-relative text-center mt-4 mt-lg-0">
+        <div class="position-relative mx-auto" style="max-width: 340px; width: 100%; height: 320px;">
           <!-- Rounded image of fresh tomatoes with float animation and hover lift -->
           <div class="w-100 h-100 animate-float hero-image-hover" style="cursor: pointer;">
             <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&h=600&fit=crop" 
@@ -52,35 +52,36 @@
           </div>
           
           <!-- Floating card 1 (Wave & OM) with float animation wrapper -->
-          <div class="position-absolute animate-float-delayed" style="top: 40px; left: -60px; z-index: 10;">
+          <div class="position-absolute animate-float-delayed" style="top: 20px; left: -15px; z-index: 10;">
             <!-- Inner card with hover effect -->
             <div class="bg-white rounded-3 shadow p-2 d-flex align-items-center gap-2 floating-card-hover" 
-                 style="width: 175px; border-left: 4px solid #FFA000; cursor: pointer;">
+                 style="width: 165px; border-left: 4px solid #FFA000; cursor: pointer;">
               <div class="d-flex align-items-center gap-1 bg-light rounded-2 p-1" style="flex-shrink: 0;">
                 <img src="/assets/wave.png" alt="Wave Logo" style="width: 16px; height: 16px; object-fit: contain;">
                 <img src="/assets/om.png" alt="OM Logo" style="width: 16px; height: 16px; object-fit: contain; border-radius: 2px;">
               </div>
-              <div>
-                <strong class="text-dark d-block" style="font-size: 11px; line-height: 1.2;">Paiement Wave & OM</strong>
-                <small class="text-muted" style="font-size: 9px; line-height: 1.1;">Paiement facile en FCFA</small>
+              <div class="text-start">
+                <strong class="text-dark d-block" style="font-size: 10.5px; line-height: 1.2;">Paiement Wave & OM</strong>
+                <small class="text-muted" style="font-size: 8.5px; line-height: 1.1;">Paiement facile en FCFA</small>
               </div>
             </div>
           </div>
           
           <!-- Floating card 2 (Deliveries) with float animation wrapper -->
-          <div class="position-absolute animate-float" style="bottom: 40px; right: -50px; z-index: 10;">
+          <div class="position-absolute animate-float" style="bottom: 20px; right: -15px; z-index: 10;">
             <!-- Inner card with hover effect -->
             <div class="bg-white rounded-3 shadow p-2 d-flex align-items-center gap-2 floating-card-hover" 
-                 style="width: 175px; border-left: 4px solid #1A7C4F; cursor: pointer;">
+                 style="width: 165px; border-left: 4px solid #1A7C4F; cursor: pointer;">
               <div class="fs-5">🚚</div>
-              <div>
-                <strong class="text-dark d-block" style="font-size: 11px; line-height: 1.2;">{{ t('15 000+ Livraisons') }}</strong>
-                <small class="text-muted" style="font-size: 9px; line-height: 1.1;">{{ t('Flotte de livreurs locaux') }}</small>
+              <div class="text-start">
+                <strong class="text-dark d-block" style="font-size: 10.5px; line-height: 1.2;">{{ t('15 000+ Livraisons') }}</strong>
+                <small class="text-muted" style="font-size: 8.5px; line-height: 1.1;">{{ t('Flotte de livreurs locaux') }}</small>
               </div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
