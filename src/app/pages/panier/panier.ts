@@ -82,16 +82,21 @@ export class PanierComponent implements OnInit {
     }
 
     const currentUser = this.authService.getUser();
+    if (!currentUser && !this.authService.isLoggedIn()) {
+      // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+      this.router.navigate(['/login'], { queryParams: { redirect: 'panier' } });
+      return;
+    }
+
     if (currentUser) {
       if (!this.formLivraison.nom) this.formLivraison.nom = currentUser.name || '';
       if (!this.formLivraison.telephone) this.formLivraison.telephone = currentUser.telephone || '';
-    } else if (!this.formLivraison.nom) {
-      this.formLivraison.nom = 'Client AgroConnect';
     }
 
     this.erreur = '';
     this.etape = 'livraison';
   }
+
 
 
   validerCommande() {
