@@ -259,9 +259,10 @@
       <!-- Header -->
       <div class="modal-header text-white border-0 p-3" style="background: linear-gradient(135deg, #091729 0%, #152d4a 100%);">
         <div>
-          <h6 class="fw-bold mb-0 text-white" style="font-size: 15px;">💬 Chat Direct - Mission #AGC-9021</h6>
-          <small class="text-white-50" style="font-size: 11px;">🟢 Client: Rokhaya Seck • Producteur: Mamadou Diallo</small>
+          <h6 class="fw-bold mb-0 text-white" style="font-size: 15px;">💬 Chat Direct - Mission #{{ getMissionId() }}</h6>
+          <small class="text-white-50" style="font-size: 11px;">🟢 Client: {{ (missions && missions[0]) ? missions[0].destinataire : (user?.name || 'Client') }} • Producteur: {{ (missions && missions[0]) ? missions[0].origine : 'Producteur' }}</small>
         </div>
+
         <button (click)="modalChatOuvert = false" class="btn-close btn-close-white shadow-none" type="button"></button>
       </div>
 
@@ -321,9 +322,10 @@
             </div>
           </div>
 
-          <!-- Indicateur "Rokhaya est en train d'écrire..." -->
+          <!-- Indicateur de saisie du client -->
           <div *ngIf="estEnTrainDecrire" class="d-flex flex-column align-items-start chat-bubble-animated">
-            <small class="text-muted mb-1" style="font-size: 10px;">Rokhaya Seck (Client) tape un message...</small>
+            <small class="text-muted mb-1" style="font-size: 10px;">{{ (missions && missions[0]) ? missions[0].destinataire : 'Client' }} tape un message...</small>
+
             <div class="p-2.5 px-3 rounded-4 bg-white shadow-sm border d-flex align-items-center gap-1.5" style="border-bottom-left-radius: 4px;">
               <span class="typing-dot"></span>
               <span class="typing-dot"></span>
