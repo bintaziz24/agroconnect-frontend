@@ -26,6 +26,7 @@ export class CommandesComponent implements OnInit {
   modalChatOuvert = false;
   modalSuiviOuvert = false;
   modalAvisOuvert = false;
+  modalFactureOuvert = false;
   commandeSelectionnee: any = null;
   messageSaisi = '';
   progressPourcentage = 15;
@@ -35,6 +36,15 @@ export class CommandesComponent implements OnInit {
   commentaireAvis = '';
   avisSoumis = false;
 
+  ouvrirFacture(cmd: any) {
+    this.commandeSelectionnee = cmd;
+    this.modalFactureOuvert = true;
+  }
+
+  imprimerFacture() {
+    window.print();
+  }
+
   ouvrirModalAvis(cmd: any) {
     this.commandeSelectionnee = cmd;
     this.noteEtoiles = 5;
@@ -42,6 +52,7 @@ export class CommandesComponent implements OnInit {
     this.avisSoumis = false;
     this.modalAvisOuvert = true;
   }
+
 
   soumettreAvis() {
     if (!this.commentaireAvis.trim()) {
