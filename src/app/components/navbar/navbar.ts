@@ -133,9 +133,12 @@ export class NavbarComponent implements OnInit {
 
   selectRole(targetRole: string) {
     if (targetRole === 'public') {
-      this.router.navigate(['/']);
+      this.authService.logout().subscribe(() => {
+        this.router.navigate(['/']);
+      });
       return;
     }
+
 
     if (!this.isLoggedIn) {
       this.router.navigate(['/login']);
