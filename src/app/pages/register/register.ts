@@ -49,27 +49,9 @@ export class RegisterComponent {
     this.authService.register(this.formData).subscribe({
       next: (res) => {
         this.chargement = false;
-        this.panierService.chargerPanier();
-
-        this.notificationService.ajouterNotification({
-          icon: '🌱',
-          titre: 'Bienvenue sur AgroConnect !',
-          temps: 'À l\'instant',
-          message: `Ravi de vous compter parmi nous, ${res.user?.prenom || this.formData.prenom || 'Client'}. Découvrez nos récoltes locales.`
+        this.router.navigate(['/login'], {
+          queryParams: { registered: 'true', email: this.formData.email }
         });
-
-        const role = res.user?.role || this.formData.role;
-        if (role === 'agriculteur') {
-          this.router.navigate(['/agriculteur/dashboard']);
-        } else if (role === 'admin') {
-          this.router.navigate(['/admin/dashboard']);
-        } else if (role === 'livreur') {
-          this.router.navigate(['/livreur/dashboard']);
-        } else if (role === 'client') {
-          this.router.navigate(['/catalogue']);
-        } else {
-          this.router.navigate(['/']);
-        }
       },
       error: (err) => {
         this.chargement = false;

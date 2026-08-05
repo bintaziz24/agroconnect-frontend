@@ -32,6 +32,12 @@
             <a routerLink="/register" style="color:var(--vert, #1A7C4F);font-weight:500">{{ 's_inscrire' | translate }}</a>
           </p>
 
+          <!-- Message Succès après inscription -->
+          <div *ngIf="messageSucces" class="alert alert-success py-2 px-3 mb-3"
+            style="font-size:13px;border-radius:10px;background-color:#d1e7dd;color:#0f5132;border-color:#badbcc">
+            ✅ {{ messageSucces }}
+          </div>
+
           <!-- Message erreur -->
           <div *ngIf="erreur" class="alert alert-danger py-2 px-3 mb-3"
             style="font-size:13px;border-radius:10px">

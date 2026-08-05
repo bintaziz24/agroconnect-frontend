@@ -18,6 +18,7 @@ export class LoginComponent {
     password: '',
   };
   erreur = '';
+  messageSucces = '';
   chargement = false;
 
   constructor(
@@ -26,6 +27,17 @@ export class LoginComponent {
     private router: Router,
     private route: ActivatedRoute
   ) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['registered']) {
+        this.messageSucces = 'Votre compte a été créé avec succès ! Veuillez vous connecter ci-dessous avec vos identifiants.';
+      }
+      if (params['email']) {
+        this.formData.email = params['email'];
+      }
+    });
+  }
 
   remplirChampsDemo(role: string) {
     if (role === 'client') {
