@@ -128,10 +128,16 @@ export class PanierComponent implements OnInit {
       };
 
       this.commandeService.creerCommande(payload).subscribe({
-        next: (res) => {
+        next: (res: any) => {
           this.chargement = false;
           this.commandeSuccess = res;
           
+          // Si PayTech renvoie une URL de redirection (Wave / Orange Money)
+          if (res && res.redirect_url) {
+            window.location.href = res.redirect_url;
+            return;
+          }
+
           // Notification temps réel pour l'espace agriculteur
           try {
             localStorage.setItem('derniere_commande_timestamp', Date.now().toString());
@@ -141,6 +147,7 @@ export class PanierComponent implements OnInit {
           this.panierService.viderPanier();
           this.etape = 'confirmation';
         },
+
         error: (err) => {
           this.chargement = false;
           let msg = 'Une erreur est survenue lors de la création de la commande.';
