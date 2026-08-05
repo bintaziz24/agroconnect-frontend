@@ -36,6 +36,13 @@ export class CommandesComponent implements OnInit {
   commentaireAvis = '';
   avisSoumis = false;
 
+  isCommandePayee(cmd: any): boolean {
+    if (!cmd) return false;
+    const st = String(cmd.statut || '').toLowerCase();
+    const paySt = String(cmd.paiement?.statut || '').toLowerCase();
+    return st === 'livree' || st.includes('livré') || st === 'payee' || paySt === 'completed' || paySt.includes('payé');
+  }
+
   ouvrirFacture(cmd: any) {
     this.commandeSelectionnee = cmd;
     this.modalFactureOuvert = true;
@@ -44,6 +51,7 @@ export class CommandesComponent implements OnInit {
   imprimerFacture() {
     window.print();
   }
+
 
   ouvrirModalAvis(cmd: any) {
     this.commandeSelectionnee = cmd;
