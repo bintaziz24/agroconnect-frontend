@@ -6,7 +6,8 @@
     <span class="opacity-75">| {{ t('Changer de perspective :') }}</span>
   </div>
   
-  <div class="d-flex align-items-center gap-2 flex-wrap">
+  <div class="d-flex align-items-center gap-2 category-tabs-scroll py-1">
+
     <button (click)="selectRole('public')" class="btn btn-sm btn-perspective" [class.active]="!isLoggedIn">
       🌐 {{ t('Site Public') }}
     </button>
