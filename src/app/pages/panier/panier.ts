@@ -76,15 +76,23 @@ export class PanierComponent implements OnInit {
   }
 
   passerALivraison() {
-    if (this.items.length === 0) return;
-
-    if (!this.authService.getUser()) {
-      this.router.navigate(['/login'], { queryParams: { redirect: 'panier' } });
+    if (!this.items || this.items.length === 0) {
+      this.erreur = 'Votre panier est vide. Veuillez ajouter des produits.';
       return;
     }
 
+    const currentUser = this.authService.getUser();
+    if (currentUser) {
+      if (!this.formLivraison.nom) this.formLivraison.nom = currentUser.name || '';
+      if (!this.formLivraison.telephone) this.formLivraison.telephone = currentUser.telephone || '';
+    } else if (!this.formLivraison.nom) {
+      this.formLivraison.nom = 'Client AgroConnect';
+    }
+
+    this.erreur = '';
     this.etape = 'livraison';
   }
+
 
   validerCommande() {
     if (!this.formLivraison.nom || !this.formLivraison.telephone || !this.formLivraison.adresse) {
