@@ -317,4 +317,73 @@ html, body {
 html[data-theme="dark"] .navbar-toggler-icon {
   filter: invert(1);
 }
+
+/* --- Responsive Mobile Adjustments --- */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden !important;
+    width: 100vw;
+  }
+
+  .hero-section {
+    padding: 3rem 1rem 2.5rem !important;
+  }
+  
+  .hero-section h1 {
+    font-size: 2.2rem !important;
+  }
+
+  .hero-search-container {
+    border-radius: 16px !important;
+    flex-direction: column !important;
+    padding: 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .hero-search-container .btn {
+    width: 100% !important;
+    border-radius: 10px !important;
+    text-align: center;
+  }
+
+  .navbar {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .demo-banner {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 11px !important;
+  }
+
+  .demo-banner .btn-perspective {
+    font-size: 10.5px !important;
+    padding: 3px 8px !important;
+  }
+
+  .stat-num {
+    font-size: 1.6rem !important;
+  }
+
+  .modal-dialog {
+    margin: 0.5rem !important;
+  }
+}
+
+/* Category horizontal swipe container */
+.category-tabs-scroll {
+  display: flex;
+  overflow-x: auto !important;
+  white-space: nowrap;
+  gap: 0.5rem;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.category-tabs-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+
 

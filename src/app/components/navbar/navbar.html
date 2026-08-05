@@ -46,9 +46,10 @@
       </a>
       
       <!-- Pill Badge next to logo (Marche Sénégalais when guest, User Space when logged in) -->
-      <span *ngIf="!isLoggedIn" class="badge border px-2.5 py-1.5 rounded-pill ms-2" style="font-size: 11px; background: var(--bg-light); color: var(--text-muted); border-color: var(--border-color) !important;">
+      <span *ngIf="!isLoggedIn" class="badge border px-2.5 py-1.5 rounded-pill ms-2 d-none d-sm-inline-block" style="font-size: 11px; background: var(--bg-light); color: var(--text-muted); border-color: var(--border-color) !important;">
         {{ t('Marche Sénégalais') }}
       </span>
+
 
       <ng-container *ngIf="isLoggedIn">
         <a *ngIf="user?.role === 'agriculteur'" routerLink="/agriculteur/dashboard" 
