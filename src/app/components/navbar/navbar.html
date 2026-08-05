@@ -229,7 +229,7 @@
           <!-- Logged in -->
           <ng-container *ngIf="isLoggedIn">
 
-            <div class="dropdown">
+            <div class="dropdown user-dropdown">
               <button class="btn btn-sm border-0 d-flex align-items-center gap-2 dropdown-toggle shadow-none" type="button" data-bs-toggle="dropdown" 
                       style="border: 1px solid #e2e8f0; border-radius: 24px; padding: 4px 12px; height: 34px;">
                 <!-- User Avatar Badge (No hardcoded photos) -->
@@ -239,7 +239,7 @@
                 </div>
                 <span class="fw-bold d-none d-md-inline" style="font-size: 13px; color: var(--text-primary);">{{ user.name }}</span>
               </button>
-              <ul class="dropdown-menu dropdown-menu-end shadow border-light-subtle rounded-4 p-3 text-start" style="min-width: 240px;">
+              <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu shadow border-light-subtle rounded-4 p-3 text-start" style="min-width: 240px;">
                 <!-- Header inside dropdown -->
                 <li class="px-2 pb-2 mb-2 border-bottom">
                   <div class="d-flex align-items-center gap-2.5 mb-1">
@@ -300,18 +300,19 @@
           </button>
 
           <!-- Language selector -->
-          <div class="dropdown ms-1 notranslate" translate="no">
+          <div class="dropdown ms-1 notranslate lang-dropdown" translate="no">
             <button class="btn btn-sm border d-flex align-items-center gap-1 shadow-none px-2.5 rounded-pill notranslate" translate="no" type="button" data-bs-toggle="dropdown" style="font-size: 11.5px; height: 34px; font-weight: 600; background: var(--bg-primary); border-color: var(--border-color) !important; color: var(--text-primary); transition: all 0.2s;">
               <span *ngIf="trans.getLanguage() === 'fr'">🇫🇷 Français</span>
               <span *ngIf="trans.getLanguage() === 'en'">🇬🇧 English</span>
               <span *ngIf="trans.getLanguage() === 'wo'">🇸🇳 Wolof</span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow border-light-subtle rounded-3 p-1 notranslate" translate="no" style="min-width: 120px; background: var(--bg-card); border-color: var(--border-color) !important;">
-              <li><a (click)="changeLang('fr')" class="dropdown-item py-1.5 rounded-2 cursor-pointer d-flex align-items-center gap-2 notranslate" translate="no" style="font-size: 12px; color: var(--text-primary);">🇫🇷 Français</a></li>
-              <li><a (click)="changeLang('en')" class="dropdown-item py-1.5 rounded-2 cursor-pointer d-flex align-items-center gap-2 notranslate" translate="no" style="font-size: 12px; color: var(--text-primary);">🇬🇧 English</a></li>
-              <li><a (click)="changeLang('wo')" class="dropdown-item py-1.5 rounded-2 cursor-pointer d-flex align-items-center gap-2 notranslate" translate="no" style="font-size: 12px; color: var(--text-primary);">🇸🇳 Wolof</a></li>
+            <ul class="dropdown-menu dropdown-menu-end lang-dropdown-menu shadow border-light-subtle rounded-3 p-1 notranslate" translate="no" style="min-width: 140px; background: var(--bg-card); border-color: var(--border-color) !important;">
+              <li><a (click)="changeLang('fr')" class="dropdown-item py-2 rounded-2 cursor-pointer d-flex align-items-center gap-2 notranslate" translate="no" style="font-size: 12.5px; color: var(--text-primary);">🇫🇷 Français</a></li>
+              <li><a (click)="changeLang('en')" class="dropdown-item py-2 rounded-2 cursor-pointer d-flex align-items-center gap-2 notranslate" translate="no" style="font-size: 12.5px; color: var(--text-primary);">🇬🇧 English</a></li>
+              <li><a (click)="changeLang('wo')" class="dropdown-item py-2 rounded-2 cursor-pointer d-flex align-items-center gap-2 notranslate" translate="no" style="font-size: 12.5px; color: var(--text-primary);">🇸🇳 Wolof</a></li>
             </ul>
           </div>
+
 
         </div>
       </div>
