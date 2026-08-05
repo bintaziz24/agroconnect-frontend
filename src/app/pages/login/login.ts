@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
@@ -13,7 +13,7 @@ import { timeout } from 'rxjs/operators';
   imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
   templateUrl: './login.html',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   formData = {
     email: '',
     password: '',
@@ -68,7 +68,6 @@ export class LoginComponent {
     this.chargement = true;
 
     this.authService.login(this.formData).pipe(timeout(8000)).subscribe({
-
       next: (res) => {
         this.chargement = false;
 

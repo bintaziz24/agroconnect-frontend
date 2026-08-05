@@ -1,3 +1,11 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterLink, Router } from '@angular/router';
+import { PanierService, CartItem } from '../../services/panier';
+import { CommandeService } from '../../services/commande';
+import { AuthService } from '../../services/auth';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { timeout } from 'rxjs/operators';
 
 @Component({
@@ -176,7 +184,6 @@ export class PanierComponent implements OnInit {
       this.erreur = 'Une erreur est survenue : ' + (e?.message || 'Vérifiez les informations saisies.');
     }
   }
-
 
   onImageError(event: any) {
     event.target.src = 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=200&fit=crop';
