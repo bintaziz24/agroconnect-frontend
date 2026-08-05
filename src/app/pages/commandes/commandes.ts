@@ -80,24 +80,18 @@ export class CommandesComponent implements OnInit {
     this.commandeService.getMesCommandes().subscribe({
       next: (res) => {
         const data = Array.isArray(res) ? res : (res?.data || []);
-        if (data.length > 0) {
-          const has9021 = data.some((c: any) => String(c.id) === '9021' || String(c.id).includes('9021'));
-          this.commandes = has9021 ? data : [this.getMockCommandes()[0], ...data];
-        } else {
-          this.commandes = this.getMockCommandes();
-        }
+        this.commandes = data;
         this.filtrerCommandes();
         this.chargement = false;
-        if (this.commandes[0]) {
+        if (this.commandes.length > 0) {
           this.chargerChat(this.getMissionId(this.commandes[0]));
         }
         this.cdr.detectChanges();
       },
       error: () => {
-        this.commandes = this.getMockCommandes();
+        this.commandes = [];
         this.filtrerCommandes();
         this.chargement = false;
-        this.chargerChat(this.getMissionId(this.commandes[0]));
         this.cdr.detectChanges();
       }
     });
