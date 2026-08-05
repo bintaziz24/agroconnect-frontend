@@ -1,11 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router';
-import { PanierService, CartItem } from '../../services/panier';
-import { CommandeService } from '../../services/commande';
-import { AuthService } from '../../services/auth';
-import { TranslatePipe } from '../../pipes/translate.pipe';
+import { timeout } from 'rxjs/operators';
 
 @Component({
   selector: 'app-panier',
@@ -119,15 +112,23 @@ export class PanierComponent implements OnInit {
         return;
       }
 
+      let rawMode = (this.formLivraison.modePaiement || 'wave').toLowerCase().trim();
+      let cleanMode = 'wave';
+      if (rawMode.includes('orange') || rawMode.includes('om')) {
+        cleanMode = 'orange_money';
+      } else if (rawMode.includes('cash') || rawMode.includes('livraison')) {
+        cleanMode = 'cash';
+      }
+
       const payload = {
         adresse_livraison: `${this.formLivraison.adresse}, ${this.formLivraison.region}`,
         telephone: this.formLivraison.telephone,
-        mode_paiement: (this.formLivraison.modePaiement || 'wave').toLowerCase(),
+        mode_paiement: cleanMode,
         montant_total: this.total,
         lignes: lignes
       };
 
-      this.commandeService.creerCommande(payload).subscribe({
+      this.commandeService.creerCommande(payload).pipe(timeout(12000)).subscribe({
         next: (res: any) => {
           this.chargement = false;
           this.commandeSuccess = res;
@@ -148,8 +149,13 @@ export class PanierComponent implements OnInit {
           this.etape = 'confirmation';
         },
 
-        error: (err) => {
+        error: (err: any) => {
           this.chargement = false;
+          if (err && err.name === 'TimeoutError') {
+            this.erreur = 'Le serveur de base de données Render sort de veille. Veuillez re-cliquer sur Valider la commande dans 3 secondes.';
+            return;
+          }
+
           let msg = 'Une erreur est survenue lors de la création de la commande.';
           if (err && err.error) {
             if (typeof err.error.message === 'string' && err.error.message.trim()) {
@@ -170,6 +176,7 @@ export class PanierComponent implements OnInit {
       this.erreur = 'Une erreur est survenue : ' + (e?.message || 'Vérifiez les informations saisies.');
     }
   }
+
 
   onImageError(event: any) {
     event.target.src = 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=200&fit=crop';
