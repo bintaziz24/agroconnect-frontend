@@ -60,11 +60,21 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    return !!token && token !== 'null' && token !== 'undefined' && !!user && user !== 'null' && user !== 'undefined';
   }
 
   getUser(): any {
-    return JSON.parse(localStorage.getItem('user') || 'null');
+    const userStr = localStorage.getItem('user');
+    if (userStr && userStr !== 'null' && userStr !== 'undefined') {
+      try {
+        return JSON.parse(userStr);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
   }
 
   getRole(): string {

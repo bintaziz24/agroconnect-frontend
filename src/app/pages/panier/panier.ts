@@ -81,13 +81,14 @@ export class PanierComponent implements OnInit {
       return;
     }
 
-    const currentUser = this.authService.getUser();
-    if (!currentUser && !this.authService.isLoggedIn()) {
-      // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+    if (!this.authService.isLoggedIn()) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       this.router.navigate(['/login'], { queryParams: { redirect: 'panier' } });
       return;
     }
 
+    const currentUser = this.authService.getUser();
     if (currentUser) {
       if (!this.formLivraison.nom) this.formLivraison.nom = currentUser.name || '';
       if (!this.formLivraison.telephone) this.formLivraison.telephone = currentUser.telephone || '';
@@ -96,6 +97,7 @@ export class PanierComponent implements OnInit {
     this.erreur = '';
     this.etape = 'livraison';
   }
+
 
 
 
