@@ -23,9 +23,12 @@ export class RegisterComponent {
     password: '',
     password_confirmation: '',
   };
+  afficherMotDePasse = false;
+  afficherConfirmation = false;
   erreur = '';
   succes = '';
   chargement = false;
+
 
   constructor(
     private authService: AuthService,

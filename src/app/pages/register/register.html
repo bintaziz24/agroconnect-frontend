@@ -88,7 +88,7 @@
               <div class="col-6">
                 <label class="form-label fw-semibold" style="font-size:13px">{{ 'reg_nom_label' | translate }}</label>
                 <input type="text" class="form-control"
-                  placeholder="Diallo"
+                  placeholder="Votre nom"
                   [(ngModel)]="formData.nom"
                   name="nom" required
                   style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
@@ -96,7 +96,7 @@
               <div class="col-6">
                 <label class="form-label fw-semibold" style="font-size:13px">{{ 'reg_prenom_label' | translate }}</label>
                 <input type="text" class="form-control"
-                  placeholder="Mamadou"
+                  placeholder="Votre prénom"
                   [(ngModel)]="formData.prenom"
                   name="prenom" required
                   style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
@@ -128,11 +128,20 @@
               <label class="form-label fw-semibold" style="font-size:13px">
                 {{ 'login_password_label' | translate }}
               </label>
-              <input type="password" class="form-control"
-                placeholder="Minimum 8 caractères"
-                [(ngModel)]="formData.password"
-                name="password" required
-                style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
+              <div class="position-relative">
+                <input [type]="afficherMotDePasse ? 'text' : 'password'" class="form-control"
+                  placeholder="Minimum 8 caractères"
+                  [(ngModel)]="formData.password"
+                  name="password" required
+                  style="border-radius:10px;padding:10px 42px 10px 14px;border:1.5px solid #ddd">
+                <button type="button" 
+                        (click)="afficherMotDePasse = !afficherMotDePasse" 
+                        class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-decoration-none shadow-none pe-3 text-muted"
+                        style="z-index: 10; border: none; font-size: 16px;"
+                        title="Afficher/Masquer le mot de passe">
+                  {{ afficherMotDePasse ? '👁️' : '🙈' }}
+                </button>
+              </div>
             </div>
 
             <!-- Confirmation -->
@@ -140,12 +149,22 @@
               <label class="form-label fw-semibold" style="font-size:13px">
                 {{ 'reg_confirm_password_label' | translate }}
               </label>
-              <input type="password" class="form-control"
-                placeholder="{{ 'reg_repeat_password_placeholder' | translate }}"
-                [(ngModel)]="formData.password_confirmation"
-                name="password_confirmation" required
-                style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
+              <div class="position-relative">
+                <input [type]="afficherConfirmation ? 'text' : 'password'" class="form-control"
+                  placeholder="{{ 'reg_repeat_password_placeholder' | translate }}"
+                  [(ngModel)]="formData.password_confirmation"
+                  name="password_confirmation" required
+                  style="border-radius:10px;padding:10px 42px 10px 14px;border:1.5px solid #ddd">
+                <button type="button" 
+                        (click)="afficherConfirmation = !afficherConfirmation" 
+                        class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-decoration-none shadow-none pe-3 text-muted"
+                        style="z-index: 10; border: none; font-size: 16px;"
+                        title="Afficher/Masquer la confirmation">
+                  {{ afficherConfirmation ? '👁️' : '🙈' }}
+                </button>
+              </div>
             </div>
+
 
             <button type="submit"
               class="btn text-white w-100 py-2 fw-semibold"

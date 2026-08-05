@@ -18,9 +18,11 @@ export class LoginComponent implements OnInit {
     email: '',
     password: '',
   };
+  afficherMotDePasse = false;
   erreur = '';
   messageSucces = '';
   chargement = false;
+
 
   constructor(
     private authService: AuthService,
