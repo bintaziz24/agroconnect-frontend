@@ -51,3 +51,15 @@
   }
 }
 
+/* Enable vertical scrolling when navbar menu is open on mobile */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    max-height: calc(85vh - 70px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 0.75rem;
+    padding-bottom: 2rem;
+  }
+}
+
+
