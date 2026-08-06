@@ -81,11 +81,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
       this.observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          // Dès qu'un élément entre dans l'écran lors du défilement, on déclenche son animation
+          // Ré-anime à chaque fois que l'élément entre/sort de l'écran au défilement
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            this.observer?.unobserve(entry.target);
-            this.observedElements.delete(entry.target);
+          } else {
+            entry.target.classList.remove('visible');
           }
         });
       }, {
