@@ -181,8 +181,9 @@ export class NavbarComponent implements OnInit {
     const query = texte.toLowerCase();
 
     if (query.includes('numero') || query.includes('numéro') || query.includes('commercial') || query.includes('telephone') || query.includes('téléphone') || query.includes('contact') || query.includes('joindre') || query.includes('appel')) {
-      return `📞 Service Commercial & Assistance AgroConnect :\n• Ligne directe / WhatsApp : +221 77 800 00 00\n• Fixe Commercial : +221 33 800 00 00\n• E-mail : commercial@agroconnect.sn\n• Horaires : 7j/7 de 08h00 à 20h00.`;
+      return `📞 Service Client & Assistance AgroConnect :\n• Assistance en ligne : Disponible 24h/24 via ce chat\n• E-mail officiel : contact@agroconnect.sn\n• Ligne Téléphonique (Démo) : +221 77 000 00 00\n• Horaires de réponse : 7j/7 de 08h00 à 20h00.`;
     }
+
 
     if (query.includes('commande') || query.includes('suivi') || query.includes('livraison') || query.includes('colis') || query.includes('statut')) {
       return `📦 Suivi de Commande & Livraison :\nConsultez l'onglet "Historique de mes commandes" dans votre espace personnel. Nos livreurs vous livrent en moins de 24h à Dakar, Thiès et en régions.`;
