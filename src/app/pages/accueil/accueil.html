@@ -13,24 +13,23 @@
         </span>
         <h1 class="fw-bold mb-3 display-4" style="font-family:'Playfair Display',serif; line-height: 1.25;" [innerHTML]="t('hero_title')">
         </h1>
-        <p class="mb-4 text-white-50" style="font-size:16px; line-height:1.6; max-width: 600px;">
+        <p class="mb-4 text-white-50" style="font-size:15px; line-height:1.5; max-width: 580px;">
           {{ t('hero_desc') }}
         </p>
         
         <!-- White search bar -->
         <div class="bg-white p-2 rounded-pill shadow d-flex align-items-center mb-4 hero-search-container" style="max-width: 550px;">
-
           <div class="d-flex align-items-center flex-grow-1 px-3">
             <span class="text-muted fs-5 me-2">🔍</span>
             <input type="text" class="form-control border-0 bg-transparent py-2 shadow-none" [placeholder]="t('hero_search')" style="font-size: 14px;">
           </div>
-          <a routerLink="/catalogue" class="btn text-white fw-bold px-4 py-2" style="background: #1A7C4F; border-radius: 50px; font-size: 14px;">
+          <a routerLink="/catalogue" class="btn text-white fw-bold px-4 py-2 text-nowrap" style="background: #1A7C4F; border-radius: 50px; font-size: 14px;">
             {{ t('hero_button') }} →
           </a>
         </div>
 
         <!-- Harvest regions -->
-        <div class="d-flex align-items-center gap-2 flex-wrap" style="font-size: 13px;">
+        <div class="d-flex align-items-center gap-2 flex-wrap" style="font-size: 12.5px;">
           <span class="text-white-50 me-1">{{ t('regions_recorte') }} :</span>
           <span class="px-3 py-1 rounded-pill" style="background: rgba(255,255,255,0.15);">📍 Dakar</span>
           <span class="px-3 py-1 rounded-pill" style="background: rgba(255,255,255,0.15);">📍 Thiès</span>
@@ -40,10 +39,9 @@
         </div>
       </div>
       
-      <!-- Right image & floating cards (visible on mobile and desktop) -->
+      <!-- Right image & floating badges -->
       <div class="col-lg-5 position-relative text-center mt-4 mt-lg-0">
-        <div class="position-relative mx-auto" style="max-width: 340px; width: 100%; height: 320px;">
-          <!-- Rounded image of fresh tomatoes with float animation and hover lift -->
+        <div class="position-relative mx-auto" style="max-width: 340px; width: 100%; height: 310px;">
           <div class="w-100 h-100 animate-float hero-image-hover" style="cursor: pointer;">
             <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&h=600&fit=crop" 
                  alt="Tomates fraîches" 
@@ -51,9 +49,8 @@
                  style="border: 4px solid rgba(255,255,255,0.2);">
           </div>
           
-          <!-- Floating card 1 (Wave & OM) with float animation wrapper -->
+          <!-- Floating card 1 (Wave & OM) -->
           <div class="position-absolute animate-float-delayed" style="top: 20px; left: -15px; z-index: 10;">
-            <!-- Inner card with hover effect -->
             <div class="bg-white rounded-3 shadow p-2 d-flex align-items-center gap-2 floating-card-hover" 
                  style="width: 165px; border-left: 4px solid #FFA000; cursor: pointer;">
               <div class="d-flex align-items-center gap-1 bg-light rounded-2 p-1" style="flex-shrink: 0;">
@@ -62,20 +59,19 @@
               </div>
               <div class="text-start">
                 <strong class="text-dark d-block" style="font-size: 10.5px; line-height: 1.2;">Paiement Wave & OM</strong>
-                <small class="text-muted" style="font-size: 8.5px; line-height: 1.1;">Paiement facile en FCFA</small>
+                <small class="text-muted" style="font-size: 8.5px; line-height: 1.1;">Directement en FCFA</small>
               </div>
             </div>
           </div>
           
-          <!-- Floating card 2 (Deliveries) with float animation wrapper -->
+          <!-- Floating card 2 (Deliveries) -->
           <div class="position-absolute animate-float" style="bottom: 20px; right: -15px; z-index: 10;">
-            <!-- Inner card with hover effect -->
             <div class="bg-white rounded-3 shadow p-2 d-flex align-items-center gap-2 floating-card-hover" 
                  style="width: 165px; border-left: 4px solid #1A7C4F; cursor: pointer;">
               <div class="fs-5">🚚</div>
               <div class="text-start">
-                <strong class="text-dark d-block" style="font-size: 10.5px; line-height: 1.2;">{{ t('15 000+ Livraisons') }}</strong>
-                <small class="text-muted" style="font-size: 8.5px; line-height: 1.1;">{{ t('Flotte de livreurs locaux') }}</small>
+                <strong class="text-dark d-block" style="font-size: 10.5px; line-height: 1.2;">Livraison 24h Express</strong>
+                <small class="text-muted" style="font-size: 8.5px; line-height: 1.1;">Partout au Sénégal</small>
               </div>
             </div>
           </div>
@@ -86,26 +82,26 @@
   </div>
 </section>
 
-<!-- STATS -->
+<!-- COMPACT STATS BAR -->
 <section class="py-4 bg-white animate-on-scroll">
   <div class="container">
-    <div class="p-4 rounded-4 shadow-sm border text-center" style="background: #E8F6F0; border-color: #D1EDE1 !important;">
-      <div class="row g-4 justify-content-center">
+    <div class="p-3.5 rounded-4 shadow-sm border text-center" style="background: #E8F6F0; border-color: #D1EDE1 !important;">
+      <div class="row g-3 justify-content-center align-items-center">
         <div class="col-6 col-md-3">
-          <h3 class="fw-bold mb-1" style="color: #0F5235; font-family:'Playfair Display',serif; font-size: 2.2rem;">1 200+</h3>
-          <small class="text-muted fw-semibold d-block">{{ t('Producteurs Référencés') }}</small>
+          <h3 class="fw-bold mb-0" style="color: #0F5235; font-family:'Playfair Display',serif; font-size: 1.9rem;">1 200+</h3>
+          <small class="text-muted fw-semibold" style="font-size: 12px;">Producteurs Partenaires</small>
+        </div>
+        <div class="col-6 col-md-3 border-start border-end-md">
+          <h3 class="fw-bold mb-0" style="color: #FFA000; font-family:'Playfair Display',serif; font-size: 1.9rem;">14</h3>
+          <small class="text-muted fw-semibold" style="font-size: 12px;">Régions Couvertes</small>
+        </div>
+        <div class="col-6 col-md-3 border-end-md">
+          <h3 class="fw-bold mb-0" style="color: #0F5235; font-family:'Playfair Display',serif; font-size: 1.9rem;">15 000+</h3>
+          <small class="text-muted fw-semibold" style="font-size: 12px;">Livraisons Effectuées</small>
         </div>
         <div class="col-6 col-md-3">
-          <h3 class="fw-bold mb-1" style="color: #FFA000; font-family:'Playfair Display',serif; font-size: 2.2rem;">14</h3>
-          <small class="text-muted fw-semibold d-block">{{ t('Régions du Sénégal') }}</small>
-        </div>
-        <div class="col-6 col-md-3">
-          <h3 class="fw-bold mb-1" style="color: #0F5235; font-family:'Playfair Display',serif; font-size: 2.2rem;">15 000+</h3>
-          <small class="text-muted fw-semibold d-block">{{ t('Commandes Honorées') }}</small>
-        </div>
-        <div class="col-6 col-md-3">
-          <h3 class="fw-bold mb-1" style="color: #0F5235; font-family:'Playfair Display',serif; font-size: 2.2rem;">4.9 / 5</h3>
-          <small class="text-muted fw-semibold d-block">{{ t('Satisfaction Consommateurs') }}</small>
+          <h3 class="fw-bold mb-0" style="color: #0F5235; font-family:'Playfair Display',serif; font-size: 1.9rem;">4.9 / 5</h3>
+          <small class="text-muted fw-semibold" style="font-size: 12px;">Note de Satisfaction</small>
         </div>
       </div>
     </div>
@@ -113,14 +109,14 @@
 </section>
 
 <!-- CATEGORIES -->
-<section class="py-5 bg-white border-bottom animate-on-scroll">
+<section class="py-4 bg-white border-bottom animate-on-scroll">
   <div class="container">
-    <div class="d-flex justify-content-between align-items-end mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
       <div>
-        <small class="text-success fw-bold text-uppercase d-block mb-1" style="font-size: 11px; letter-spacing: 0.05em;">{{ t('sec_categories_title') }}</small>
-        <h2 class="fw-bold mb-0 text-dark" style="font-family:'Playfair Display',serif;">{{ t('sec_categories_head') }}</h2>
+        <small class="text-success fw-bold text-uppercase d-block" style="font-size: 11px; letter-spacing: 0.05em;">{{ t('sec_categories_title') }}</small>
+        <h3 class="fw-bold mb-0 text-dark" style="font-family:'Playfair Display',serif; font-size: 24px;">{{ t('sec_categories_head') }}</h3>
       </div>
-      <a routerLink="/catalogue" class="text-success fw-bold text-decoration-none" style="font-size: 14px;">
+      <a routerLink="/catalogue" class="text-success fw-bold text-decoration-none" style="font-size: 13.5px;">
         {{ t('sec_categories_all') }} &gt;
       </a>
     </div>
@@ -130,14 +126,13 @@
         <div [routerLink]="['/catalogue']" [queryParams]="{ cat: cat.nom }" 
              class="card border border-light-subtle rounded-4 p-3 text-center h-100 shadow-sm category-card" 
              style="transition: all 0.3s ease; cursor: pointer;">
-          <div class="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px; background: #E8F6F0; color: #1A7C4F;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-leaf" viewBox="0 0 16 16">
+          <div class="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-2" style="width: 44px; height: 44px; background: #E8F6F0; color: #1A7C4F;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-leaf" viewBox="0 0 16 16">
               <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708L7.293 10l-2.647 2.646a.5.5 0 0 0 .708.708L8 10.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 10l2.647-2.646z"/>
-              <path d="M8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293l-2.646-2.647a.5.5 0 0 0-.708.708L7.293 8 4.646 10.646a.5.5 0 0 0 .708.708L8 8.707z"/>
             </svg>
           </div>
-          <h6 class="fw-bold mb-1 text-dark" style="font-size: 14px;">{{ t(cat.nom) }}</h6>
-          <small class="text-muted" style="font-size: 11px;">{{ cat.count }} {{ t('produits_plural') }}</small>
+          <h6 class="fw-bold mb-0 text-dark" style="font-size: 13.5px;">{{ t(cat.nom) }}</h6>
+          <small class="text-muted" style="font-size: 10.5px;">{{ cat.count }} {{ t('produits_plural') }}</small>
         </div>
       </div>
     </div>
@@ -147,12 +142,12 @@
 <!-- PRODUCTS GRID -->
 <section class="py-5 animate-on-scroll" style="background: #FAFBF9;">
   <div class="container">
-    <div class="d-flex justify-content-between align-items-end mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
-        <small class="text-success fw-bold text-uppercase d-block mb-1" style="font-size: 11px; letter-spacing: 0.05em;">{{ t('sec_harvest_title') }}</small>
-        <h2 class="fw-bold mb-0 text-dark" style="font-family:'Playfair Display',serif;">{{ t('sec_harvest_head') }}</h2>
+        <small class="text-success fw-bold text-uppercase d-block" style="font-size: 11px; letter-spacing: 0.05em;">{{ t('sec_harvest_title') }}</small>
+        <h3 class="fw-bold mb-0 text-dark" style="font-family:'Playfair Display',serif; font-size: 24px;">{{ t('sec_harvest_head') }}</h3>
       </div>
-      <a routerLink="/catalogue" class="text-success fw-bold text-decoration-none" style="font-size: 14px;">
+      <a routerLink="/catalogue" class="text-success fw-bold text-decoration-none" style="font-size: 13.5px;">
         {{ t('sec_harvest_all') }} &gt;
       </a>
     </div>
@@ -162,150 +157,94 @@
         <app-card-produit [produit]="produit"></app-card-produit>
       </div>
     </div>
-<!-- ECOSYSTEME NETWORK -->
-<section id="a-propos" class="py-5 animate-on-scroll" style="background: #FAFBF9;">
-  <div class="container p-4 p-md-5 rounded-4 text-white shadow" style="background: #0b1329;">
-
-    <div class="text-center mb-5">
-      <small class="text-success fw-bold text-uppercase d-block mb-1" style="font-size: 11px; letter-spacing: 0.05em;">{{ t('eco_title') }}</small>
-      <h2 class="fw-bold mb-3" style="font-family:'Playfair Display',serif; font-size: 2.2rem;">{{ t('eco_head') }}</h2>
-      <p class="text-white-50 mx-auto" style="font-size: 14px; max-width: 600px;">{{ t('eco_desc') }}</p>
-    </div>
-    
-    <div class="row g-4">
-      <!-- Card 1: Acheteurs -->
-      <div class="col-md-4 text-start">
-        <div class="card h-100 p-4 border-0 rounded-4 text-white" style="background: #152243;">
-          <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 45px; height: 45px; background: rgba(26, 124, 79, 0.2); color: #1A7C4F; font-size: 20px;">
-            🛒
-          </div>
-          <h5 class="fw-bold mb-2">{{ t('eco_buyers_title') }}</h5>
-          <p class="text-white-50 mb-0" style="font-size: 13px; line-height: 1.6;">
-            {{ t('eco_buyers_desc') }}
-          </p>
-        </div>
-      </div>
-      <!-- Card 2: Agriculteurs -->
-      <div class="col-md-4 text-start">
-        <div class="card h-100 p-4 border-0 rounded-4 text-white" style="background: #152243;">
-          <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 45px; height: 45px; background: rgba(255, 160, 0, 0.2); color: #FFA000; font-size: 20px;">
-            🌾
-          </div>
-          <h5 class="fw-bold mb-2">{{ t('eco_farmers_title') }}</h5>
-          <p class="text-white-50 mb-0" style="font-size: 13px; line-height: 1.6;">
-            {{ t('eco_farmers_desc') }}
-          </p>
-        </div>
-      </div>
-      <!-- Card 3: Livreurs -->
-      <div class="col-md-4 text-start">
-        <div class="card h-100 p-4 border-0 rounded-4 text-white" style="background: #152243;">
-          <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 45px; height: 45px; background: rgba(27, 94, 166, 0.2); color: #1B5EA6; font-size: 20px;">
-            🚚
-          </div>
-          <h5 class="fw-bold mb-2">{{ t('eco_drivers_title') }}</h5>
-          <p class="text-white-50 mb-0" style="font-size: 13px; line-height: 1.6;">
-            {{ t('eco_drivers_desc') }}
-          </p>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- CALL TO ACTION BANNER -->
-<section class="py-4 animate-on-scroll" style="background: #FAFBF9;">
-  <div class="container p-4 rounded-4 text-white d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4 shadow-sm" 
-       style="background: #10663a;">
-    <div class="text-start">
-      <h4 class="fw-bold mb-2" style="font-family:'Playfair Display',serif;">{{ t('cta_title') }}</h4>
-      <p class="text-white-50 mb-0" style="font-size: 14px; max-width: 700px;">
-        {{ t('cta_desc') }}
-      </p>
-    </div>
-    <div class="d-flex gap-3">
-      <a routerLink="/catalogue" class="btn fw-bold px-4 py-2 text-dark" style="background: #FFA000; border-radius: 10px; font-size: 14px; text-decoration: none;">
-        {{ t('cta_btn_order') }}
-      </a>
-      <a routerLink="/register" class="btn text-white fw-bold px-4 py-2 border border-white-50" style="background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 14px; text-decoration: none;">
-        {{ t('cta_btn_more') }}
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION COMMENT ÇA MARCHE -->
-<section class="py-5 animate-on-scroll" style="background:var(--vert-d);color:white">
+<!-- COMMENT ÇA MARCHE (VISUEL & ÉPURÉ) -->
+<section class="py-5 text-white animate-on-scroll" style="background: #0b1329;">
   <div class="container text-center">
-    <h2 style="font-family:'Playfair Display',serif;margin-bottom:.5rem">
-      {{ t('sec_how_title') }}
-    </h2>
-    <p style="opacity:.8;margin-bottom:2.5rem">{{ t('sec_how_subtitle') }}</p>
-    <div class="row g-4">
-      <div class="col-md-3">
-        <div style="font-size:2.5rem;margin-bottom:.8rem">📝</div>
-        <h6 class="fw-bold">{{ t('how_step1_title') }}</h6>
-        <small style="opacity:.75">{{ t('how_step1_desc') }}</small>
+    <small class="text-success fw-bold text-uppercase d-block mb-1" style="font-size: 11px; letter-spacing: 0.08em;">Expérience AgroConnect</small>
+    <h3 class="fw-bold mb-4" style="font-family:'Playfair Display',serif; font-size: 26px;">Comment ça marche ?</h3>
+    
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-4">
+        <div class="p-4 rounded-4 h-100 text-start border border-secondary border-opacity-25" style="background: #152243;">
+          <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 42px; height: 42px; background: rgba(26, 124, 79, 0.25); color: #4cd964; font-size: 18px;">
+            1️⃣
+          </div>
+          <h6 class="fw-bold text-white mb-2">Choisissez vos Récoltes</h6>
+          <p class="text-white-50 mb-0" style="font-size: 13px; line-height: 1.5;">
+            Explorez le catalogue de fruits et légumes frais issus directement des champs locaux au Sénégal.
+          </p>
+        </div>
       </div>
-      <div class="col-md-3">
-        <div style="font-size:2.5rem;margin-bottom:.8rem">🔍</div>
-        <h6 class="fw-bold">{{ t('how_step2_title') }}</h6>
-        <small style="opacity:.75">{{ t('how_step2_desc') }}</small>
+
+      <div class="col-md-4">
+        <div class="p-4 rounded-4 h-100 text-start border border-secondary border-opacity-25" style="background: #152243;">
+          <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 42px; height: 42px; background: rgba(255, 160, 0, 0.25); color: #FFA000; font-size: 18px;">
+            2️⃣
+          </div>
+          <h6 class="fw-bold text-white mb-2">Payez en Toute Sécurité</h6>
+          <p class="text-white-50 mb-0" style="font-size: 13px; line-height: 1.5;">
+            Réglez instantanément via Wave, Orange Money ou choisissez de payer en espèces à la livraison.
+          </p>
+        </div>
       </div>
-      <div class="col-md-3">
-        <div style="font-size:2.5rem;margin-bottom:.8rem">📱</div>
-        <h6 class="fw-bold">{{ t('how_step3_title') }}</h6>
-        <small style="opacity:.75">{{ t('how_step3_desc') }}</small>
-      </div>
-      <div class="col-md-3">
-        <div style="font-size:2.5rem;margin-bottom:.8rem">🚚</div>
-        <h6 class="fw-bold">{{ t('how_step4_title') }}</h6>
-        <small style="opacity:.75">{{ t('how_step4_desc') }}</small>
+
+      <div class="col-md-4">
+        <div class="p-4 rounded-4 h-100 text-start border border-secondary border-opacity-25" style="background: #152243;">
+          <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 42px; height: 42px; background: rgba(27, 94, 166, 0.25); color: #64b5f6; font-size: 18px;">
+            3️⃣
+          </div>
+          <h6 class="fw-bold text-white mb-2">Livraison sous 24h</h6>
+          <p class="text-white-50 mb-0" style="font-size: 13px; line-height: 1.5;">
+            Nos livreurs partenaires vous livrent directement chez vous avec un suivi en temps réel.
+          </p>
+        </div>
       </div>
     </div>
+
     <div class="mt-4">
-      <a routerLink="/register" class="btn px-4 py-2"
-        style="background:var(--or);color:white;border-radius:10px;font-size:15px;font-weight:500">
-        {{ t('how_btn') }} →
+      <a routerLink="/catalogue" class="btn text-dark fw-bold px-4 py-2 rounded-pill" style="background: #FFA000; font-size: 13.5px;">
+        Découvrir le Catalogue →
       </a>
     </div>
   </div>
 </section>
 
-<!-- FOIRE AUX QUESTIONS (FAQ) -->
-<section id="faq" class="py-5 bg-light animate-on-scroll">
-  <div class="container" style="max-width: 900px;">
-    <h2 class="text-center fw-bold mb-4" style="font-family:'Playfair Display',serif">{{ t('faq_head') }}</h2>
+<!-- FOIRE AUX QUESTIONS (FAQ COMPACTE) -->
+<section id="faq" class="py-5 bg-white animate-on-scroll">
+  <div class="container" style="max-width: 800px;">
+    <div class="text-center mb-4">
+      <small class="text-success fw-bold text-uppercase d-block" style="font-size: 11px; letter-spacing: 0.05em;">Assistance & Questions</small>
+      <h3 class="fw-bold mb-0 text-dark" style="font-family:'Playfair Display',serif; font-size: 24px;">Questions Fréquentes</h3>
+    </div>
     
-    <div class="d-flex flex-column gap-3 mb-4">
+    <div class="d-flex flex-column gap-2.5 mb-4 text-start">
       <div *ngFor="let faq of faqs; let i = index" class="bg-white rounded-3 border shadow-sm">
-        <!-- HEADER ACCORDEON -->
         <div class="d-flex justify-content-between align-items-center p-3 cursor-pointer select-none" 
              (click)="toggleFaq(i)" style="outline: none;">
-          <h6 class="fw-bold mb-0 text-dark" style="font-size:15px; line-height: 1.4;">{{ t('faq_q' + (i+1)) }}</h6>
+          <h6 class="fw-bold mb-0 text-dark" style="font-size: 14px; line-height: 1.4;">{{ t('faq_q' + (i+1)) }}</h6>
           <span class="fs-5 text-muted transition-transform" [style.transform]="faq.open ? 'rotate(180deg)' : 'rotate(0deg)'"
                 style="display: inline-block; transition: transform 0.2s ease;">
             ▾
           </span>
         </div>
-        <!-- CONTENU ACCORDEON -->
-        <div *ngIf="faq.open" class="px-3 pb-3 border-top pt-3 bg-light-subtle text-muted" style="font-size:14px; line-height: 1.6;">
+        <div *ngIf="faq.open" class="px-3 pb-3 border-top pt-3 text-muted" style="font-size: 13px; line-height: 1.5; background: #fafafa;">
           {{ t('faq_a' + (i+1)) }}
         </div>
       </div>
     </div>
 
-    <!-- BANDEAU CONTACT -->
-    <div class="rounded-4 p-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3" 
+    <!-- BANDEAU CONTACT QUICK -->
+    <div class="rounded-4 p-3.5 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 shadow-sm" 
          style="background: #E8F6F0; border: 1px solid #D1EDE1;">
-      <div>
-        <h6 class="fw-bold mb-1 text-dark" style="font-size:15px;">{{ t('faq_contact_title') }}</h6>
-        <p class="text-muted mb-0" style="font-size:13px; line-height: 1.4;">
-          {{ t('faq_contact_desc') }}
-        </p>
+      <div class="text-start">
+        <h6 class="fw-bold mb-0 text-dark" style="font-size:14px;">Besoin d'aide ou d'un conseil ?</h6>
+        <small class="text-muted" style="font-size:12px;">Notre équipe commerciale réactive est disponible par téléphone.</small>
       </div>
-      <a href="tel:+221777556815" class="btn text-white fw-bold d-flex align-items-center gap-2 px-4 py-2" 
-         style="background: #1A7C4F; border-radius: 10px; font-size: 14px;">
+      <a href="tel:+221777556815" class="btn text-white fw-bold d-flex align-items-center gap-2 px-3.5 py-1.5 rounded-pill text-nowrap" 
+         style="background: #1A7C4F; font-size: 13px;">
         📞 +221 77 755 68 15
       </a>
     </div>
