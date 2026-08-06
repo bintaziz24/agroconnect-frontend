@@ -34,7 +34,6 @@ import { TranslationService } from '../../services/translation';
                 <img src="/assets/om.png" alt="Orange Money" style="width: 14px; height: 14px; object-fit: contain; border-radius: 2px;">
                 Orange Money
               </span>
-              <span class="badge px-3 py-2 text-white rounded-1" style="background-color: #dc2626 !important; font-size: 11px;">Free Money 🔴</span>
               <span class="badge px-3 py-2 text-white rounded-1" style="background-color: #059669 !important; font-size: 11px;">Espèces à la Livraison 💵</span>
             </div>
           </div>
