@@ -144,6 +144,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
             }));
           }
 
+          if (res.statut_validation) {
+            if (!this.user) this.user = {};
+            this.user.statut_validation = res.statut_validation;
+            localStorage.setItem('user', JSON.stringify(this.user));
+          }
+
           this.cdr.detectChanges();
         }
       },
@@ -151,7 +157,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  ouvrirModalForm() {
+    const statut = this.user?.statut_validation;
+    if (statut && statut !== 'validé') {
+      alert("⏳ Votre compte agriculteur est actuellement en cours de vérification par l'administration AgroConnect.\n\nVous pourrez ajouter et publier vos récoltes dès que votre compte aura été validé par un administrateur.");
+      this.afficherModalForm = false;
+      return;
+    }
+    this.afficherModalForm = true;
+  }
+
   ajouterProduit() {
+    const statut = this.user?.statut_validation;
+    if (statut && statut !== 'validé') {
+      alert("⏳ Votre compte agriculteur est actuellement en cours de vérification par l'administration AgroConnect. Vous ne pouvez pas encore publier de récoltes.");
+      this.afficherModalForm = false;
+      return;
+    }
+
     if (!this.nouveauProduit.nom || !this.nouveauProduit.prix) return;
 
     const nomSaisi = this.nouveauProduit.nom.trim().toLowerCase();
@@ -174,24 +197,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Nouveau produit inédit
-    const currentUserName = this.user?.name || this.user?.nom || 'Mon Exploitation';
-    const newProdLocally = {
-      id: Date.now(),
-      nom: this.nouveauProduit.nom,
-      prix: this.nouveauProduit.prix,
-      unite: this.nouveauProduit.unite,
-      stock: Number(this.nouveauProduit.stock),
-      categorie: this.nouveauProduit.categorie,
-      region: this.nouveauProduit.region || 'Thiès',
-      agriculteur: currentUserName,
-      image: this.nouveauProduit.image
-    };
-
-    this.produits.unshift(newProdLocally);
-    this.stats.produits = this.produits.length;
-    this.afficherModalForm = false;
-
     // Sauvegarde API
     const formData = new FormData();
     formData.append('nom', this.nouveauProduit.nom);
@@ -204,11 +209,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       formData.append('description', this.nouveauProduit.description);
     }
 
+    this.afficherModalForm = false;
+
     this.produitService.creerProduit(formData).subscribe({
       next: () => {
         this.chargerDashboardData();
       },
-      error: () => {}
+      error: (err: any) => {
+        const msg = err.error?.message || "Impossible de publier la récolte (compte en attente ou non autorisé).";
+        alert(`❌ ${msg}`);
+      }
     });
 
     this.resetForm();

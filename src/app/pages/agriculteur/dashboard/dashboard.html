@@ -19,9 +19,14 @@
         </p>
       </div>
       
-      <button (click)="afficherModalForm = true" class="btn btn-light px-4 py-2.5 rounded-pill fw-bold text-success border-0 shadow-sm text-nowrap"
-              style="font-size: 13px; color: #1a7c4f !important;">
-        {{ 'agri_add_harvest' | translate }}
+      <button (click)="ouvrirModalForm()" 
+              class="btn px-4 py-2.5 rounded-pill fw-bold border-0 shadow-sm text-nowrap"
+              [class.btn-light]="user?.statut_validation === 'validé'"
+              [class.btn-warning]="user?.statut_validation !== 'validé'"
+              [style.color]="user?.statut_validation === 'validé' ? '#1a7c4f !important' : '#856404 !important'"
+              style="font-size: 13px;">
+        <span *ngIf="user?.statut_validation !== 'validé'">🔒 Compte en cours de vérification</span>
+        <span *ngIf="!user?.statut_validation || user?.statut_validation === 'validé'">{{ 'agri_add_harvest' | translate }}</span>
       </button>
     </div>
   </div>
@@ -221,8 +226,9 @@
   <div *ngIf="ongletActif === 'apercu' || ongletActif === 'produits'" class="bg-white rounded-4 border p-4 mb-4 shadow-sm text-start">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="fw-bold mb-0" style="color: var(--text-primary);">Mes produits en stock</h5>
-      <button (click)="afficherModalForm = true" class="btn btn-outline-success btn-sm px-3 py-1.5" style="border-radius: 20px;">
-        + Nouveau produit
+      <button (click)="ouvrirModalForm()" class="btn btn-outline-success btn-sm px-3 py-1.5" style="border-radius: 20px;">
+        <span *ngIf="user?.statut_validation !== 'validé'">🔒 + Nouveau produit</span>
+        <span *ngIf="!user?.statut_validation || user?.statut_validation === 'validé'">+ Nouveau produit</span>
       </button>
     </div>
 
