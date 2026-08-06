@@ -84,8 +84,8 @@ import { TranslationService } from '../../services/translation';
               <li class="d-flex align-items-start gap-2">
                 <span>📞</span>
                 <div>
-                  <a href="tel:+221777556815" class="d-block text-white text-decoration-none hover-white">+221 77 755 68 15</a>
-                  <a href="https://wa.me/221777556815" target="_blank" class="text-white-50 text-decoration-none hover-white" style="font-size: 11px;">WhatsApp: +221 77 755 68 15</a>
+                  <a href="tel:+221765512974" class="d-block text-white text-decoration-none hover-white">+221 76 551 29 74</a>
+                  <a href="https://wa.me/221765512974" target="_blank" class="text-white-50 text-decoration-none hover-white" style="font-size: 11px;">WhatsApp Commercial: +221 76 551 29 74</a>
                 </div>
               </li>
               <li class="d-flex align-items-start gap-2">

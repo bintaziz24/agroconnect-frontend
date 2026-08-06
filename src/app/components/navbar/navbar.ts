@@ -191,7 +191,7 @@ export class NavbarComponent implements OnInit {
     const query = texte.toLowerCase();
 
     if (query.includes('numero') || query.includes('numéro') || query.includes('commercial') || query.includes('telephone') || query.includes('téléphone') || query.includes('contact') || query.includes('joindre') || query.includes('appel')) {
-      return `📞 Service Client & Assistance AgroConnect :\n• Assistance en ligne : Disponible 24h/24 via ce chat\n• E-mail officiel : contact@agroconnect.sn\n• Ligne Téléphonique (Démo) : +221 77 000 00 00\n• Horaires de réponse : 7j/7 de 08h00 à 20h00.`;
+      return `📞 Service Commercial & Assistance WhatsApp AgroConnect :\n• Téléphone & WhatsApp Commercial : +221 76 551 29 74\n• E-mail officiel : contact@agroconnect.sn\n• Assistance en ligne : Disponible 24h/24 via ce chat\n• Horaires de réponse : 7j/7 de 08h00 à 20h00.`;
     }
 
 
