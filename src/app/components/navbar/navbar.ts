@@ -90,10 +90,11 @@ export class NavbarComponent implements OnInit {
     if (!target.closest('.notification-container')) {
       this.showNotifications = false;
     }
-    if (!target.closest('.chat-container')) {
+    if (!target.closest('.chat-container') && !target.closest('.modal')) {
       this.showChat = false;
     }
   }
+
 
   @HostListener('window:nouvelle-commande', ['$event'])
   onNouvelleCommande(event: any) {
