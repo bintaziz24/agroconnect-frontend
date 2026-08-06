@@ -40,10 +40,14 @@ export class AppComponent implements OnInit, AfterViewInit {
   private observer: IntersectionObserver | null = null;
   private observedElements = new Set<Element>();
 
-  // Liste des pages privées où la barre de navigation globale est masquée
+  // Liste des pages privées / espaces utilisateurs où la barre de navigation globale est masquée
   pagesPrivees = [
     '/login',
     '/register',
+    '/agriculteur',
+    '/admin',
+    '/livreur',
+    '/commandes',
   ];
 
   constructor(
@@ -60,8 +64,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd)
     ).subscribe((e: any) => {
-      // Masque la Navbar si l'URL commence par l'une des pages privées (ex: /login)
-      this.afficherNavbar = !this.pagesPrivees.some(p => e.url.startsWith(p));
+      const currentUrl = e.urlAfterRedirects || e.url || '';
+      // Masque la Navbar globale et le Footer sur tous les espaces utilisateurs / tableaux de bord
+      this.afficherNavbar = !this.pagesPrivees.some(p => currentUrl.startsWith(p));
       
       // Relance le scanner d'animations après chaque changement de page
       setTimeout(() => this.scannerElementsAnimations(), 150);
