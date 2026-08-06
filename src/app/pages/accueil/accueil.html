@@ -7,15 +7,8 @@
     <div class="row align-items-center g-5">
       <!-- Left content -->
       <div class="col-lg-7 text-start">
-        <span class="badge rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-1"
-          style="background:rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); font-size:11px; letter-spacing:.08em; color: #FFF3DC;">
-          {{ t('hero_tag') }}
-        </span>
-        <h1 class="fw-bold mb-4 display-4" style="font-family:'Playfair Display',serif; line-height: 1.25;" [innerHTML]="t('hero_title')">
-        </h1>
-        
         <!-- White search bar -->
-        <div class="bg-white p-2 rounded-pill shadow d-flex align-items-center mb-4 hero-search-container" style="max-width: 550px;">
+        <div class="bg-white p-2 rounded-pill shadow d-flex align-items-center mb-3 hero-search-container" style="max-width: 550px;">
           <div class="d-flex align-items-center flex-grow-1 px-3">
             <span class="text-muted fs-5 me-2">🔍</span>
             <input type="text" class="form-control border-0 bg-transparent py-2 shadow-none" [placeholder]="t('hero_search')" style="font-size: 14px;">
@@ -24,6 +17,13 @@
             {{ t('hero_button') }} →
           </a>
         </div>
+
+        <span class="badge rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-1"
+          style="background:rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); font-size:11px; letter-spacing:.08em; color: #FFF3DC;">
+          {{ t('hero_tag') }}
+        </span>
+        <h1 class="fw-bold mb-0 display-4" style="font-family:'Playfair Display',serif; line-height: 1.25;" [innerHTML]="t('hero_title')">
+        </h1>
       </div>
       
       <!-- Right image Carousel & floating badges -->
