@@ -52,18 +52,19 @@ export class RegisterComponent {
     this.authService.register(this.formData).subscribe({
       next: (res: any) => {
         this.chargement = false;
-        this.panierService.chargerPanier();
 
-        const role = res?.user?.role || this.formData.role;
-        if (role === 'agriculteur') {
-          this.router.navigate(['/agriculteur/dashboard']);
-        } else if (role === 'livreur') {
-          this.router.navigate(['/livreur/dashboard']);
-        } else if (role === 'admin') {
-          this.router.navigate(['/admin/dashboard']);
-        } else {
-          this.router.navigate(['/catalogue']);
-        }
+        // Déconnecter immédiatement toute session temporaire créée lors de l'inscription
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+
+        // Redirection vers la page de connexion avec message de confirmation
+        this.router.navigate(['/login'], {
+          queryParams: {
+            registered: 'true',
+            email: this.formData.email,
+            role: this.formData.role
+          }
+        });
       },
 
       error: (err) => {

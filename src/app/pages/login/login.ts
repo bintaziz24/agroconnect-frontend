@@ -34,7 +34,12 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params['registered']) {
-        this.messageSucces = 'Votre compte a été créé avec succès ! Veuillez vous connecter ci-dessous avec vos identifiants.';
+        const role = params['role'];
+        if (role === 'agriculteur' || role === 'livreur') {
+          this.messageSucces = 'Votre compte a été créé avec succès ! Il est actuellement en cours de vérification par l\'administration. Veuillez saisir vos identifiants ci-dessous pour vous connecter à votre espace.';
+        } else {
+          this.messageSucces = 'Votre compte a été créé avec succès ! Veuillez saisir vos identifiants ci-dessous pour vous connecter.';
+        }
       }
       if (params['email']) {
         this.formData.email = params['email'];
