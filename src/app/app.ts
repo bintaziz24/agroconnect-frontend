@@ -64,14 +64,21 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.afficherNavbar = !this.pagesPrivees.some(p => e.url.startsWith(p));
       
       // Relance le scanner d'animations après chaque changement de page
-      setTimeout(() => this.scannerElementsAnimations(), 150);
+      setTimeout(() => this.scannerElementsAnimations(), 100);
+      setTimeout(() => this.scannerElementsAnimations(), 400);
     });
+
+    // Écouteur de défilement (scroll) de secours pour garantir le déclenchement des animations
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', () => this.verifierElementsVisibles(), { passive: true });
+    }
   }
 
   ngAfterViewInit() {
     // Initialise l'observateur d'animation dès le chargement du DOM
     this.initialiserObserverGlobal();
-    setTimeout(() => this.scannerElementsAnimations(), 150);
+    setTimeout(() => this.scannerElementsAnimations(), 100);
+    setTimeout(() => this.scannerElementsAnimations(), 500);
   }
 
   /**
@@ -82,14 +89,15 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           // Dès qu'un élément devient visible à l'écran, on lui ajoute la classe 'visible'
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting || entry.intersectionRatio > 0) {
             entry.target.classList.add('visible');
             this.observer?.unobserve(entry.target);
             this.observedElements.delete(entry.target);
           }
         });
       }, {
-        threshold: 0.05 // Déclenche l'animation dès que 5% de l'élément est visible
+        threshold: 0,
+        rootMargin: '0px 0px 100px 0px' // Déclenche l'animation légèrement avant l'entrée dans l'écran
       });
 
       // Détecte les nouveaux éléments ajoutés dynamiquement dans le DOM (MutationObserver)
@@ -106,17 +114,39 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Scanne le DOM pour trouver tous les éléments marqués pour animation
+   * Scanne le DOM pour trouver tous les éléments marqués pour animation et les observer
    */
   private scannerElementsAnimations() {
-    if (!this.observer) return;
     const selectors = ['.animate-on-scroll', '.animate-slide-left', '.animate-slide-right'];
     selectors.forEach(sel => {
       const elements = document.querySelectorAll(sel);
       elements.forEach(el => {
-        if (!el.classList.contains('visible') && !this.observedElements.has(el)) {
-          this.observer?.observe(el);
-          this.observedElements.add(el);
+        if (!el.classList.contains('visible')) {
+          if (this.observer && !this.observedElements.has(el)) {
+            this.observer.observe(el);
+            this.observedElements.add(el);
+          }
+          // Vérification immédiate si l'élément est déjà visible dans la fenêtre
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            el.classList.add('visible');
+          }
+        }
+      });
+    });
+  }
+
+  /**
+   * Vérifie directement la position des éléments lors du scroll (Fallback)
+   */
+  private verifierElementsVisibles() {
+    const selectors = ['.animate-on-scroll', '.animate-slide-left', '.animate-slide-right'];
+    selectors.forEach(sel => {
+      const elements = document.querySelectorAll(`${sel}:not(.visible)`);
+      elements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.95) {
+          el.classList.add('visible');
         }
       });
     });
