@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class WhatsappService {
   private apiUrl = environment.apiUrl;
-  private defaultNumber = '221770000000';
+  private defaultNumber = '221765512974';
 
   constructor(private http: HttpClient) {}
 
