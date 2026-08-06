@@ -20,11 +20,31 @@ export class PanierService {
     this.chargerPanier();
   }
 
+  private consolidateItems(items: CartItem[]): CartItem[] {
+    const map = new Map<number, CartItem>();
+    items.forEach(item => {
+      if (!item || !item.produit) return;
+      const pid = Number(item.produit.id);
+      if (map.has(pid)) {
+        map.get(pid)!.quantite += item.quantite;
+      } else {
+        map.set(pid, {
+          produit: item.produit,
+          quantite: item.quantite
+        });
+      }
+    });
+    return Array.from(map.values());
+  }
+
   private loadInitialCart() {
     const saved = localStorage.getItem('agroconnect_cart');
     if (saved) {
       try {
-        this.itemsSubject.next(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          this.itemsSubject.next(this.consolidateItems(parsed));
+        }
       } catch (e) {
         this.itemsSubject.next([]);
       }
@@ -49,8 +69,9 @@ export class PanierService {
   }
 
   private saveCart(items: CartItem[]) {
-    this.itemsSubject.next(items);
-    localStorage.setItem('agroconnect_cart', JSON.stringify(items));
+    const consolidated = this.consolidateItems(items);
+    this.itemsSubject.next(consolidated);
+    localStorage.setItem('agroconnect_cart', JSON.stringify(consolidated));
   }
 
   getItems(): CartItem[] {
@@ -65,7 +86,9 @@ export class PanierService {
 
   ajouter(produit: any, quantite: number = 1): Observable<any> {
     const current = [...this.getItems()];
-    const index = current.findIndex(item => item.produit.id === produit.id);
+    const targetId = Number(produit.id);
+    const index = current.findIndex(item => Number(item.produit?.id) === targetId);
+
     if (index > -1) {
       current[index].quantite += quantite;
     } else {
@@ -83,7 +106,9 @@ export class PanierService {
 
   modifierQuantite(produitId: number, delta: number) {
     let current = [...this.getItems()];
-    const index = current.findIndex(item => item.produit.id === produitId);
+    const targetId = Number(produitId);
+    const index = current.findIndex(item => Number(item.produit?.id) === targetId);
+
     if (index > -1) {
       current[index].quantite += delta;
       if (current[index].quantite <= 0) {
@@ -106,7 +131,8 @@ export class PanierService {
   }
 
   supprimer(produitId: number): Observable<any> {
-    const current = this.getItems().filter(item => item.produit.id !== produitId);
+    const targetId = Number(produitId);
+    const current = this.getItems().filter(item => Number(item.produit?.id) !== targetId);
     this.saveCart(current);
 
     if (localStorage.getItem('token')) {
