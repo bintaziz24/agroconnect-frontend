@@ -27,12 +27,12 @@
 </div>
 
 <!-- BARRE DE NAVIGATION PRINCIPALE -->
-<nav class="navbar navbar-expand-lg sticky-top px-lg-5 px-3 border-bottom shadow-sm py-2.5" style="position: sticky; top: 0; z-index: 1020; background: var(--bg-card); border-color: var(--border-color) !important; transition: background-color 0.3s ease, border-color 0.3s ease;">
-  <div class="container-fluid px-lg-4">
+<nav class="navbar navbar-expand-lg sticky-top px-lg-4 px-3 border-bottom shadow-sm py-2" style="position: sticky; top: 0; z-index: 1020; background: var(--bg-card); border-color: var(--border-color) !important; transition: background-color 0.3s ease, border-color 0.3s ease;">
+  <div class="container-fluid px-lg-2">
     
     <!-- Logo & Badges -->
-    <div class="d-flex align-items-center gap-3 me-lg-4">
-      <a class="navbar-brand d-flex align-items-center gap-2.5 text-decoration-none me-0" routerLink="/">
+    <div class="d-flex align-items-center gap-2 me-lg-3">
+      <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none me-0" routerLink="/">
         <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #1A7C4F;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#FFC107" class="bi bi-leaf-fill" viewBox="0 0 16 16">
             <path d="M1.5 10.5a8.5 8.5 0 0 1 15-5.25 8.5 8.5 0 0 1-15 5.25z" opacity="0.15" />
@@ -46,29 +46,28 @@
       </a>
       
       <!-- Pill Badge next to logo (Marche Sénégalais when guest, User Space when logged in) -->
-      <span *ngIf="!isLoggedIn" class="badge border px-3 py-1.5 rounded-pill ms-2 d-none d-sm-inline-block" style="font-size: 11px; background: var(--bg-light); color: var(--text-muted); border-color: var(--border-color) !important;">
+      <span *ngIf="!isLoggedIn" class="badge border px-2.5 py-1.5 rounded-pill ms-1.5 d-none d-sm-inline-block" style="font-size: 11px; background: var(--bg-light); color: var(--text-muted); border-color: var(--border-color) !important;">
         {{ t('Marche Sénégalais') }}
       </span>
 
-
       <ng-container *ngIf="isLoggedIn">
         <a *ngIf="user?.role === 'agriculteur'" routerLink="/agriculteur/dashboard" 
-           class="badge text-decoration-none px-3 py-1.5 rounded-pill ms-2 border d-inline-flex align-items-center gap-1.5 shadow-sm" 
+           class="badge text-decoration-none px-2.5 py-1.5 rounded-pill ms-1.5 border d-inline-flex align-items-center gap-1 shadow-sm" 
            style="font-size: 11px; background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; cursor: pointer;">
           👨‍🌾 {{ t('espace_agriculteur') }}
         </a>
         <a *ngIf="user?.role === 'livreur'" routerLink="/livreur/dashboard" 
-           class="badge text-decoration-none px-3 py-1.5 rounded-pill ms-2 border d-inline-flex align-items-center gap-1.5 shadow-sm" 
+           class="badge text-decoration-none px-2.5 py-1.5 rounded-pill ms-1.5 border d-inline-flex align-items-center gap-1 shadow-sm" 
            style="font-size: 11px; background: #e3f2fd; color: #1565c0; border-color: #bbdefb; cursor: pointer;">
           🚚 {{ t('espace_livreur') }}
         </a>
         <a *ngIf="user?.role === 'admin'" routerLink="/admin/dashboard" 
-           class="badge text-decoration-none px-3 py-1.5 rounded-pill ms-2 border d-inline-flex align-items-center gap-1.5 shadow-sm" 
+           class="badge text-decoration-none px-2.5 py-1.5 rounded-pill ms-1.5 border d-inline-flex align-items-center gap-1 shadow-sm" 
            style="font-size: 11px; background: #ffebee; color: #c62828; border-color: #ffcdd2; cursor: pointer;">
           🛡️ {{ t('espace_admin') }}
         </a>
         <a *ngIf="user?.role === 'client'" routerLink="/commandes" 
-           class="badge text-decoration-none px-3 py-1.5 rounded-pill ms-2 border d-inline-flex align-items-center gap-1.5 shadow-sm" 
+           class="badge text-decoration-none px-2.5 py-1.5 rounded-pill ms-1.5 border d-inline-flex align-items-center gap-1 shadow-sm" 
            style="font-size: 11px; background: #e8f5e9; color: #1a7c4f; border-color: #d1ede1; cursor: pointer;">
           👤 {{ t('espace_client') }}
         </a>
@@ -82,36 +81,36 @@
 
     <!-- Menu items & actions -->
     <div class="collapse navbar-collapse" id="navContent">
-      <!-- Navigation links centered with airy spacing -->
-      <ul class="navbar-nav ms-lg-3 me-lg-auto mb-2 mb-lg-0 gap-lg-3 gap-2 align-items-lg-center" style="font-size: 13.5px;">
-        <li class="nav-item ms-lg-2">
-          <a class="nav-link px-3 py-1.5 rounded-3 text-success fw-bold text-nowrap d-inline-flex align-items-center" 
-             routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" style="height: 36px; background: var(--bg-light);">
+      <!-- Navigation links centered with balanced spacing -->
+      <ul class="navbar-nav ms-lg-2 me-lg-auto mb-2 mb-lg-0 gap-lg-2 gap-1.5 align-items-lg-center" style="font-size: 13.5px;">
+        <li class="nav-item">
+          <a class="nav-link px-2.5 py-1.5 rounded-3 text-success fw-bold text-nowrap d-inline-flex align-items-center" 
+             routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" style="height: 35px; background: var(--bg-light);">
             {{ t('accueil') }}
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link px-3 py-1.5 rounded-3 fw-medium text-nowrap d-inline-flex align-items-center" 
-             routerLink="/catalogue" routerLinkActive="active" style="height: 36px; color: var(--text-primary);">
+          <a class="nav-link px-2.5 py-1.5 rounded-3 fw-medium text-nowrap d-inline-flex align-items-center" 
+             routerLink="/catalogue" routerLinkActive="active" style="height: 35px; color: var(--text-primary);">
             {{ t('produits') }}
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link px-3 py-1.5 rounded-3 fw-medium text-nowrap d-inline-flex align-items-center" 
-             routerLink="/" fragment="a-propos" style="height: 36px; color: var(--text-primary);">
+          <a class="nav-link px-2.5 py-1.5 rounded-3 fw-medium text-nowrap d-inline-flex align-items-center" 
+             routerLink="/" fragment="a-propos" style="height: 35px; color: var(--text-primary);">
             {{ t('apropos') }}
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link px-3 py-1.5 rounded-3 fw-medium text-nowrap d-inline-flex align-items-center" 
-             routerLink="/" fragment="faq" style="height: 36px; color: var(--text-primary);">
+          <a class="nav-link px-2.5 py-1.5 rounded-3 fw-medium text-nowrap d-inline-flex align-items-center" 
+             routerLink="/" fragment="faq" style="height: 35px; color: var(--text-primary);">
             {{ t('faq') }}
           </a>
         </li>
       </ul>
 
       <!-- Action items on the right -->
-      <div class="d-flex align-items-center gap-3 flex-wrap mt-2 mt-lg-0 pt-2 pt-lg-0 border-top border-lg-0 ms-lg-auto">
+      <div class="d-flex align-items-center gap-2.5 flex-wrap mt-2 mt-lg-0 pt-2 pt-lg-0 border-top border-lg-0 ms-lg-auto">
 
         <!-- Icons (only when logged in or public with cart) -->
         <div class="d-flex align-items-center gap-3 text-muted">
