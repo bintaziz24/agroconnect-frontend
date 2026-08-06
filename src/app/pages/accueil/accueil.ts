@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProduitService } from '../../services/produit';
@@ -132,7 +132,8 @@ export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
     private produitService: ProduitService,
     private panierService: PanierService,
     public trans: TranslationService,
-    private el: ElementRef
+    private el: ElementRef,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngAfterViewInit() {
@@ -159,14 +160,17 @@ export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
 
   nextSlide() {
     this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
+    this.cdr.detectChanges();
   }
 
   prevSlide() {
     this.currentSlideIndex = (this.currentSlideIndex - 1 + this.heroSlides.length) % this.heroSlides.length;
+    this.cdr.detectChanges();
   }
 
   goToSlide(index: number) {
     this.currentSlideIndex = index;
+    this.cdr.detectChanges();
   }
 
   ngOnDestroy() {
@@ -179,7 +183,7 @@ export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
     if (typeof window !== 'undefined') {
       this.slideInterval = setInterval(() => {
         this.nextSlide();
-      }, 4000);
+      }, 3000);
     }
 
     this.produitService.getProduits().subscribe({
