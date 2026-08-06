@@ -344,15 +344,15 @@
       </div>
 
       <!-- Body -->
-      <div class="modal-body p-3 bg-light text-start" style="height: 300px; overflow-y: auto;">
+      <div id="chat-navbar-body" class="modal-body p-3 bg-light text-start" style="height: 300px; overflow-y: auto;">
         <div class="d-flex flex-column gap-3">
           <!-- Message 1 (Incoming) -->
           <div class="d-flex flex-column align-items-start text-start" style="max-width: 85%;">
             <small class="text-muted mb-1 ms-1">Assistance AgroConnect</small>
             <div class="p-3 rounded-4 bg-white border text-dark shadow-sm" style="border-top-left-radius: 4px !important; font-size: 13px; line-height: 1.4;">
-              Bonjour ! Comment pouvons-nous vous aider aujourd'hui sur la plateforme ? N'hésitez pas à nous poser des questions sur vos produits ou vos commandes.
+              Bonjour ! Bienvenue sur le service d'assistance AgroConnect 🌾. Comment pouvons-nous vous guider aujourd'hui ?
             </div>
-            <small class="text-muted mt-1 ms-1" style="font-size: 9px;">10:45</small>
+            <small class="text-muted mt-1 ms-1" style="font-size: 9px;">En ligne 🟢</small>
           </div>
 
           <!-- Dynamic messages -->
@@ -372,6 +372,19 @@
         </div>
       </div>
 
+      <!-- Quick suggestions -->
+      <div class="px-3 py-2 bg-white border-top d-flex gap-1.5 flex-wrap">
+        <button (click)="envoyerMessage(undefined, 'Quel est le numéro du service commercial ?')" type="button" class="btn btn-sm btn-light border rounded-pill" style="font-size: 11px;">
+          📞 Contact Commercial
+        </button>
+        <button (click)="envoyerMessage(undefined, 'Comment suivre l état de ma commande ?')" type="button" class="btn btn-sm btn-light border rounded-pill" style="font-size: 11px;">
+          📦 Suivre une commande
+        </button>
+        <button (click)="envoyerMessage(undefined, 'Quels sont les modes de paiement autorisés ?')" type="button" class="btn btn-sm btn-light border rounded-pill" style="font-size: 11px;">
+          💳 Modes de paiement
+        </button>
+      </div>
+
       <!-- Footer / Form -->
       <div class="modal-footer p-2.5 bg-white border-top">
         <form (submit)="envoyerMessage($event)" class="d-flex w-100 gap-2">
@@ -383,6 +396,7 @@
           </button>
         </form>
       </div>
+
 
     </div>
   </div>

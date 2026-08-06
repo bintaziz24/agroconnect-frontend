@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -33,8 +33,10 @@ export class NavbarComponent implements OnInit {
     private panierService: PanierService,
     private notificationService: NotificationService,
     private router: Router,
-    public trans: TranslationService
+    public trans: TranslationService,
+    private cdr: ChangeDetectorRef
   ) {}
+
 
   t(key: string): string {
     return this.trans.translate(key);
@@ -197,14 +199,22 @@ export class NavbarComponent implements OnInit {
       return `Bonjour ! Bienvenue sur l'assistance en ligne AgroConnect 🌾. Comment pouvons-nous vous guider aujourd'hui ?`;
     }
 
-    return `Merci pour votre message ! Notre équipe commerciale est disponible en direct au +221 77 800 00 00 (WhatsApp) ou par mail à commercial@agroconnect.sn. En quoi d'autre pouvons-nous vous aider ?`;
+  scrollToBottom() {
+    setTimeout(() => {
+      const container = document.getElementById('chat-navbar-body');
+      if (container) {
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
   }
 
-  envoyerMessage(event: Event) {
-    event.preventDefault();
-    if (!this.nouveauMessage.trim()) return;
-
-    const texteMessage = this.nouveauMessage.trim();
+  envoyerMessage(event?: Event, texteRapide?: string) {
+    if (event) event.preventDefault();
+    const texteMessage = (texteRapide || this.nouveauMessage || '').trim();
+    if (!texteMessage) return;
 
     this.chatMessages.push({
       texte: texteMessage,
@@ -213,7 +223,9 @@ export class NavbarComponent implements OnInit {
       heure: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     });
 
-    this.nouveauMessage = '';
+    if (!texteRapide) this.nouveauMessage = '';
+    this.cdr.detectChanges();
+    this.scrollToBottom();
 
     setTimeout(() => {
       const reponse = this.genererReponseAssistance(texteMessage);
@@ -223,6 +235,8 @@ export class NavbarComponent implements OnInit {
         auteur: 'Assistance AgroConnect',
         heure: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
-    }, 300);
+      this.cdr.detectChanges();
+      this.scrollToBottom();
+    }, 350);
   }
 }
