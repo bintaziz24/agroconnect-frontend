@@ -203,6 +203,27 @@ html, body {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
 }
 
+/* Custom Green Toggle Switch */
+.bio-custom-switch {
+  width: 2.3em !important;
+  height: 1.25em !important;
+  cursor: pointer;
+  background-color: #cbd5e1;
+  border-color: #cbd5e1;
+  transition: all 0.2s ease-in-out;
+}
+
+.bio-custom-switch:checked {
+  background-color: #1A7C4F !important;
+  border-color: #1A7C4F !important;
+  box-shadow: 0 0 0 0.2rem rgba(26, 124, 79, 0.25) !important;
+}
+
+.bio-custom-switch:focus {
+  border-color: #1A7C4F !important;
+  box-shadow: 0 0 0 0.2rem rgba(26, 124, 79, 0.2) !important;
+}
+
 .animate-on-scroll {
   opacity: 0;
   transform: translateY(30px);

@@ -107,17 +107,16 @@
       </div>
       
       <!-- Bio Switch checkbox -->
-      <div class="d-flex align-items-center px-3 py-2 rounded-pill" style="background: #E8F6F0; border: 1px solid #D1EDE1;">
-        <div class="form-check form-switch mb-0 d-flex align-items-center gap-2">
+      <div class="d-flex align-items-center px-3.5 py-2 rounded-pill text-nowrap flex-shrink-0" style="background: #E8F6F0; border: 1px solid #D1EDE1; min-width: max-content;">
+        <div class="form-check form-switch mb-0 d-flex align-items-center gap-2 text-nowrap p-0 m-0">
           <input 
-            class="form-check-input mt-0 cursor-pointer" 
+            class="form-check-input mt-0 ms-0 cursor-pointer bio-custom-switch" 
             type="checkbox" 
             id="bioSwitch" 
             [(ngModel)]="bioUniquement"
             (change)="appliquerFiltres()"
-            style="accent-color: #1A7C4F;"
           />
-          <label class="form-check-label fw-bold text-success cursor-pointer" for="bioSwitch" style="font-size: 12px; user-select: none;">
+          <label class="form-check-label fw-bold cursor-pointer text-nowrap mb-0" for="bioSwitch" style="font-size: 13px; user-select: none; color: #0F5235 !important; line-height: 1; white-space: nowrap;">
             {{ 'cat_bio_only' | translate }}
           </label>
         </div>
