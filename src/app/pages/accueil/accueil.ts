@@ -153,6 +153,10 @@ export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  t(key: string): string {
+    return this.trans.translate(key);
+  }
+
   nextSlide() {
     this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
   }
