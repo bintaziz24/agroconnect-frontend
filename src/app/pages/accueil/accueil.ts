@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProduitService } from '../../services/produit';
@@ -13,8 +13,33 @@ import { TranslationService } from '../../services/translation';
   templateUrl: './accueil.html',
   styleUrl: './accueil.scss',
 })
-export class AccueilComponent implements OnInit, AfterViewInit {
+export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
   produits: any[] = [];
+  
+  heroSlides = [
+    {
+      nom: 'Tomates fraîches Bio',
+      origine: '📍 Niayes, Sénégal',
+      image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&h=600&fit=crop'
+    },
+    {
+      nom: 'Mangues Kent succulentes',
+      origine: '📍 Ziguinchor, Casamance',
+      image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&h=600&fit=crop'
+    },
+    {
+      nom: 'Oignons Violets locaux',
+      origine: '📍 Podor, Vallée du Fleuve',
+      image: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=600&h=600&fit=crop'
+    },
+    {
+      nom: 'Riz parfumé de la Vallée',
+      origine: '📍 Richard-Toll, Saint-Louis',
+      image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&h=600&fit=crop'
+    }
+  ];
+  currentSlideIndex = 0;
+  slideInterval: any = null;
 
   categories = [
     { nom: 'Légumes', count: 124 },
@@ -128,11 +153,31 @@ export class AccueilComponent implements OnInit, AfterViewInit {
     }
   }
 
-  t(key: string): string {
-    return this.trans.translate(key);
+  nextSlide() {
+    this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
+  }
+
+  prevSlide() {
+    this.currentSlideIndex = (this.currentSlideIndex - 1 + this.heroSlides.length) % this.heroSlides.length;
+  }
+
+  goToSlide(index: number) {
+    this.currentSlideIndex = index;
+  }
+
+  ngOnDestroy() {
+    if (this.slideInterval) {
+      clearInterval(this.slideInterval);
+    }
   }
 
   ngOnInit() {
+    if (typeof window !== 'undefined') {
+      this.slideInterval = setInterval(() => {
+        this.nextSlide();
+      }, 4000);
+    }
+
     this.produitService.getProduits().subscribe({
       next: (res) => {
         const data = res.data || res;

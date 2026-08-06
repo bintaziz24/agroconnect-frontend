@@ -29,18 +29,55 @@
         </div>
       </div>
       
-      <!-- Right image & floating badges -->
+      <!-- Right image Carousel & floating badges -->
       <div class="col-lg-5 position-relative text-center mt-4 mt-lg-0">
         <div class="position-relative mx-auto" style="max-width: 340px; width: 100%; height: 310px;">
-          <div class="w-100 h-100 animate-float hero-image-hover" style="cursor: pointer;">
-            <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&h=600&fit=crop" 
-                 alt="Tomates fraîches" 
-                 class="rounded-4 w-100 h-100 object-fit-cover shadow" 
-                 style="border: 4px solid rgba(255,255,255,0.2);">
+          
+          <!-- Image Slide Container -->
+          <div class="w-100 h-100 rounded-4 overflow-hidden shadow position-relative hero-image-hover" 
+               style="border: 4px solid rgba(255,255,255,0.25); cursor: pointer;"
+               (click)="nextSlide()">
+            
+            <img [src]="heroSlides[currentSlideIndex].image" 
+                 [alt]="heroSlides[currentSlideIndex].nom" 
+                 class="w-100 h-100 object-fit-cover transition-all"
+                 style="transition: all 0.5s ease-in-out;">
+            
+            <!-- Slide Title Overlay Badge -->
+            <div class="position-absolute bottom-0 start-0 end-0 p-2.5 text-start text-white" 
+                 style="background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);">
+              <span class="badge bg-success-subtle text-success px-2 py-0.5 rounded-pill mb-1" style="font-size: 10px;">
+                {{ heroSlides[currentSlideIndex].origine }}
+              </span>
+              <h6 class="fw-bold mb-0 text-white" style="font-size: 13.5px;">{{ heroSlides[currentSlideIndex].nom }}</h6>
+            </div>
+
+            <!-- Arrow Navigation Buttons -->
+            <button (click)="prevSlide(); $event.stopPropagation()" 
+                    class="btn btn-sm btn-dark bg-opacity-50 text-white rounded-circle position-absolute top-50 start-0 translate-middle-y ms-2 border-0 shadow-none d-flex align-items-center justify-content-center p-0" 
+                    style="width: 28px; height: 28px; font-size: 14px; z-index: 15;">
+              ‹
+            </button>
+            <button (click)="nextSlide(); $event.stopPropagation()" 
+                    class="btn btn-sm btn-dark bg-opacity-50 text-white rounded-circle position-absolute top-50 end-0 translate-middle-y me-2 border-0 shadow-none d-flex align-items-center justify-content-center p-0" 
+                    style="width: 28px; height: 28px; font-size: 14px; z-index: 15;">
+              ›
+            </button>
+
+            <!-- Dots Indicator -->
+            <div class="position-absolute top-0 end-0 p-2.5 d-flex gap-1.5" style="z-index: 15;">
+              <span *ngFor="let slide of heroSlides; let idx = index" 
+                    (click)="goToSlide(idx); $event.stopPropagation()"
+                    class="rounded-circle transition-all cursor-pointer" 
+                    [style.background]="idx === currentSlideIndex ? '#4cd964' : 'rgba(255,255,255,0.4)'"
+                    [style.width]="idx === currentSlideIndex ? '16px' : '7px'"
+                    style="height: 7px; border-radius: 4px; transition: all 0.3s ease;">
+              </span>
+            </div>
           </div>
           
           <!-- Floating card 1 (Wave & OM) -->
-          <div class="position-absolute animate-float-delayed" style="top: 20px; left: -15px; z-index: 10;">
+          <div class="position-absolute animate-float-delayed" style="top: 15px; left: -20px; z-index: 20;">
             <div class="bg-white rounded-3 shadow p-2 d-flex align-items-center gap-2 floating-card-hover" 
                  style="width: 165px; border-left: 4px solid #FFA000; cursor: pointer;">
               <div class="d-flex align-items-center gap-1 bg-light rounded-2 p-1" style="flex-shrink: 0;">
@@ -55,7 +92,7 @@
           </div>
           
           <!-- Floating card 2 (Deliveries) -->
-          <div class="position-absolute animate-float" style="bottom: 20px; right: -15px; z-index: 10;">
+          <div class="position-absolute animate-float" style="bottom: 15px; right: -20px; z-index: 20;">
             <div class="bg-white rounded-3 shadow p-2 d-flex align-items-center gap-2 floating-card-hover" 
                  style="width: 165px; border-left: 4px solid #1A7C4F; cursor: pointer;">
               <div class="fs-5">🚚</div>
