@@ -17,8 +17,9 @@ import { WhatsappService } from './services/whatsapp';
     <!-- Point d'injection des pages dynamique (RouterOutlet) -->
     <router-outlet></router-outlet>
 
-    <!-- Bouton Flottant WhatsApp -->
-    <a (click)="ouvrirWhatsapp()" 
+    <!-- Bouton Flottant WhatsApp (Masqué sur login/register) -->
+    <a *ngIf="afficherNavbar"
+       (click)="ouvrirWhatsapp()" 
        class="position-fixed bottom-0 end-0 m-4 p-3 rounded-circle shadow-lg text-white d-flex align-items-center justify-content-center border-0 text-decoration-none whatsapp-floating-btn"
        style="width: 58px; height: 58px; background: #25D366; z-index: 9999; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4) !important;"
        title="Besoin d'aide ? Discutez avec AgroConnect sur WhatsApp 💬">
