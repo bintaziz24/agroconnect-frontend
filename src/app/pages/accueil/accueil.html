@@ -127,9 +127,10 @@
         <div [routerLink]="['/catalogue']" [queryParams]="{ cat: cat.nom }" 
              class="card border border-light-subtle rounded-4 p-3 text-center h-100 shadow-sm category-card" 
              style="transition: all 0.3s ease; cursor: pointer;">
-          <div class="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-2" style="width: 44px; height: 44px; background: #E8F6F0; color: #1A7C4F;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-leaf" viewBox="0 0 16 16">
-              <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708L7.293 10l-2.647 2.646a.5.5 0 0 0 .708.708L8 10.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 10l2.647-2.646z"/>
+          <div class="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-2 shadow-sm" style="width: 44px; height: 44px; background: #E8F6F0; color: #1A7C4F;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#1A7C4F" class="bi bi-leaf-fill" viewBox="0 0 16 16">
+              <path d="M1.5 10.5a8.5 8.5 0 0 1 15-5.25 8.5 8.5 0 0 1-15 5.25z" opacity="0.2" />
+              <path d="M8 2c.002-.593.18-1.205.514-1.77.377-.638.93-1.215 1.502-1.659 1.115-.867 2.587-1.321 3.866-1.258 1.114.055 2.217.49 3.033 1.27.839.801 1.247 1.93 1.257 3.074.01 1.213-.425 2.62-1.24 3.702-.455.604-1.02 1.12-1.666 1.45-.584.299-1.254.453-1.84.453-.79 0-1.579-.2-2.228-.687a3.619 3.619 0 0 1-1.393-2.162c-.32-.904-.32-1.897-.156-2.996.016-.104.034-.207.054-.312a29.1 29.1 0 0 0-.256-.23c-.156.108-.314.216-.47.328-.543.39-1.093.84-1.47 1.387-.384.557-.58 1.206-.576 1.884a3.7 3.7 0 0 0 .565 1.958c.224.364.503.69.83.96a.5.5 0 1 1-.648.762 4.7 4.7 0 0 1-1.082-1.266A4.7 4.7 0 0 1 1.5 9.2z"/>
             </svg>
           </div>
           <h6 class="fw-bold mb-0 text-dark" style="font-size: 13.5px;">{{ t(cat.nom) }}</h6>
