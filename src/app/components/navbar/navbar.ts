@@ -200,6 +200,9 @@ export class NavbarComponent implements OnInit {
       return `Bonjour ! Bienvenue sur l'assistance en ligne AgroConnect 🌾. Comment pouvons-nous vous guider aujourd'hui ?`;
     }
 
+    return `Merci pour votre message ! Notre équipe commerciale est disponible en direct au +221 77 800 00 00 (WhatsApp) ou par mail à commercial@agroconnect.sn. En quoi d'autre pouvons-nous vous aider ?`;
+  }
+
   scrollToBottom() {
     setTimeout(() => {
       const container = document.getElementById('chat-navbar-body');
