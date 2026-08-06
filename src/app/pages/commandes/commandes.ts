@@ -350,38 +350,48 @@ export class CommandesComponent implements OnInit {
   }
 
   getNomAgriculteur(cmd: any): string {
-    if (!cmd) return 'Mamadou Sow (Ferme Vallée Bio)';
+    if (!cmd) return 'Producteur Partenaire AgroConnect';
 
     if (cmd.agriculteur_nom) return cmd.agriculteur_nom;
     if (cmd.agriculteur?.name) return cmd.agriculteur.name;
     if (cmd.agriculteur?.nom) return cmd.agriculteur.nom;
     if (cmd.producteur_nom) return cmd.producteur_nom;
 
-    const firstLine = cmd.lignes_commande?.[0];
-    if (firstLine?.produit?.agriculteur) {
-      const agr = firstLine.produit.agriculteur;
-      if (agr.user?.name) return agr.user.name;
-      if (agr.user?.nom) return agr.user.nom;
-      if (agr.nom_ferme) return agr.nom_ferme;
-      if (agr.nom) return agr.nom;
-      if (typeof agr === 'string') return agr;
+    const lines = cmd.lignes_commande || cmd.lignesCommande || cmd.lignes || [];
+    for (const line of lines) {
+      const p = line?.produit;
+      if (p) {
+        if (p.agriculteur_nom) return p.agriculteur_nom;
+        if (p.agriculteur?.user?.name) return p.agriculteur.user.name;
+        if (p.agriculteur?.user?.nom) return p.agriculteur.user.nom;
+        if (p.agriculteur?.name) return p.agriculteur.name;
+        if (p.agriculteur?.nom) return p.agriculteur.nom;
+        if (p.agriculteur?.nom_ferme) return p.agriculteur.nom_ferme;
+        if (p.agriculteur?.region) return `Producteur local (${p.agriculteur.region})`;
+      }
     }
 
     if (String(cmd.id).includes('9021')) return 'Mamadou Sow (Ferme Vallée Bio)';
     if (String(cmd.id).includes('7719')) return 'Cheikh Ndiaye (Riziculture Saint-Louis)';
 
-    return 'Mamadou Sow (Ferme Vallée Bio)';
+    return 'Producteur Local Sénégalais';
   }
 
   getLocalisationAgriculteur(cmd: any): string {
-    const firstLine = cmd?.lignes_commande?.[0];
-    if (firstLine?.produit?.agriculteur?.localisation) {
-      return firstLine.produit.agriculteur.localisation;
+    if (!cmd) return 'Sénégal';
+    const lines = cmd.lignes_commande || cmd.lignesCommande || cmd.lignes || [];
+    for (const line of lines) {
+      const p = line?.produit;
+      if (p) {
+        if (p.region) return p.region;
+        if (p.agriculteur?.region) return p.agriculteur.region;
+        if (p.agriculteur?.localisation) return p.agriculteur.localisation;
+      }
     }
-    if (cmd?.agriculteur_localisation) return cmd.agriculteur_localisation;
-    if (String(cmd?.id).includes('9021')) return 'Ziguinchor';
-    if (String(cmd?.id).includes('7719')) return 'Saint-Louis';
-    return 'Ziguinchor, Sénégal';
+    if (cmd.agriculteur_localisation) return cmd.agriculteur_localisation;
+    if (String(cmd.id).includes('9021')) return 'Ziguinchor';
+    if (String(cmd.id).includes('7719')) return 'Saint-Louis';
+    return 'Thiès, Sénégal';
   }
 
   suivreDirect(commande: any) {
