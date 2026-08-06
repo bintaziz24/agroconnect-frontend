@@ -8,6 +8,8 @@ import { AuthService } from '../../services/auth';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { timeout } from 'rxjs/operators';
 
+import { WhatsappService } from '../../services/whatsapp';
+
 @Component({
   selector: 'app-panier',
   standalone: true,
@@ -39,6 +41,7 @@ export class PanierComponent implements OnInit {
     public panierService: PanierService,
     private commandeService: CommandeService,
     private authService: AuthService,
+    private whatsappService: WhatsappService,
     private router: Router
   ) {}
 
@@ -202,5 +205,36 @@ export class PanierComponent implements OnInit {
 
   onImageError(event: any) {
     event.target.src = 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=200&fit=crop';
+  }
+
+  partagerSurWhatsapp() {
+    const articles = this.items.map(item => ({
+      nom: item.produit?.nom || 'Produit',
+      quantite: item.quantite || 1,
+      unite: item.produit?.unite || 'kg',
+      prix: item.produit?.prix || 0
+    }));
+
+    const cmdId = this.commandeSuccess?.commande?.id || this.commandeSuccess?.id || Math.floor(1000 + Math.random() * 9000);
+
+    this.whatsappService.genererLienCommande({
+      id: cmdId,
+      client_nom: this.formLivraison.nom || 'Client AgroConnect',
+      adresse: `${this.formLivraison.adresse}, ${this.formLivraison.region}`,
+      paiement: this.formLivraison.modePaiement,
+      total: this.total,
+      articles: articles
+    }).subscribe({
+      next: (res) => {
+        if (res && res.link) {
+          window.open(res.link, '_blank');
+        } else {
+          this.whatsappService.ouvrirChatDirect(`Bonjour AgroConnect ! Je confirme ma commande #CMD-${cmdId} d'un montant de ${this.total} FCFA.`);
+        }
+      },
+      error: () => {
+        this.whatsappService.ouvrirChatDirect(`Bonjour AgroConnect ! Je confirme ma commande #CMD-${cmdId} d'un montant de ${this.total} FCFA.`);
+      }
+    });
   }
 }

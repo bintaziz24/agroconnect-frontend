@@ -152,11 +152,16 @@
       </div>
 
       <!-- Pied du modal -->
-      <div class="modal-footer p-3 bg-light border-0 d-flex justify-content-between">
-        <button (click)="modalOuvert = false" class="btn btn-secondary btn-sm px-4 rounded-pill" type="button">Fermer</button>
-        <button (click)="ajouterAuPanier($event); modalOuvert = false" class="btn btn-success btn-sm px-4 rounded-pill text-white border-0" style="background: #1A7C4F;">
-          Ajouter au panier
-        </button>
+      <div class="modal-footer p-3 bg-light border-0 d-flex justify-content-between gap-2">
+        <button (click)="modalOuvert = false" class="btn btn-secondary btn-sm px-3 rounded-pill" type="button">Fermer</button>
+        <div class="d-flex gap-2">
+          <button (click)="commanderWhatsapp(); modalOuvert = false" class="btn btn-sm px-3 rounded-pill text-white border-0 shadow-sm d-flex align-items-center gap-1" style="background: #25D366; font-weight: 600;">
+            💬 WhatsApp
+          </button>
+          <button (click)="ajouterAuPanier($event); modalOuvert = false" class="btn btn-success btn-sm px-3 rounded-pill text-white border-0 shadow-sm" style="background: #1A7C4F;">
+            🛒 Ajouter au panier
+          </button>
+        </div>
       </div>
 
     </div>

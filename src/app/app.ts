@@ -4,13 +4,8 @@ import { NavbarComponent } from './components/navbar/navbar';
 import { FooterComponent } from './components/footer/footer';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { WhatsappService } from './services/whatsapp';
 
-/**
- * Composant Racine de l'application AgroConnect (AppComponent)
- * Gère la structure globale de l'interface :
- * 1. Affichage/Masquage de la Navbar et du Footer selon la page active.
- * 2. Détection automatique des éléments animés au défilement (Scroll Animations).
- */
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -21,6 +16,16 @@ import { filter } from 'rxjs/operators';
 
     <!-- Point d'injection des pages dynamique (RouterOutlet) -->
     <router-outlet></router-outlet>
+
+    <!-- Bouton Flottant WhatsApp -->
+    <a (click)="ouvrirWhatsapp()" 
+       class="position-fixed bottom-0 end-0 m-4 p-3 rounded-circle shadow-lg text-white d-flex align-items-center justify-content-center border-0 text-decoration-none whatsapp-floating-btn"
+       style="width: 58px; height: 58px; background: #25D366; z-index: 9999; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4) !important;"
+       title="Besoin d'aide ? Discutez avec AgroConnect sur WhatsApp 💬">
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.068-.315-.099-.448.099-.133.197-.513.646-.629.776-.117.13-.232.148-.43.05-.197-.099-.834-.308-1.587-.978-.588-.523-.984-1.168-1.101-1.367-.116-.197-.013-.304.086-.403.088-.088.197-.232.296-.347.099-.116.133-.197.198-.329.066-.133.033-.248-.017-.347-.05-.099-.448-1.082-.614-1.482-.162-.389-.328-.337-.448-.343-.115-.006-.247-.007-.38-.007s-.347.05-.528.248c-.18.198-.692.677-.692 1.652 0 .974.71 1.916.808 2.048.099.132 1.398 2.133 3.387 2.99.472.204.84.326 1.127.417.473.151.904.13 1.245.079.38-.058 1.17-.478 1.336-.94.165-.463.165-.859.116-.94-.049-.082-.182-.132-.379-.23z"/>
+      </svg>
+    </a>
 
     <!-- Pied de page (Footer) visible sur les pages publiques -->
     <app-footer *ngIf="afficherNavbar"></app-footer>
@@ -40,7 +45,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     '/register',
   ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private whatsappService: WhatsappService
+  ) {}
+
+  ouvrirWhatsapp() {
+    this.whatsappService.ouvrirChatDirect("Bonjour AgroConnect ! Je souhaite obtenir des informations sur vos récoltes fraîches et produits locaux au Sénégal.");
+  }
 
   ngOnInit() {
     // Écoute les changements de navigation (URL) dans l'application

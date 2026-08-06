@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PanierService } from '../../services/panier';
+import { WhatsappService } from '../../services/whatsapp';
 
 @Component({
   selector: 'app-card-produit',
@@ -14,7 +15,16 @@ export class CardProduit {
   ajoute = false;
   modalOuvert = false;
 
-  constructor(private panierService: PanierService) {}
+  constructor(
+    private panierService: PanierService,
+    private whatsappService: WhatsappService
+  ) {}
+
+  commanderWhatsapp(event?: Event) {
+    if (event) event.stopPropagation();
+    if (!this.produit) return;
+    this.whatsappService.ouvrirChatProduit(this.produit);
+  }
 
   ajouterAuPanier(event: Event) {
     event.stopPropagation();
