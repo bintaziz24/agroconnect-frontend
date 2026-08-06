@@ -128,10 +128,20 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  showProfilModal = false;
+
   logout() {
     this.authService.logout().subscribe(() => {
       this.router.navigate(['/']);
     });
+  }
+
+  ouvrirProfil() {
+    this.showProfilModal = true;
+  }
+
+  fermerProfil() {
+    this.showProfilModal = false;
   }
 
   selectRole(targetRole: string) {
