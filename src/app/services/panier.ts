@@ -55,7 +55,7 @@ export class PanierService {
     if (localStorage.getItem('token')) {
       this.http.get<any[]>(`${this.apiUrl}/panier`).subscribe({
         next: (items) => {
-          if (Array.isArray(items)) {
+          if (Array.isArray(items) && items.length > 0) {
             const cartItems: CartItem[] = items.map(item => ({
               produit: item.produit,
               quantite: item.quantite

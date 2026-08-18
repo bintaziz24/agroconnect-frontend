@@ -76,6 +76,11 @@
             style="font-size: 13px; transition: all 0.2s;">
       {{ 'agri_tab_products' | translate }} ({{ stats.produits }})
     </button>
+    <a routerLink="/chat" 
+       class="btn btn-sm px-3 py-2 rounded-2 fw-bold border-0 cursor-pointer text-decoration-none" 
+       style="font-size: 13px; color: #1A7C4F; background: #e8f6f0;">
+      💬 Messagerie Client
+    </a>
   </div>
 
   <!-- Alerte Notification Nouvelle Commande en Temps Réel -->
@@ -135,12 +140,15 @@
     <div class="col-6 col-md-3">
       <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
         <div class="d-flex justify-content-between align-items-center mb-1">
-          <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Note Producteur</small>
+          <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Évaluation Producteur</small>
           <span class="fs-5">⭐</span>
         </div>
         <div>
-          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">4.5 / 5</h4>
-          <small class="text-muted" style="font-size: 11px;">Basé sur 120+ avis clients</small>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.note | number:'1.1-1' }} / 5</h4>
+          <small class="text-muted" style="font-size: 11px;">
+            <span *ngIf="stats.nombreAvis > 0">Basé sur {{ stats.nombreAvis }} avis client{{ stats.nombreAvis > 1 ? 's' : '' }}</span>
+            <span *ngIf="stats.nombreAvis === 0">Aucun avis enregistré</span>
+          </small>
         </div>
       </div>
     </div>
@@ -225,7 +233,7 @@
   <!-- Onglet Produits -->
   <div *ngIf="ongletActif === 'apercu' || ongletActif === 'produits'" class="bg-white rounded-4 border p-4 mb-4 shadow-sm text-start">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="fw-bold mb-0" style="color: var(--text-primary);">Mes produits en stock</h5>
+      <h5 class="fw-bold mb-0 text-dark" style="color: #111827 !important;">Mes produits en stock</h5>
       <button (click)="ouvrirModalForm()" class="btn btn-outline-success btn-sm px-3 py-1.5" style="border-radius: 20px;">
         <span *ngIf="user?.statut_validation !== 'validé'">🔒 + Nouveau produit</span>
         <span *ngIf="!user?.statut_validation || user?.statut_validation === 'validé'">+ Nouveau produit</span>
@@ -236,31 +244,31 @@
       <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
         <thead class="table-light">
           <tr>
-            <th>Produit</th>
-            <th>Catégorie</th>
-            <th>Prix unitaire</th>
-            <th>Stock disponible</th>
-            <th class="text-end">Actions</th>
+            <th class="text-dark">Produit</th>
+            <th class="text-dark">Catégorie</th>
+            <th class="text-dark">Prix unitaire</th>
+            <th class="text-dark">Stock disponible</th>
+            <th class="text-end text-dark">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let p of produits">
             <td>
               <div class="d-flex align-items-center gap-3">
-                <img [src]="p.image" [alt]="p.nom" (error)="onImageError($event)" class="rounded-3" style="width:44px; height:44px; object-fit:cover;" />
+                <img [src]="p.image" [alt]="p.nom" (error)="onImageError($event)" class="rounded-3 shadow-sm border" style="width:44px; height:44px; object-fit:cover;" />
                 <div>
-                  <strong class="d-block" style="color: var(--text-primary);">{{ p.nom }}</strong>
-                  <small class="text-muted">ID: #PROD-{{ p.id }}</small>
+                  <strong class="d-block text-dark fw-bold" style="font-size: 14px; color: #111827 !important;">{{ p.nom }}</strong>
+                  <small style="font-size: 11px; color: #6b7280 !important;">ID: #PROD-{{ p.id }}</small>
                 </div>
               </div>
             </td>
             <td>
-              <span class="badge bg-secondary bg-opacity-10 text-dark px-2.5 py-1.5" style="font-size: 11px;">
+              <span class="badge px-2.5 py-1.5 fw-semibold border" style="font-size: 11px; background: #e8f6f0 !important; color: #0F5235 !important; border-color: #b7e4c7 !important;">
                 {{ p.categorie }}
               </span>
             </td>
             <td>
-              <strong class="text-success">{{ p.prix | number }} FCFA</strong> / {{ p.unite }}
+              <strong class="text-success fw-bold" style="color: #1A7C4F !important;">{{ p.prix | number }} FCFA</strong> / {{ p.unite }}
             </td>
             <td>
               <span class="badge px-2.5 py-1.5" [class.bg-success]="p.stock > 10" [class.bg-warning]="p.stock <= 10 && p.stock > 0" [class.bg-danger]="p.stock === 0" style="font-size: 11px;">

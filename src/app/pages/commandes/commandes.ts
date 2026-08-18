@@ -1,10 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommandeService } from '../../services/commande';
 import { AuthService } from '../../services/auth';
 import { ChatService, ChatMessage } from '../../services/chat';
+import { DiscussionService } from '../../services/discussion';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 
 declare var L: any;
@@ -81,6 +82,8 @@ export class CommandesComponent implements OnInit {
     private commandeService: CommandeService,
     private authService: AuthService,
     private chatService: ChatService,
+    private discussionService: DiscussionService,
+    private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -98,10 +101,9 @@ export class CommandesComponent implements OnInit {
       this.chatSubscription.unsubscribe();
     }
     this.chatSubscription = this.chatService.getMessagesObservable(missionId).subscribe((list) => {
-      const currentUserName = this.user?.name || this.user?.nom || '';
-      this.chatMessages = list.map(msg => ({
-        ...msg,
-        estMe: msg.role === 'CUSTOMER' || (currentUserName && msg.auteur.includes(currentUserName))
+      this.chatMessages = list.map(m => ({
+        ...m,
+        estMe: m.role === 'CUSTOMER'
       }));
       this.cdr.detectChanges();
     });
@@ -109,6 +111,17 @@ export class CommandesComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.authService.getUser();
+
+    // Redirection selon le rôle : un agriculteur ou livreur doit accéder à ses commandes professionnelles
+    if (this.user?.role === 'agriculteur') {
+      this.router.navigate(['/agriculteur/dashboard'], { queryParams: { tab: 'commandes' } });
+      return;
+    }
+    if (this.user?.role === 'livreur') {
+      this.router.navigate(['/livreur/dashboard']);
+      return;
+    }
+
     this.chargerCommandes();
 
     this.chargerChat(this.getMissionId());
@@ -221,9 +234,21 @@ export class CommandesComponent implements OnInit {
 
   ouvrirChat(cmd: any) {
     this.commandeSelectionnee = cmd;
-    this.modalChatOuvert = true;
-    const missionId = this.getMissionId(cmd);
-    this.chargerChat(missionId);
+    const agriculteurId = cmd.agriculteur_id || cmd.agriculteur?.id || 1;
+    const cmdId = typeof cmd.id === 'number' ? cmd.id : parseInt(String(cmd.id).replace(/[^0-9]/g, '')) || 1;
+
+    this.discussionService.demarrerDiscussion({
+      agriculteur_id: agriculteurId,
+      commande_id: cmdId,
+      message: `Bonjour, j'ai une question concernant ma commande #${cmd.id}.`
+    }).subscribe({
+      next: (disc) => {
+        this.router.navigate(['/chat', disc.id]);
+      },
+      error: () => {
+        this.router.navigate(['/chat']);
+      }
+    });
   }
 
   fermerChat() {

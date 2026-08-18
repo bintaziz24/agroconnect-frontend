@@ -19,22 +19,19 @@ export class WhatsappService {
   }
 
   ouvrirChatDirect(message?: string) {
-    const text = message || "Bonjour AgroConnect ! Je souhaite obtenir des informations sur vos produits agricoles.";
-    const url = `https://wa.me/${this.defaultNumber}?text=${encodeURIComponent(text)}`;
+    const url = `https://wa.me/${this.defaultNumber}`;
     window.open(url, '_blank');
   }
 
   ouvrirChatProduit(produit: any) {
-    const nom = produit.nom || 'ce produit';
-    const prix = produit.prix ? `${produit.prix} FCFA` : '';
-    const text = `Bonjour AgroConnect ! Je suis intéressé par *${nom}* (${prix}). Est-il disponible ?`;
-    this.ouvrirChatDirect(text);
+    this.ouvrirChatDirect();
   }
 
   ouvrirChatCommande(commande: any) {
-    const id = commande.id || 'CMD';
-    const total = commande.montant_total || commande.total || 0;
-    const text = `Bonjour AgroConnect ! Je souhaite suivre l'état de ma commande *#CMD-${id}* (Total : ${total} FCFA).`;
-    this.ouvrirChatDirect(text);
+    this.ouvrirChatDirect();
+  }
+
+  getReponseAutomatique(type: string = 'accueil', donnees: any = {}): Observable<any> {
+    return this.http.post(`${this.apiUrl}/whatsapp/reponse-automatique`, { type, donnees });
   }
 }

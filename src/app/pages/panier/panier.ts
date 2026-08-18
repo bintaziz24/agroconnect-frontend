@@ -229,11 +229,11 @@ export class PanierComponent implements OnInit {
         if (res && res.link) {
           window.open(res.link, '_blank');
         } else {
-          this.whatsappService.ouvrirChatDirect(`Bonjour AgroConnect ! Je confirme ma commande #CMD-${cmdId} d'un montant de ${this.total} FCFA.`);
+          this.whatsappService.ouvrirChatDirect();
         }
       },
       error: () => {
-        this.whatsappService.ouvrirChatDirect(`Bonjour AgroConnect ! Je confirme ma commande #CMD-${cmdId} d'un montant de ${this.total} FCFA.`);
+        this.whatsappService.ouvrirChatDirect();
       }
     });
   }

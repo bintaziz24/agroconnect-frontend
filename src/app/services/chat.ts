@@ -45,7 +45,8 @@ export class ChatService {
     }
 
     try {
-      return JSON.parse(raw);
+      const parsed: ChatMessage[] = JSON.parse(raw);
+      return parsed.filter(m => !m.auteur?.includes('Réponse Automatique'));
     } catch (e) {
       return [];
     }
@@ -76,6 +77,7 @@ export class ChatService {
 
     list.push(newMsg);
     this.saveMessages(missionId, list);
+
     return list;
   }
 

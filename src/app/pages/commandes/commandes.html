@@ -486,7 +486,7 @@
             <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill fw-bold text-uppercase d-inline-block mb-1" style="font-size: 11px;">
               PAYÉ AVEC SUCCÈS
             </span>
-            <h5 class="fw-bold mb-0 text-dark" style="font-size: 16px;">FACTURE N° FAC-AGC-{{ commandeSelectionnee?.id }}</h5>
+            <h5 class="fw-bold mb-0 text-dark" style="font-size: 16px;">FACTURE N° {{ commandeSelectionnee?.paiement?.facture?.numero_facture || ('FAC-AGC-' + commandeSelectionnee?.id) }}</h5>
             <small class="text-muted d-block" style="font-size: 11px;">Date : {{ (commandeSelectionnee?.created_at || commandeSelectionnee?.date) | date:'dd/MM/yyyy à HH:mm' }}</small>
           </div>
         </div>

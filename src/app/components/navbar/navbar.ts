@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth';
 import { PanierService } from '../../services/panier';
 import { TranslationService } from '../../services/translation';
 import { NotificationService, AppNotification } from '../../services/notification';
+import { DiscussionService } from '../../services/discussion';
 
 @Component({
   selector: 'app-navbar',
@@ -27,16 +28,17 @@ export class NavbarComponent implements OnInit {
 
   notificationsCount = 0;
   notifications: AppNotification[] = [];
+  unreadChatCount = 0;
 
   constructor(
     private authService: AuthService,
     private panierService: PanierService,
     private notificationService: NotificationService,
+    private discussionService: DiscussionService,
     private router: Router,
     public trans: TranslationService,
     private cdr: ChangeDetectorRef
   ) {}
-
 
   t(key: string): string {
     return this.trans.translate(key);
@@ -57,6 +59,9 @@ export class NavbarComponent implements OnInit {
     this.authService.user$.subscribe((user: any) => {
       this.user = user;
       this.isLoggedIn = !!user;
+      if (this.isLoggedIn) {
+        this.chargerUnreadChatCount();
+      }
     });
 
     this.panierService.items$.subscribe(items => {
@@ -69,6 +74,15 @@ export class NavbarComponent implements OnInit {
 
     this.notificationService.unreadCount$.subscribe(count => {
       this.notificationsCount = count;
+    });
+  }
+
+  chargerUnreadChatCount() {
+    this.discussionService.getNombreMessagesNonLus().subscribe({
+      next: (res) => {
+        this.unreadChatCount = res.non_lus;
+      },
+      error: () => {}
     });
   }
 

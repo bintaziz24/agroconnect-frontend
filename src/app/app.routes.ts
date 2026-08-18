@@ -64,6 +64,19 @@ export const routes: Routes = [
       import('./pages/livreur/dashboard/dashboard').then(m => m.DashboardComponent),
     canActivate: [roleGuard(['livreur'])]
   },
+  // Messagerie / Chat direct (Client <-> Agriculteur)
+  {
+    path: 'chat',
+    loadComponent: () =>
+      import('./pages/chat/chat').then(m => m.ChatComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'chat/:id',
+    loadComponent: () =>
+      import('./pages/chat/chat').then(m => m.ChatComponent),
+    canActivate: [authGuard]
+  },
   // Redirection par défaut si la route n'existe pas
   { path: '**', redirectTo: '' }
 ];

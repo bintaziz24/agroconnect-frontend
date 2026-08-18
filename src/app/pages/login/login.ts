@@ -22,6 +22,46 @@ export class LoginComponent implements OnInit {
   erreur = '';
   messageSucces = '';
   chargement = false;
+  modeReset = false;
+  resetData = {
+    password: '',
+    password_confirmation: ''
+  };
+
+  onResetPassword() {
+    this.erreur = '';
+    this.messageSucces = '';
+    if (!this.formData.email) {
+      this.erreur = 'Veuillez saisir votre adresse e-mail ci-dessus.';
+      return;
+    }
+    if (!this.resetData.password || this.resetData.password.length < 8) {
+      this.erreur = 'Le nouveau mot de passe doit comporter au moins 8 caractères.';
+      return;
+    }
+    if (this.resetData.password !== this.resetData.password_confirmation) {
+      this.erreur = 'Les mots de passe ne correspondent pas.';
+      return;
+    }
+
+    this.chargement = true;
+    this.authService.reinitialiserMotDePasse({
+      email: this.formData.email,
+      password: this.resetData.password,
+      password_confirmation: this.resetData.password_confirmation
+    }).subscribe({
+      next: (res) => {
+        this.chargement = false;
+        this.modeReset = false;
+        this.messageSucces = 'Votre mot de passe a été réinitialisé avec succès ! Vous pouvez maintenant vous connecter.';
+        this.resetData = { password: '', password_confirmation: '' };
+      },
+      error: (err) => {
+        this.chargement = false;
+        this.erreur = err?.error?.message || 'Erreur lors de la réinitialisation du mot de passe.';
+      }
+    });
+  }
 
 
   constructor(

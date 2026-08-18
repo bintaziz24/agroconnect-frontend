@@ -41,6 +41,12 @@ export class AuthService {
     );
   }
 
+  reinitialiserMotDePasse(data: { email: string; password: string; password_confirmation: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reinitialiser-mot-de-passe`, data, {
+      headers: { 'Accept': 'application/json' }
+    });
+  }
+
   logout(): Observable<any> {
     // Déconnexion instantanée côté client (0ms de latence)
     localStorage.removeItem('token');
@@ -75,6 +81,10 @@ export class AuthService {
       }
     }
     return null;
+  }
+
+  getCurrentUser(): any {
+    return this.getUser();
   }
 
   getRole(): string {

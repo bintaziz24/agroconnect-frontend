@@ -1,7 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { PanierService } from '../../services/panier';
 import { WhatsappService } from '../../services/whatsapp';
+import { DiscussionService } from '../../services/discussion';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-card-produit',
@@ -17,8 +20,81 @@ export class CardProduit {
 
   constructor(
     private panierService: PanierService,
-    private whatsappService: WhatsappService
+    private whatsappService: WhatsappService,
+    private discussionService: DiscussionService,
+    private authService: AuthService,
+    private router: Router
   ) {}
+
+  getUserRole(): string {
+    const user = this.authService.getCurrentUser();
+    return user?.role || 'client';
+  }
+
+  isMonProduit(): boolean {
+    const user = this.authService.getCurrentUser();
+    if (!user || user.role !== 'agriculteur') return false;
+    const agriculteurId = this.produit?.agriculteur_id || this.produit?.agriculteur?.id;
+    const nomAgri = this.getNomAgriculteur(this.produit);
+    return (agriculteurId && user.id === agriculteurId) || (user.name && nomAgri && user.name.toLowerCase() === nomAgri.toLowerCase());
+  }
+
+  allerDashboardAgriculteur(event?: Event) {
+    if (event) event.stopPropagation();
+    this.router.navigate(['/agriculteur/dashboard']);
+  }
+
+  avertirModeAgriculteur(event?: Event) {
+    if (event) event.stopPropagation();
+    alert('Vous êtes actuellement en Espace Agriculteur. Pour discuter ou commander des produits auprès d\'un autre producteur, veuillez utiliser l\'Espace Client dans la barre supérieure.');
+  }
+
+  discuterAvecAgriculteur(event?: Event) {
+    if (event) event.stopPropagation();
+    this.modalOuvert = false;
+    if (!this.produit) return;
+
+    if (this.getUserRole() === 'agriculteur') {
+      this.avertirModeAgriculteur(event);
+      return;
+    }
+
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const agriculteurId = this.produit.agriculteur_id || this.produit.agriculteur?.id || this.produit.agriculteur?.user_id || 1;
+    const nomAgriculteur = this.getNomAgriculteur(this.produit);
+    const nomProduit = this.produit.nom || 'Produit local';
+    const imageProduit = this.produit.image || '';
+    const prixProduit = this.produit.prix_unitaire || this.produit.prix || 1000;
+    const uniteProduit = this.produit.unite_mesure || 'kg';
+
+    this.discussionService.demarrerDiscussion({
+      agriculteur_id: agriculteurId,
+      produit_id: this.produit.id,
+      nom_agriculteur: nomAgriculteur,
+      nom_produit: nomProduit,
+      image_produit: imageProduit,
+      prix_produit: prixProduit,
+      unite_produit: uniteProduit,
+      message: `Bonjour ${nomAgriculteur}, je suis intéressé par votre produit ${nomProduit}.`
+    }).subscribe({
+      next: (disc) => {
+        this.modalOuvert = false;
+        if (disc && disc.id) {
+          this.router.navigate(['/chat', disc.id]);
+        } else {
+          this.router.navigate(['/chat']);
+        }
+      },
+      error: (err) => {
+        console.error('Erreur démarrage chat', err);
+        this.router.navigate(['/chat']);
+      }
+    });
+  }
 
   commanderWhatsapp(event?: Event) {
     if (event) event.stopPropagation();
@@ -59,6 +135,15 @@ export class CardProduit {
       return produit.agriculteur.localisation || produit.agriculteur.region || 'Sénégal';
     }
     return 'Sénégal';
+  }
+
+  getNomFerme(produit: any): string {
+    if (!produit) return 'Ferme Bio Sénégal';
+    if (produit.ferme?.nom_ferme) return produit.ferme.nom_ferme;
+    if (produit.agriculteur?.fermes && produit.agriculteur.fermes.length > 0) {
+      return produit.agriculteur.fermes[0].nom_ferme;
+    }
+    return 'Ferme AgroConnect (Sénégal)';
   }
 
   getNomLocal(nom: string): string {

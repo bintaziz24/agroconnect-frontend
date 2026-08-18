@@ -1,11 +1,12 @@
 import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
 import { AuthService } from '../../../services/auth';
 import { ChatService, ChatMessage } from '../../../services/chat';
+import { DiscussionService } from '../../../services/discussion';
 import { environment } from '../../../../environments/environment';
 
 // Fix for Leaflet default icon paths in Angular CLI
@@ -59,12 +60,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   constructor(
     private authService: AuthService,
     private chatService: ChatService,
+    private discussionService: DiscussionService,
     private http: HttpClient,
     private route: ActivatedRoute,
+    private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
   chatSubscription: any = null;
+
+  livreurProfil: any = { immatriculation_vehicule: 'DK-8921-AB', est_dispo: true };
 
   ngOnInit() {
     this.user = this.authService.getUser();
@@ -79,6 +84,39 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.chargerChat('AGC-9021');
     this.chargerMissionsBackend();
+    this.chargerProfilLivreur();
+  }
+
+  chargerProfilLivreur() {
+    this.http.get<any>(`${this.apiUrl}/livreur/profile`).subscribe({
+      next: (res) => {
+        if (res) {
+          this.livreurProfil = res;
+          this.cdr.detectChanges();
+        }
+      },
+      error: () => {}
+    });
+  }
+
+  toggleDisponibilite() {
+    const nouveauStatut = !this.livreurProfil.est_dispo;
+    this.livreurProfil.est_dispo = nouveauStatut;
+    this.http.put(`${this.apiUrl}/livreur/profile`, { est_dispo: nouveauStatut }).subscribe({
+      next: (res: any) => {
+        if (res) this.livreurProfil = res;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  enregistrerVehicule() {
+    this.http.put(`${this.apiUrl}/livreur/profile`, { immatriculation_vehicule: this.livreurProfil.immatriculation_vehicule }).subscribe({
+      next: (res: any) => {
+        if (res) this.livreurProfil = res;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   chargerChat(missionId: string) {
@@ -348,9 +386,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.livraisonConfirmee = false;
 
     if (target.realId) {
-      this.http.put(`${this.apiUrl}/livraisons/${target.realId}`, { status: 'annulee' }).subscribe({
-        next: () => this.chargerMissionsBackend()
+      this.http.put(`${this.apiUrl}/livraisons/${target.realId}`, { status: 'refusee', action: 'refuser' }).subscribe({
+        next: () => {
+          this.missions = this.missions.filter(m => m.realId !== target.realId);
+          this.chargerMissionsBackend();
+        }
       });
+    } else {
+      this.missions = this.missions.filter(m => m !== target);
     }
   }
 
@@ -395,5 +438,28 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         });
       }
     }, 100);
+  }
+
+  naviguerVersMessagerie() {
+    this.router.navigate(['/chat']);
+  }
+
+  ouvrirDiscussionBackend(mission: any) {
+    const agriculteurId = mission?.agriculteur_id || 1;
+    const commandeId = mission?.commande_id || 1;
+
+    this.discussionService.demarrerDiscussion({
+      agriculteur_id: agriculteurId,
+      commande_id: commandeId,
+      livreur_id: this.user?.id,
+      message: `Bonjour, je suis le livreur en charge de la livraison pour la mission #${mission?.id || ''}.`
+    }).subscribe({
+      next: (disc) => {
+        this.router.navigate(['/chat', disc.id]);
+      },
+      error: () => {
+        this.router.navigate(['/chat']);
+      }
+    });
   }
 }

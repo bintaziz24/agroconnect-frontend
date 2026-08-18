@@ -129,7 +129,16 @@
 
           <!-- Message chat icon -->
           <div class="position-relative chat-container">
-            <a (click)="toggleChat($event)" class="text-decoration-none text-secondary d-flex align-items-center hover-success" style="cursor: pointer;">
+            <a *ngIf="isLoggedIn" routerLink="/chat" class="position-relative text-decoration-none text-secondary d-flex align-items-center hover-success">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span *ngIf="unreadChatCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" 
+                    style="font-size: 8px; padding: 3px 5px; margin-top: -2px; margin-left: -2px;">
+                {{ unreadChatCount }}
+              </span>
+            </a>
+            <a *ngIf="!isLoggedIn" (click)="toggleChat($event)" class="text-decoration-none text-secondary d-flex align-items-center hover-success" style="cursor: pointer;">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
               </svg>
@@ -276,9 +285,9 @@
                     👤 Mon Profil & Paramètres
                   </a>
                 </li>
-                <li *ngIf="user?.role !== 'admin'">
+                <li *ngIf="user?.role === 'client'">
                   <a routerLink="/commandes" class="dropdown-item py-2 rounded-3" style="font-size: 13px;">
-                    📦 Historique de mes commandes
+                    📦 Historique de mes achats
                   </a>
                 </li>
                 <li><hr class="dropdown-divider"></li>

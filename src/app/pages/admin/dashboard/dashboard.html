@@ -28,7 +28,7 @@
             style="font-size: 13px; transition: all 0.2s;">
       {{ 'admin_tab_dash' | translate }}
     </button>
-    <button (click)="menuActif = 'utilisateurs'" 
+    <button (click)="menuActif = 'utilisateurs'; roleFiltre = 'tous'" 
             class="btn btn-sm px-3 py-2 rounded-2 fw-bold border-0 cursor-pointer" 
             [style.background]="menuActif === 'utilisateurs' ? '#1A7C4F' : 'transparent'"
             [style.color]="menuActif === 'utilisateurs' ? '#ffffff' : 'var(--text-secondary)'"
@@ -62,15 +62,15 @@
     </div>
 
     <!-- Producteurs actifs -->
-    <div class="col-6 col-md-3" (click)="menuActif = 'utilisateurs'" style="cursor: pointer;">
+    <div class="col-6 col-md-3" (click)="menuActif = 'utilisateurs'; roleFiltre = 'agriculteur'" style="cursor: pointer;">
       <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between floating-card-hover" style="min-height: 110px;">
         <div class="d-flex justify-content-between align-items-center mb-1">
           <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Producteurs Actifs</small>
           <span class="fs-5">👨‍🌾</span>
         </div>
         <div>
-          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.agriculteurs || agriculteurs.length }}</h4>
-          <small class="text-success fw-semibold" style="font-size: 11px;">🟢 Cliquez pour afficher</small>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.agriculteurs || totalAgriculteursCount }}</h4>
+          <small class="text-success fw-semibold" style="font-size: 11px;">🟢 Cliquez pour filtrer producteurs</small>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@
     </div>
 
     <!-- Validations en attente -->
-    <div class="col-6 col-md-3" (click)="menuActif = 'utilisateurs'" style="cursor: pointer;">
+    <div class="col-6 col-md-3" (click)="menuActif = 'utilisateurs'; roleFiltre = 'tous'" style="cursor: pointer;">
       <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between floating-card-hover" style="min-height: 110px;">
         <div class="d-flex justify-content-between align-items-center mb-1">
           <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Validations en attente</small>
@@ -215,7 +215,7 @@
   </div>
 
   <!-- ONGLET VALIDATIONS PRODUITS (MODÉRATION) -->
-  <div *ngIf="menuActif === 'validations'">
+  <div *ngIf="menuActif === 'validations' || menuActif === 'moderation' || menuActif === 'produits'">
     <div class="bg-white rounded-4 border p-4 shadow-sm text-start mb-4">
       <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <div>
@@ -242,7 +242,7 @@
             <tr>
               <th>Produit</th>
               <th>Catégorie</th>
-              <th>Producteur</th>
+              <th>Producteur & Ferme</th>
               <th>Prix unitaire</th>
               <th>Stock disponible</th>
               <th class="text-end">Action Modération</th>
@@ -264,7 +264,8 @@
                 <span class="badge bg-light text-dark border">{{ prod.categorie?.nom || 'Légumes / Fruits' }}</span>
               </td>
               <td>
-                <span class="fw-medium text-dark">{{ prod.agriculteur?.user?.name || 'Agriculteur Partenaire' }}</span>
+                <span class="fw-medium text-dark d-block">👨‍🌾 {{ prod.agriculteur?.user?.name || prod.agriculteur?.user?.nom || 'Agriculteur Partenaire' }}</span>
+                <small class="text-muted" style="font-size: 11px;">🏡 {{ prod.ferme?.nom_ferme || (prod.agriculteur?.fermes && prod.agriculteur.fermes.length > 0 ? prod.agriculteur.fermes[0].nom_ferme : 'Ferme locale') }}</small>
               </td>
               <td class="fw-bold text-success">{{ prod.prix | number }} FCFA / {{ prod.unite || 'kg' }}</td>
               <td>
@@ -294,7 +295,45 @@
   <!-- ONGLET UTILISATEURS / AGRICULTEURS LIST -->
   <div *ngIf="menuActif === 'utilisateurs'">
     <div class="bg-white rounded-4 border p-4 shadow-sm text-start">
-      <h5 class="fw-bold text-dark mb-3">Validation des agriculteurs & Utilisateurs</h5>
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+          <h5 class="fw-bold text-dark mb-1">
+            <span *ngIf="roleFiltre === 'tous'">Gestion & Validation des Utilisateurs</span>
+            <span *ngIf="roleFiltre === 'agriculteur'">👨‍🌾 Producteurs Actifs & Agriculteurs</span>
+            <span *ngIf="roleFiltre === 'client'">🛒 Clients Enregistrés</span>
+            <span *ngIf="roleFiltre === 'livreur'">🚚 Livreurs Enregistrés</span>
+          </h5>
+          <p class="text-muted small mb-0">Consultez, filtrez et validez les comptes utilisateurs de la plateforme.</p>
+        </div>
+
+        <!-- Filtres par rôle -->
+        <div class="d-flex align-items-center gap-1.5 bg-light p-1.5 rounded-pill border flex-wrap">
+          <button (click)="roleFiltre = 'tous'" 
+                  class="btn btn-sm px-3 py-1 rounded-pill border-0 fw-bold transition-all"
+                  [style.background]="roleFiltre === 'tous' ? '#1A7C4F' : 'transparent'"
+                  [style.color]="roleFiltre === 'tous' ? '#ffffff' : '#6c757d'" style="font-size: 12px;">
+            Tous ({{ agriculteurs.length }})
+          </button>
+          <button (click)="roleFiltre = 'agriculteur'" 
+                  class="btn btn-sm px-3 py-1 rounded-pill border-0 fw-bold transition-all"
+                  [style.background]="roleFiltre === 'agriculteur' ? '#1A7C4F' : 'transparent'"
+                  [style.color]="roleFiltre === 'agriculteur' ? '#ffffff' : '#6c757d'" style="font-size: 12px;">
+            👨‍🌾 Producteurs ({{ totalAgriculteursCount }})
+          </button>
+          <button (click)="roleFiltre = 'client'" 
+                  class="btn btn-sm px-3 py-1 rounded-pill border-0 fw-bold transition-all"
+                  [style.background]="roleFiltre === 'client' ? '#1A7C4F' : 'transparent'"
+                  [style.color]="roleFiltre === 'client' ? '#ffffff' : '#6c757d'" style="font-size: 12px;">
+            🛒 Clients ({{ totalClientsCount }})
+          </button>
+          <button (click)="roleFiltre = 'livreur'" 
+                  class="btn btn-sm px-3 py-1 rounded-pill border-0 fw-bold transition-all"
+                  [style.background]="roleFiltre === 'livreur' ? '#1A7C4F' : 'transparent'"
+                  [style.color]="roleFiltre === 'livreur' ? '#ffffff' : '#6c757d'" style="font-size: 12px;">
+            🚚 Livreurs ({{ totalLivreursCount }})
+          </button>
+        </div>
+      </div>
       
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
@@ -309,7 +348,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let agri of agriculteurs">
+            <tr *ngFor="let agri of agriculteursFiltres">
               <td>
                 <div class="d-flex align-items-center gap-3">
                   <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" 

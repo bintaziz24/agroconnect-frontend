@@ -17,8 +17,8 @@ import { WhatsappService } from './services/whatsapp';
     <!-- Point d'injection des pages dynamique (RouterOutlet) -->
     <router-outlet></router-outlet>
 
-    <!-- Bouton Flottant WhatsApp (Masqué sur login/register) -->
-    <a *ngIf="afficherNavbar"
+    <!-- Bouton Flottant WhatsApp (Masqué sur login/register/chat) -->
+    <a *ngIf="afficherNavbar && !estPageChat"
        (click)="ouvrirWhatsapp()" 
        class="position-fixed bottom-0 end-0 m-4 p-3 rounded-circle shadow-lg text-white d-flex align-items-center justify-content-center border-0 text-decoration-none whatsapp-floating-btn"
        style="width: 58px; height: 58px; background: #25D366; z-index: 9999; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4) !important;"
@@ -29,12 +29,13 @@ import { WhatsappService } from './services/whatsapp';
     </a>
 
     <!-- Pied de page (Footer) visible sur les pages publiques -->
-    <app-footer *ngIf="afficherNavbar"></app-footer>
+    <app-footer *ngIf="afficherNavbar && !estPageChat"></app-footer>
   `
 })
 export class AppComponent implements OnInit, AfterViewInit {
   // Indique si la barre de navigation et le footer doivent être affichés
   afficherNavbar = true;
+  estPageChat = false;
 
   // Observateur d'intersection pour déclencher les animations au défilement
   private observer: IntersectionObserver | null = null;
@@ -52,7 +53,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) {}
 
   ouvrirWhatsapp() {
-    this.whatsappService.ouvrirChatDirect("Bonjour AgroConnect ! Je souhaite obtenir des informations sur vos récoltes fraîches et produits locaux au Sénégal.");
+    this.whatsappService.ouvrirChatDirect();
   }
 
   ngOnInit() {
@@ -62,6 +63,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     ).subscribe((e: any) => {
       // Masque la Navbar si l'URL commence par l'une des pages privées (ex: /login)
       this.afficherNavbar = !this.pagesPrivees.some(p => e.url.startsWith(p));
+      this.estPageChat = e.url.startsWith('/chat');
       
       // Relance le scanner d'animations après chaque changement de page
       setTimeout(() => this.scannerElementsAnimations(), 150);

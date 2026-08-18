@@ -35,6 +35,26 @@ export class DashboardComponent implements OnInit {
   commandes: any[] = [];
   produitsModeration: any[] = [];
   chargementProduits = false;
+  roleFiltre: string = 'tous';
+
+  get agriculteursFiltres(): any[] {
+    if (!this.roleFiltre || this.roleFiltre === 'tous') {
+      return this.agriculteurs;
+    }
+    return this.agriculteurs.filter(a => a.role === this.roleFiltre);
+  }
+
+  get totalAgriculteursCount(): number {
+    return this.agriculteurs.filter(a => a.role === 'agriculteur').length;
+  }
+
+  get totalClientsCount(): number {
+    return this.agriculteurs.filter(a => a.role === 'client').length;
+  }
+
+  get totalLivreursCount(): number {
+    return this.agriculteurs.filter(a => a.role === 'livreur').length;
+  }
 
   constructor(
     private authService: AuthService,

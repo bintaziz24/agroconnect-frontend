@@ -61,11 +61,16 @@
                 style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
             </div>
 
-            <div class="mb-4">
-              <label class="form-label fw-semibold" style="font-size:13px">
-                {{ 'login_password_label' | translate }}
-              </label>
-              <div class="position-relative">
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label class="form-label fw-semibold mb-0" style="font-size:13px">
+                  {{ 'login_password_label' | translate }}
+                </label>
+                <button type="button" (click)="modeReset = !modeReset" class="btn btn-link p-0 text-decoration-none small text-success fw-medium" style="font-size: 12px;">
+                  {{ modeReset ? 'Retour à la connexion' : 'Mot de passe oublié ?' }}
+                </button>
+              </div>
+              <div class="position-relative" *ngIf="!modeReset">
                 <input
                   [type]="afficherMotDePasse ? 'text' : 'password'"
                   class="form-control"
@@ -82,6 +87,22 @@
                   {{ afficherMotDePasse ? '👁️' : '🙈' }}
                 </button>
               </div>
+            </div>
+
+            <!-- Bloc Réinitialisation de mot de passe (UML Method) -->
+            <div *ngIf="modeReset" class="p-3 bg-light rounded-3 border mb-3">
+              <h6 class="fw-bold text-dark mb-2" style="font-size: 13px;">🔒 Réinitialisation du mot de passe</h6>
+              <div class="mb-2">
+                <label class="form-label small mb-1">Nouveau mot de passe</label>
+                <input type="password" class="form-control form-control-sm rounded-2" [(ngModel)]="resetData.password" name="resetPass" placeholder="Nouveau mot de passe (min 8 car.)">
+              </div>
+              <div class="mb-3">
+                <label class="form-label small mb-1">Confirmer le mot de passe</label>
+                <input type="password" class="form-control form-control-sm rounded-2" [(ngModel)]="resetData.password_confirmation" name="resetPassConf" placeholder="Confirmer le nouveau mot de passe">
+              </div>
+              <button type="button" (click)="onResetPassword()" class="btn btn-sm btn-success w-100 rounded-pill py-1.5 fw-bold" style="background:#1A7C4F;">
+                ✓ Réinitialiser mon mot de passe
+              </button>
             </div>
 
 
