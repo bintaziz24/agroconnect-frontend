@@ -409,6 +409,33 @@ export class ChatComponent implements OnInit, OnDestroy {
     return typeof window !== 'undefined' && window.innerWidth < 768;
   }
 
+  getProductImage(produit: any): string {
+    if (!produit) return 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400';
+    const photo = produit.photo || produit.image || produit.photo_url;
+    if (photo && (photo.startsWith('http://') || photo.startsWith('https://') || photo.startsWith('data:'))) {
+      return photo;
+    }
+    const nom = (produit.nom || '').toLowerCase();
+    if (nom.includes('oignon')) return 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400';
+    if (nom.includes('carotte')) return 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400';
+    if (nom.includes('tomate')) return 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400';
+    if (nom.includes('mangue')) return 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=400';
+    if (nom.includes('maïs') || nom.includes('mais')) return 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400';
+    if (nom.includes('poivron')) return 'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=400';
+    if (nom.includes('laitue') || nom.includes('salade')) return 'https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=400';
+    if (nom.includes('pastèque') || nom.includes('pasteque')) return 'https://images.unsplash.com/photo-1563114773-84221bd62daa?w=400';
+    if (nom.includes('gombo')) return 'https://images.unsplash.com/photo-1597481499750-3e6b22637e12?w=400';
+    if (nom.includes('mil') || nom.includes('sorgho')) return 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400';
+    return 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400';
+  }
+
+  onImageError(event: any, produit?: any): void {
+    if (event && event.target) {
+      const nom = produit?.nom || this.discussionActive?.produit?.nom || '';
+      event.target.src = this.getProductImage({ nom: nom });
+    }
+  }
+
   private scrollToBottom(): void {
     setTimeout(() => {
       try {
