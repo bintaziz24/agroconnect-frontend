@@ -116,6 +116,9 @@ export class NavbarComponent implements OnInit {
 
   private playNotificationSound(): void {
     try {
+      if (typeof window !== 'undefined' && 'navigator' in window && 'vibrate' in navigator) {
+        navigator.vibrate([200, 100, 200]);
+      }
       if (typeof window !== 'undefined' && (window.AudioContext || (window as any).webkitAudioContext)) {
         const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
         const ctx = new AudioCtx();
