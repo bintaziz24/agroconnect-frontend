@@ -57,6 +57,12 @@ export const routes: Routes = [
       import('./pages/admin/dashboard/dashboard').then(m => m.DashboardComponent),
     canActivate: [roleGuard(['admin'])]
   },
+  { path: 'admin/moderation', redirectTo: 'admin/dashboard?tab=validations' },
+  { path: 'admin/validations', redirectTo: 'admin/dashboard?tab=validations' },
+  { path: 'admin/produits', redirectTo: 'admin/dashboard?tab=validations' },
+  { path: 'admin/utilisateurs', redirectTo: 'admin/dashboard?tab=utilisateurs' },
+  { path: 'admin/livreurs', redirectTo: 'admin/dashboard?tab=livreurs' },
+  { path: 'admin', redirectTo: 'admin/dashboard' },
   // Espace privé Livreur (Réservé au rôle 'livreur')
   {
     path: 'livreur/dashboard',

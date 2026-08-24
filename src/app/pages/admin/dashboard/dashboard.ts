@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/auth';
 import { TranslatePipe } from '../../../pipes/translate.pipe';
@@ -60,6 +60,7 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private http: HttpClient,
     private route: ActivatedRoute,
+    private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -70,11 +71,22 @@ export class DashboardComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (params['tab']) {
         this.menuActif = params['tab'];
-      } else {
-        this.menuActif = 'dashboard';
       }
       this.cdr.detectChanges();
     });
+  }
+
+  changerOnglet(tab: string, roleFiltre: string = 'tous') {
+    this.menuActif = tab;
+    if (roleFiltre) {
+      this.roleFiltre = roleFiltre;
+    }
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab: tab },
+      queryParamsHandling: 'merge'
+    });
+    this.cdr.detectChanges();
   }
 
   chargerDonneesBackend() {
@@ -194,6 +206,8 @@ export class DashboardComponent implements OnInit {
     const liv = this.livreurs.find(l => l.id === id);
     if (liv) liv.statut = 'disponible';
 
+    this.cdr.detectChanges();
+
     this.http.put(`${this.apiUrl}/admin/valider/${id}`, { statut: 'validé' }).subscribe({
       next: () => {
         this.chargerDonneesBackend();
@@ -209,6 +223,8 @@ export class DashboardComponent implements OnInit {
     const liv = this.livreurs.find(l => l.id === id);
     if (liv) liv.statut = 'hors_ligne';
 
+    this.cdr.detectChanges();
+
     this.http.put(`${this.apiUrl}/admin/valider/${id}`, { statut: 'rejeté' }).subscribe({
       next: () => {
         this.chargerDonneesBackend();
@@ -219,12 +235,19 @@ export class DashboardComponent implements OnInit {
 
   supprimerProduit(id: number) {
     if (confirm('Voulez-vous vraiment retirer ce produit de la plateforme ?')) {
+      // Suppression optimiste immédiate dans l'interface
+      this.produitsModeration = this.produitsModeration.filter(p => p.id !== id);
+      this.stats.produits = Math.max(0, this.stats.produits - 1);
+      this.cdr.detectChanges();
+
       this.http.delete(`${this.apiUrl}/admin/produits/${id}`).subscribe({
         next: () => {
-          this.produitsModeration = this.produitsModeration.filter(p => p.id !== id);
-          this.stats.produits = Math.max(0, this.stats.produits - 1);
+          this.cdr.detectChanges();
         },
-        error: () => {}
+        error: () => {
+          // Recharger en cas d'erreur backend pour restaurer l'état exact
+          this.chargerDonneesBackend();
+        }
       });
     }
   }

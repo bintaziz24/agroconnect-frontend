@@ -52,12 +52,27 @@ export class DiscussionService {
         const mergedMap = new Map<string, Discussion>();
         if (Array.isArray(local)) {
           for (const d of local) {
-            if (d && d.id) mergedMap.set(String(d.id), d);
+            if (d && d.id) {
+              if (d.messages) d.messages = this.deduplicateMessages(d.messages);
+              mergedMap.set(String(d.id), d);
+            }
           }
         }
         if (Array.isArray(apiDiscussions)) {
           for (const d of apiDiscussions) {
-            if (d && d.id) mergedMap.set(String(d.id), d);
+            if (d && d.id) {
+              const existingLocal = mergedMap.get(String(d.id));
+              if (existingLocal && existingLocal.messages && existingLocal.messages.length > 0) {
+                if (!d.messages || d.messages.length === 0) {
+                  d.messages = existingLocal.messages;
+                } else {
+                  d.messages = this.deduplicateMessages([...d.messages, ...existingLocal.messages]);
+                }
+              } else if (d.messages) {
+                d.messages = this.deduplicateMessages(d.messages);
+              }
+              mergedMap.set(String(d.id), d);
+            }
           }
         }
         const mergedList = Array.from(mergedMap.values());
@@ -77,8 +92,10 @@ export class DiscussionService {
     return this.http.get<Discussion>(`${this.apiUrl}/discussions/${id}`).pipe(
       tap(disc => {
         if (disc) {
-          if (disc.messages) {
+          if (disc.messages && disc.messages.length > 0) {
             disc.messages = this.deduplicateMessages(disc.messages);
+          } else if (found && found.messages && found.messages.length > 0) {
+            disc.messages = found.messages;
           }
           this.updateLocalDiscussion(disc);
         }
@@ -123,6 +140,7 @@ export class DiscussionService {
     produit_id?: number;
     commande_id?: number;
     nom_agriculteur?: string;
+    telephone_agriculteur?: string;
     nom_produit?: string;
     image_produit?: string;
     prix_produit?: number;
@@ -158,7 +176,7 @@ export class DiscussionService {
         client: currentUserObj,
         agriculteur: {
           id: data.agriculteur_id,
-          user: { name: data.nom_agriculteur || 'Producteur local', telephone: '778000000', role: 'agriculteur' }
+          user: { name: data.nom_agriculteur || 'Producteur local', telephone: data.telephone_agriculteur || '772345678', role: 'agriculteur' }
         },
         produit: data.produit_id ? {
           id: data.produit_id,
@@ -294,8 +312,26 @@ export class DiscussionService {
   }
 
   getNombreMessagesNonLus(): Observable<{ non_lus: number }> {
+    const local = this.getLocalDiscussions();
+    const currentUserObj = this.getCurrentUserObj();
+    let localNonLus = 0;
+    if (Array.isArray(local)) {
+      for (const d of local) {
+        if (d.messages && Array.isArray(d.messages)) {
+          for (const m of d.messages) {
+            if (m && String(m.expediteur_id) !== String(currentUserObj.id) && !m.est_lu) {
+              localNonLus++;
+            }
+          }
+        } else if (d.non_lus_count) {
+          localNonLus += d.non_lus_count;
+        }
+      }
+    }
+
     return this.http.get<{ non_lus: number }>(`${this.apiUrl}/discussions/non-lus/count`).pipe(
-      catchError(() => of({ non_lus: 0 }))
+      map(res => ({ non_lus: Math.max(res?.non_lus || 0, localNonLus) })),
+      catchError(() => of({ non_lus: localNonLus }))
     );
   }
 
@@ -337,10 +373,13 @@ export class DiscussionService {
             if (role === 'agriculteur') {
               // Si connecté en tant que Producteur/Agriculteur :
               // L'agriculteur ne voit QUE les messages qui LUI sont spécifiquement adressés !
-              const agriUserId = d.agriculteur?.id || d.agriculteur_id;
+              const agriUserId = d.agriculteur?.user_id || d.agriculteur?.user?.id;
+              const agriTableId = d.agriculteur?.id || d.agriculteur_id;
+              const userAgriTableId = u.agriculteur?.id || u.agriculteur_id;
               const agriName = d.agriculteur?.user?.name || d.agriculteur?.nom;
 
               if (agriUserId && userId && String(agriUserId) === String(userId)) return true;
+              if (userAgriTableId && agriTableId && String(userAgriTableId) === String(agriTableId)) return true;
               if (agriName && userName && agriName.toLowerCase().trim() === userName.toLowerCase().trim()) return true;
               if (agriName && userName && (agriName.toLowerCase().includes(userName.toLowerCase()) || userName.toLowerCase().includes(agriName.toLowerCase()))) return true;
               return false;
@@ -381,8 +420,10 @@ export class DiscussionService {
     for (const msg of messages) {
       if (!msg) continue;
       const text = (msg.contenu || '').trim();
-      const isAutomatedMessage = text.startsWith('Bonjour') || text.includes('je suis intéressé par votre produit') || text.includes('question concernant ma commande');
-      const dedupKey = isAutomatedMessage ? `${msg.expediteur_id}_${text}` : (msg.id ? `id_${msg.id}` : `msg_${msg.expediteur_id}_${text}_${msg.created_at}`);
+      const isAutoGreeting = text.includes('je suis intéressé par votre produit') ||
+                             text.includes('question concernant ma commande') ||
+                             text.includes('livreur en charge de la livraison');
+      const dedupKey = isAutoGreeting ? `${msg.expediteur_id}_${text}` : (msg.id ? `id_${msg.id}` : `msg_${msg.expediteur_id}_${text}_${msg.created_at}`);
       if (seenKeys.has(dedupKey)) {
         continue;
       }
@@ -397,6 +438,10 @@ export class DiscussionService {
     const localList = this.getLocalDiscussions();
     const idx = localList.findIndex(d => String(d.id) === String(discussion.id));
     if (idx !== -1) {
+      const existingDisc = localList[idx];
+      if ((!discussion.messages || discussion.messages.length === 0) && existingDisc.messages && existingDisc.messages.length > 0) {
+        discussion.messages = existingDisc.messages;
+      }
       localList[idx] = discussion;
     } else {
       localList.unshift(discussion);
@@ -411,7 +456,12 @@ export class DiscussionService {
   }
 
   private initDefaultLocalDiscussions(): Discussion[] {
-    this.saveLocalDiscussions([]);
+    if (typeof window !== 'undefined') {
+      const existing = localStorage.getItem(this.STORAGE_KEY);
+      if (!existing) {
+        this.saveLocalDiscussions([]);
+      }
+    }
     return [];
   }
 }

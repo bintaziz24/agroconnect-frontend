@@ -133,8 +133,8 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
               </svg>
-              <span *ngIf="unreadChatCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" 
-                    style="font-size: 8px; padding: 3px 5px; margin-top: -2px; margin-left: -2px;">
+              <span *ngIf="unreadChatCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white shadow-xs" 
+                    style="font-size: 9px; padding: 2px 5px; margin-top: -1px; margin-left: -3px;">
                 {{ unreadChatCount }}
               </span>
             </a>

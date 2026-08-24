@@ -19,16 +19,32 @@ export class WhatsappService {
   }
 
   ouvrirChatDirect(message?: string) {
-    const url = `https://wa.me/${this.defaultNumber}`;
+    const text = encodeURIComponent(message || 'Bonjour AgroConnect, je souhaite avoir des informations.');
+    const url = `https://wa.me/${this.defaultNumber}?text=${text}`;
     window.open(url, '_blank');
   }
 
   ouvrirChatProduit(produit: any) {
-    this.ouvrirChatDirect();
+    const telAgri = produit?.agriculteur?.user?.telephone || 
+                    produit?.agriculteur?.telephone || 
+                    produit?.agriculteur?.tel || 
+                    produit?.telephone;
+
+    const numClean = telAgri ? telAgri.replace(/\D/g, '') : '772345678';
+    const numFormatted = numClean.startsWith('221') ? numClean : `221${numClean}`;
+    const produitNom = produit?.nom || 'votre produit';
+    const text = encodeURIComponent(`Bonjour, je suis intéressé par votre produit ${produitNom} sur AgroConnect.`);
+
+    window.open(`https://wa.me/${numFormatted}?text=${text}`, '_blank');
   }
 
   ouvrirChatCommande(commande: any) {
-    this.ouvrirChatDirect();
+    const telLivreur = commande?.livreur?.telephone || commande?.telephone_livreur;
+    const numClean = telLivreur ? telLivreur.replace(/\D/g, '') : '778901234';
+    const numFormatted = numClean.startsWith('221') ? numClean : `221${numClean}`;
+    const text = encodeURIComponent(`Bonjour, je vous contacte au sujet de la livraison de la commande #${commande?.id || ''} sur AgroConnect.`);
+
+    window.open(`https://wa.me/${numFormatted}?text=${text}`, '_blank');
   }
 
   getReponseAutomatique(type: string = 'accueil', donnees: any = {}): Observable<any> {

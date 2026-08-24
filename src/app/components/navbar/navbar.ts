@@ -64,6 +64,13 @@ export class NavbarComponent implements OnInit {
       }
     });
 
+    // Rafraîchir périodiquement le compteur de messages non lus (badge rouge)
+    setInterval(() => {
+      if (this.isLoggedIn) {
+        this.chargerUnreadChatCount();
+      }
+    }, 4000);
+
     this.panierService.items$.subscribe(items => {
       this.cartCount = items.reduce((acc, item) => acc + item.quantite, 0);
     });
@@ -80,7 +87,8 @@ export class NavbarComponent implements OnInit {
   chargerUnreadChatCount() {
     this.discussionService.getNombreMessagesNonLus().subscribe({
       next: (res) => {
-        this.unreadChatCount = res.non_lus;
+        this.unreadChatCount = res?.non_lus || 0;
+        this.cdr.detectChanges();
       },
       error: () => {}
     });

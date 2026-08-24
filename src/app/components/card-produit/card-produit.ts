@@ -66,6 +66,7 @@ export class CardProduit {
 
     const agriculteurId = this.produit.agriculteur_id || this.produit.agriculteur?.id || this.produit.agriculteur?.user_id || 1;
     const nomAgriculteur = this.getNomAgriculteur(this.produit);
+    const telAgriculteur = this.produit.agriculteur?.user?.telephone || this.produit.agriculteur?.telephone || this.produit.agriculteur?.tel || '';
     const nomProduit = this.produit.nom || 'Produit local';
     const imageProduit = this.produit.image || '';
     const prixProduit = this.produit.prix_unitaire || this.produit.prix || 1000;
@@ -75,6 +76,7 @@ export class CardProduit {
       agriculteur_id: agriculteurId,
       produit_id: this.produit.id,
       nom_agriculteur: nomAgriculteur,
+      telephone_agriculteur: telAgriculteur,
       nom_produit: nomProduit,
       image_produit: imageProduit,
       prix_produit: prixProduit,
