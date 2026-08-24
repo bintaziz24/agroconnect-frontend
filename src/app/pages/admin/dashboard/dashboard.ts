@@ -89,6 +89,20 @@ export class DashboardComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  private deduplicateById(items: any[]): any[] {
+    if (!Array.isArray(items)) return [];
+    const seen = new Set();
+    return items.filter(item => {
+      if (!item) return false;
+      const key = item.id !== undefined && item.id !== null ? String(item.id) : (item.nom || JSON.stringify(item));
+      if (seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
+  }
+
   chargerDonneesBackend() {
     // Statistiques globales
     this.http.get<any>(`${this.apiUrl}/admin/statistiques`).subscribe({
@@ -114,7 +128,7 @@ export class DashboardComponent implements OnInit {
     this.http.get<any[]>(`${this.apiUrl}/admin/utilisateurs`).subscribe({
       next: (list) => {
         if (Array.isArray(list)) {
-          this.agriculteurs = list.map(u => ({
+          const rawUsers = list.map(u => ({
             id: u.id,
             nom: u.name,
             role: u.role || 'client',
@@ -124,6 +138,8 @@ export class DashboardComponent implements OnInit {
             statut: u.statut_validation || (u.agriculteur ? u.agriculteur.statut_validation : null) || (['agriculteur', 'livreur'].includes(u.role) ? 'en_attente' : 'validé'),
             image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop'
           }));
+
+          this.agriculteurs = this.deduplicateById(rawUsers);
 
           // Mapping livreurs
           const registeredLivreurs = list
@@ -140,7 +156,7 @@ export class DashboardComponent implements OnInit {
               note: '5.0 ⭐ (Nouveau)'
             }));
 
-          this.livreurs = registeredLivreurs;
+          this.livreurs = this.deduplicateById(registeredLivreurs);
           this.cdr.detectChanges();
         }
       },
@@ -153,7 +169,7 @@ export class DashboardComponent implements OnInit {
       next: (list) => {
         this.chargementProduits = false;
         if (Array.isArray(list)) {
-          this.produitsModeration = list;
+          this.produitsModeration = this.deduplicateById(list);
         }
         this.cdr.detectChanges();
       },
@@ -167,7 +183,7 @@ export class DashboardComponent implements OnInit {
     this.http.get<any[]>(`${this.apiUrl}/admin/commandes`).subscribe({
       next: (list) => {
         if (Array.isArray(list)) {
-          this.commandes = list.slice(0, 5);
+          this.commandes = this.deduplicateById(list.slice(0, 5));
         }
         this.cdr.detectChanges();
       },
