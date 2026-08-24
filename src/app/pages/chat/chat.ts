@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -63,7 +63,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     private discussionService: DiscussionService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -120,10 +121,12 @@ export class ChatComponent implements OnInit, OnDestroy {
           }
         }
         this.loadingDiscussions = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Erreur chargement discussions', err);
         this.loadingDiscussions = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -169,12 +172,14 @@ export class ChatComponent implements OnInit, OnDestroy {
         }
         this.loadingMessages = false;
         discussion.non_lus_count = 0; // Réinitialiser le compteur local
+        this.cdr.detectChanges();
         this.scrollToBottom();
       },
       error: (err) => {
         console.error('Erreur chargement messages', err);
         this.loadingMessages = false;
         this.messages = this.discussionService.deduplicateMessages(discussion.messages || []);
+        this.cdr.detectChanges();
       }
     });
   }
@@ -192,6 +197,7 @@ export class ChatComponent implements OnInit, OnDestroy {
               this.scrollToBottom();
             }
           }
+          this.cdr.detectChanges();
         }
       }
     });
@@ -207,27 +213,56 @@ export class ChatComponent implements OnInit, OnDestroy {
       fichier_url: this.selectedImage || undefined
     };
 
+    const tempMsg: Message = {
+      id: Date.now(),
+      discussion_id: this.discussionActive.id,
+      expediteur_id: this.currentUser?.id || 1,
+      contenu: texte,
+      type_message: payload.type_message,
+      fichier_url: payload.fichier_url,
+      est_lu: true,
+      created_at: new Date().toISOString(),
+      expediteur: this.currentUser || { name: 'Moi' }
+    };
+
+    if (!this.messages.some(m => m.contenu === texte && m.created_at === tempMsg.created_at)) {
+      this.messages.push(tempMsg);
+    }
+    if (this.discussionActive) {
+      this.discussionActive.dernier_message = tempMsg;
+      this.discussionActive.dernier_message_at = tempMsg.created_at;
+    }
+
     this.nouveauMessage = '';
     this.selectedImage = null;
     this.sendingMessage = true;
+    this.cdr.detectChanges();
+    this.scrollToBottom();
+
+    // Timer de sécurité pour garantir l'arrêt du bouton spinner sous 1.2s max
+    const safetyTimeout = setTimeout(() => {
+      this.sendingMessage = false;
+      this.cdr.detectChanges();
+    }, 1200);
 
     this.discussionService.envoyerMessage(this.discussionActive.id, payload).subscribe({
       next: (msg) => {
-        if (msg) {
-          if (!this.messages.some(m => String(m.id) === String(msg.id))) {
-            this.messages.push(msg);
-          }
-          if (this.discussionActive) {
-            this.discussionActive.dernier_message = msg;
-            this.discussionActive.dernier_message_at = new Date().toISOString();
+        clearTimeout(safetyTimeout);
+        if (msg && msg.id) {
+          const idx = this.messages.findIndex(m => m.id === tempMsg.id);
+          if (idx !== -1) {
+            this.messages[idx] = msg;
           }
         }
         this.sendingMessage = false;
+        this.cdr.detectChanges();
         this.scrollToBottom();
       },
       error: (err) => {
+        clearTimeout(safetyTimeout);
         console.error('Erreur envoi message', err);
         this.sendingMessage = false;
+        this.cdr.detectChanges();
       }
     });
   }
