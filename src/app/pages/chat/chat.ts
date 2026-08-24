@@ -279,10 +279,10 @@ export class ChatComponent implements OnInit, OnDestroy {
     } else if (role === 'livreur') {
       nom = discussion.client?.name || discussion.agriculteur?.user?.name || discussion.produit?.agriculteur?.user?.name || 'Utilisateur';
     } else {
-      nom = discussion.agriculteur?.user?.name || 
-            discussion.agriculteur?.nom || 
-            discussion.produit?.agriculteur?.user?.name || 
+      nom = discussion.produit?.agriculteur?.user?.name || 
             discussion.produit?.agriculteur?.nom || 
+            discussion.agriculteur?.user?.name || 
+            discussion.agriculteur?.nom || 
             'Producteur Agricole';
     }
 
