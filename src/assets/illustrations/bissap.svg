@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5f5"/>
+      <stop offset="100%" stop-color="#fed7d7"/>
+    </linearGradient>
+    <linearGradient id="petalGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e53e3e"/>
+      <stop offset="50%" stop-color="#c53030"/>
+      <stop offset="100%" stop-color="#805ad5"/>
+    </linearGradient>
+    <linearGradient id="petalGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9b2c2c"/>
+      <stop offset="100%" stop-color="#742a2a"/>
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38a169"/>
+      <stop offset="100%" stop-color="#22543d"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="6" stdDeviation="6" flood-color="#742a2a" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Fond -->
+  <rect width="400" height="400" rx="32" fill="url(#bgGrad)"/>
+  
+  <!-- Motif décoratif arrière-plan -->
+  <circle cx="200" cy="190" r="130" fill="#feb2b2" opacity="0.4"/>
+  
+  <g filter="url(#shadow)" transform="translate(0, -10)">
+    <!-- Feuilles vertes -->
+    <path d="M 120,240 C 90,200 100,150 140,140 C 150,180 140,220 120,240 Z" fill="url(#leafGrad)"/>
+    <path d="M 280,240 C 310,200 300,150 260,140 C 250,180 260,220 280,240 Z" fill="url(#leafGrad)"/>
+    
+    <!-- Fleur de Bissap Principale (Hibiscus Sabdariffa) -->
+    <!-- Pétales extérieures / Calices de Bissap -->
+    <g transform="translate(200, 190)">
+      <!-- Pétale 1 Top -->
+      <path d="M 0,0 C -35,-85 35,-85 0,0 Z" fill="url(#petalGrad1)" transform="rotate(0)"/>
+      <!-- Pétale 2 Right -->
+      <path d="M 0,0 C -35,-85 35,-85 0,0 Z" fill="url(#petalGrad1)" transform="rotate(72)"/>
+      <!-- Pétale 3 Bottom Right -->
+      <path d="M 0,0 C -35,-85 35,-85 0,0 Z" fill="url(#petalGrad1)" transform="rotate(144)"/>
+      <!-- Pétale 4 Bottom Left -->
+      <path d="M 0,0 C -35,-85 35,-85 0,0 Z" fill="url(#petalGrad1)" transform="rotate(216)"/>
+      <!-- Pétale 5 Left -->
+      <path d="M 0,0 C -35,-85 35,-85 0,0 Z" fill="url(#petalGrad1)" transform="rotate(288)"/>
+
+      <!-- Coeur foncé du Calice de Bissap -->
+      <circle cx="0" cy="0" r="32" fill="url(#petalGrad2)"/>
+      
+      <!-- Étamines centrales jaunes dorées -->
+      <path d="M 0,0 Q 15,-20 25,-40" stroke="#ecc94b" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <circle cx="25" cy="-40" r="5" fill="#f6e05e"/>
+      <circle cx="20" cy="-35" r="4" fill="#faf089"/>
+      <circle cx="28" cy="-33" r="3.5" fill="#ecc94b"/>
+      <circle cx="15" cy="-42" r="3" fill="#f6e05e"/>
+    </g>
+
+    <!-- Gousses / Calices séchées au sol -->
+    <g transform="translate(130, 260) scale(0.6)">
+      <path d="M 0,0 C -25,-60 25,-60 0,0 Z" fill="url(#petalGrad2)"/>
+    </g>
+    <g transform="translate(270, 260) scale(0.6) rotate(20)">
+      <path d="M 0,0 C -25,-60 25,-60 0,0 Z" fill="url(#petalGrad2)"/>
+    </g>
+  </g>
+
+  <!-- Etiquette Produit -->
+  <rect x="50" y="325" width="300" height="48" rx="24" fill="#9b2c2c"/>
+  <text x="200" y="356" font-family="'Outfit', 'Segoe UI', sans-serif" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">Fleurs de Bissap (Hibiscus)</text>
+</svg>
