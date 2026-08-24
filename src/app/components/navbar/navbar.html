@@ -236,6 +236,14 @@
           <!-- Logged in -->
           <ng-container *ngIf="isLoggedIn">
 
+            <!-- Bouton d'activation du son & vibrations sur mobile -->
+            <button (click)="activerAlertesMobile()" 
+                    class="btn btn-sm btn-outline-warning rounded-pill px-2.5 py-1 me-1 fw-semibold text-nowrap d-none d-sm-inline-flex align-items-center gap-1 shadow-none"
+                    style="font-size: 11px; border-color: #f59e0b; color: #d97706; background: #fffbeb;"
+                    title="Appuyez pour activer la sonnerie et les vibrations sur votre téléphone">
+              🔔 Activer son mobile
+            </button>
+
             <div class="dropdown user-dropdown">
               <button class="btn btn-sm border-0 d-flex align-items-center gap-2 dropdown-toggle shadow-none" type="button" data-bs-toggle="dropdown" 
                       style="border: 1px solid #e2e8f0; border-radius: 24px; padding: 4px 12px; height: 34px;">

@@ -114,20 +114,51 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/chat']);
   }
 
+  alertesMobileActivees = false;
+
+  @HostListener('window:focus')
+  @HostListener('document:visibilitychange')
+  onWindowFocus() {
+    if (typeof document !== 'undefined' && !document.hidden && this.isLoggedIn) {
+      this.chargerUnreadChatCount();
+    }
+  }
+
+  activerAlertesMobile(): void {
+    this.playNotificationSound();
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          new Notification('🔔 Alertes Mobile AgroConnect Activées', {
+            body: 'Votre téléphone sonnera et vibrera désormais à chaque nouveau message client !',
+            icon: '/assets/logo.png'
+          });
+        }
+      });
+    }
+    this.alertesMobileActivees = true;
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('alertes_mobile_activees', 'true');
+    }
+  }
+
   private playNotificationSound(): void {
     try {
       if (typeof window !== 'undefined' && 'navigator' in window && 'vibrate' in navigator) {
-        navigator.vibrate([200, 100, 200]);
+        navigator.vibrate([300, 150, 300]);
       }
       if (typeof window !== 'undefined' && (window.AudioContext || (window as any).webkitAudioContext)) {
         const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
         const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+          ctx.resume();
+        }
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(587.33, ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
-        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
         osc.connect(gain);
         gain.connect(ctx.destination);
