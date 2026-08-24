@@ -277,13 +277,17 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (role === 'agriculteur') {
       nom = discussion.client?.name || 'Client AgroConnect';
     } else if (role === 'livreur') {
-      nom = discussion.client?.name || discussion.agriculteur?.user?.name || 'Utilisateur';
+      nom = discussion.client?.name || discussion.agriculteur?.user?.name || discussion.produit?.agriculteur?.user?.name || 'Utilisateur';
     } else {
-      nom = discussion.agriculteur?.user?.name || discussion.agriculteur?.nom || 'Producteur Agricole';
+      nom = discussion.agriculteur?.user?.name || 
+            discussion.agriculteur?.nom || 
+            discussion.produit?.agriculteur?.user?.name || 
+            discussion.produit?.agriculteur?.nom || 
+            'Producteur Agricole';
     }
 
     if (!nom || nom === 'Moi' || nom === 'Moi (Acheteur)') {
-      return role === 'agriculteur' ? 'Client AgroConnect' : (discussion.agriculteur?.user?.name || 'Producteur Agricole');
+      return role === 'agriculteur' ? 'Client AgroConnect' : (discussion.agriculteur?.user?.name || discussion.produit?.agriculteur?.user?.name || 'Producteur Agricole');
     }
     return nom;
   }

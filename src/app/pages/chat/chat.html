@@ -156,8 +156,9 @@
               </button>
 
               <div *ngIf="discussionActive.produit" class="d-none d-lg-flex align-items-center gap-2 bg-light p-1.5 px-2 rounded-3 border">
-                <img [src]="discussionActive.produit.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=100'" 
-                     class="rounded-2 flex-shrink-0" style="width: 32px; height: 32px; object-fit: cover;">
+                <img [src]="discussionActive.produit.photo || discussionActive.produit.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=100'" 
+                     class="rounded-2 flex-shrink-0" style="width: 32px; height: 32px; object-fit: cover;"
+                     (error)="onImageError($event)">
                 <div class="text-start leading-tight">
                   <span class="d-block fw-bold text-dark small text-truncate" style="font-size: 11px; max-width: 130px;">{{ discussionActive.produit.nom }}</span>
                   <span class="text-success fw-semibold" style="font-size: 10px;">{{ (discussionActive.produit.prix || discussionActive.produit.prix_unitaire | number) }} FCFA / {{ (discussionActive.produit.unite || discussionActive.produit.unite_mesure || 'kg') }}</span>
