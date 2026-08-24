@@ -5,6 +5,7 @@ import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { ProduitService } from '../../../services/produit';
 import { CommandeService } from '../../../services/commande';
 import { AuthService } from '../../../services/auth';
+import { DiscussionService } from '../../../services/discussion';
 import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 @Component({
@@ -19,6 +20,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ongletActif: 'apercu' | 'produits' | 'commandes' = 'apercu';
   pollInterval: any = null;
   nouvelleCommandeAlerte = false;
+  nouveauMessageAlerte = false;
+  unreadMessagesCount = 0;
+  private previousUnreadMessagesCount = -1;
   nombreCommandesPrecedent = 0;
 
   stats = {
@@ -86,6 +90,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private produitService: ProduitService,
     private commandeService: CommandeService,
     private authService: AuthService,
+    private discussionService: DiscussionService,
     private router: Router,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
@@ -114,6 +119,30 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.pollInterval) {
       clearInterval(this.pollInterval);
     }
+  }
+
+  allerVersChat(): void {
+    this.router.navigate(['/chat']);
+  }
+
+  private playNotificationSound(): void {
+    try {
+      if (typeof window !== 'undefined' && (window.AudioContext || (window as any).webkitAudioContext)) {
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      }
+    } catch (e) {}
   }
 
   private deduplicateByName(items: any[]): any[] {

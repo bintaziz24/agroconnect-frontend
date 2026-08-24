@@ -31,6 +31,24 @@
     </div>
   </div>
 
+  <!-- Bandeau d'alerte instantané pour Nouveau Message Client -->
+  <div *ngIf="nouveauMessageAlerte" class="alert alert-success border-0 rounded-4 p-3 mb-4 d-flex align-items-center justify-content-between shadow-sm text-start animate__animated animate__bounceIn" style="background: linear-gradient(135deg, #1b5e20, #2e7d32); color: white;">
+    <div class="d-flex align-items-center gap-3">
+      <div class="rounded-circle bg-white bg-opacity-25 p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px;">
+        <i class="bi bi-chat-dots-fill text-white fs-4"></i>
+      </div>
+      <div>
+        <h6 class="fw-bold mb-1 text-white">💬 Nouveau message reçu d'un client !</h6>
+        <p class="mb-0 text-white-50 small">
+          Un acheteur vient de vous envoyer un message concernant vos produits.
+        </p>
+      </div>
+    </div>
+    <button (click)="allerVersChat()" class="btn btn-light btn-sm rounded-pill fw-bold px-3 text-success shadow-none flex-shrink-0 ms-2">
+      Ouvrir la messagerie
+    </button>
+  </div>
+
   <!-- Bandeau d'alerte si le compte est en attente de validation -->
   <div *ngIf="user?.statut_validation === 'en_attente'" class="alert alert-warning border-warning rounded-4 p-3 mb-4 d-flex align-items-center gap-3 shadow-sm text-start">
     <span class="fs-4">⏳</span>

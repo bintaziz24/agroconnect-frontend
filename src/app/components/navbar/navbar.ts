@@ -29,6 +29,9 @@ export class NavbarComponent implements OnInit {
   notificationsCount = 0;
   notifications: AppNotification[] = [];
   unreadChatCount = 0;
+  previousUnreadChatCount = -1;
+  nouveauMessageToast = false;
+  toastMessageText = '';
 
   constructor(
     private authService: AuthService,
@@ -64,7 +67,7 @@ export class NavbarComponent implements OnInit {
       }
     });
 
-    // Rafraîchir périodiquement le compteur de messages non lus (badge rouge)
+    // Rafraîchir périodiquement le compteur de messages non lus (badge rouge & alertes)
     setInterval(() => {
       if (this.isLoggedIn) {
         this.chargerUnreadChatCount();
@@ -87,11 +90,64 @@ export class NavbarComponent implements OnInit {
   chargerUnreadChatCount() {
     this.discussionService.getNombreMessagesNonLus().subscribe({
       next: (res) => {
-        this.unreadChatCount = res?.non_lus || 0;
+        const count = res?.non_lus || 0;
+        if (this.previousUnreadChatCount >= 0 && count > this.previousUnreadChatCount) {
+          this.nouveauMessageToast = true;
+          this.toastMessageText = `Vous avez reçu un nouveau message ! (${count} non lu${count > 1 ? 's' : ''})`;
+          this.playNotificationSound();
+          this.triggerNativeNotification('💬 Nouveau Message AgroConnect', this.toastMessageText);
+          setTimeout(() => {
+            this.nouveauMessageToast = false;
+            this.cdr.detectChanges();
+          }, 6500);
+        }
+        this.previousUnreadChatCount = count;
+        this.unreadChatCount = count;
         this.cdr.detectChanges();
       },
       error: () => {}
     });
+  }
+
+  ouvrirChatNotification(): void {
+    this.nouveauMessageToast = false;
+    this.router.navigate(['/chat']);
+  }
+
+  private playNotificationSound(): void {
+    try {
+      if (typeof window !== 'undefined' && (window.AudioContext || (window as any).webkitAudioContext)) {
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      }
+    } catch (e) {}
+  }
+
+  private triggerNativeNotification(title: string, body: string): void {
+    try {
+      if (typeof window !== 'undefined' && 'Notification' in window) {
+        if (Notification.permission === 'granted') {
+          new Notification(title, { body, icon: '/assets/logo.png' });
+        } else if (Notification.permission !== 'denied') {
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              new Notification(title, { body, icon: '/assets/logo.png' });
+            }
+          });
+        }
+      }
+    } catch (e) {}
   }
 
   toggleNotifications(event: Event) {

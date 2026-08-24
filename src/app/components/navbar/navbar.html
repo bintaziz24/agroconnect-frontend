@@ -511,3 +511,24 @@
     </div>
   </div>
 </div>
+
+<!-- Floating Toast Alert for Instant New Message Notification -->
+<div *ngIf="nouveauMessageToast" 
+     class="position-fixed top-0 end-0 p-3" 
+     style="z-index: 1100; margin-top: 75px; max-width: 380px;">
+  <div class="toast show border-0 shadow-lg text-white rounded-4 overflow-hidden" 
+       style="background: linear-gradient(135deg, #1b5e20, #2e7d32);">
+    <div class="toast-body p-3 d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-3" (click)="ouvrirChatNotification()" style="cursor: pointer;">
+        <div class="rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center p-2 flex-shrink-0" style="width: 42px; height: 42px;">
+          <i class="bi bi-chat-dots-fill text-white fs-5"></i>
+        </div>
+        <div class="text-start">
+          <h6 class="mb-0 fw-bold text-white" style="font-size: 14px;">💬 Nouveau Message Client !</h6>
+          <small class="text-white-50 d-block" style="font-size: 12px;">{{ toastMessageText }}</small>
+        </div>
+      </div>
+      <button type="button" class="btn-close btn-close-white ms-2 flex-shrink-0" (click)="nouveauMessageToast = false"></button>
+    </div>
+  </div>
+</div>
