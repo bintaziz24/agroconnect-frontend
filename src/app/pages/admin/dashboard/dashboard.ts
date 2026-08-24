@@ -94,7 +94,7 @@ export class DashboardComponent implements OnInit {
     const seen = new Set();
     return items.filter(item => {
       if (!item) return false;
-      const key = item.id !== undefined && item.id !== null ? String(item.id) : (item.nom || JSON.stringify(item));
+      const key = item.nom ? `${item.nom.toLowerCase().trim()}-${item.agriculteur_id || item.id || ''}` : (item.id !== undefined && item.id !== null ? String(item.id) : JSON.stringify(item));
       if (seen.has(key)) {
         return false;
       }
