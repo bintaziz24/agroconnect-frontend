@@ -116,6 +116,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  private deduplicateByName(items: any[]): any[] {
+    if (!Array.isArray(items)) return [];
+    const seen = new Set();
+    return items.filter(item => {
+      if (!item) return false;
+      const key = item.nom ? item.nom.toLowerCase().trim() : String(item.id || JSON.stringify(item));
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
   chargerDashboardData() {
     this.produitService.getDashboard().subscribe({
       next: (res) => {
@@ -130,13 +142,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
           this.stats.commandes = nouvellesCommandes;
           this.stats.revenus = res.revenus !== undefined ? res.revenus : 0;
-          this.stats.produits = res.produits !== undefined ? res.produits : 0;
           this.stats.nombreAvis = res.nombre_avis !== undefined ? res.nombre_avis : (nouvellesCommandes > 0 ? nouvellesCommandes * 2 : 0);
           this.stats.note = res.note !== undefined ? res.note : (this.stats.nombreAvis > 0 ? 4.8 : 5.0);
           this.commandes = Array.isArray(res.dernieres_commandes) ? res.dernieres_commandes : [];
           
           if (Array.isArray(res.mes_produits)) {
-            this.produits = res.mes_produits.map((p: any) => ({
+            const rawProduits = res.mes_produits.map((p: any) => ({
               id: p.id,
               nom: p.nom,
               prix: p.prix,
@@ -146,6 +157,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
               agriculteur: p.agriculteur?.user?.name || p.agriculteur?.nom || this.user?.name || 'Mon Exploitation',
               image: p.photo || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=200&fit=crop'
             }));
+            this.produits = this.deduplicateByName(rawProduits);
+            this.stats.produits = this.produits.length;
           }
 
           if (res.statut_validation) {
