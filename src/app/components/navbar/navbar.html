@@ -315,17 +315,17 @@
           </button>
 
           <!-- Language selector -->
-          <div class="dropdown ms-1 notranslate lang-dropdown" translate="no">
-            <button class="btn btn-sm border d-flex align-items-center gap-1.5 shadow-sm px-3 rounded-pill notranslate fw-bold" translate="no" type="button" data-bs-toggle="dropdown" style="font-size: 12px; height: 36px; background: #e8f5ee; border: 1.5px solid #1A7C4F !important; color: #0F5235; transition: all 0.2s;">
-              <span *ngIf="trans.getLanguage() === 'fr'">🇫🇷 Français</span>
-              <span *ngIf="trans.getLanguage() === 'en'">🇬🇧 English</span>
-              <span *ngIf="trans.getLanguage() === 'wo'">🇸🇳 Wolof</span>
-              <span style="font-size: 10px; opacity: 0.7;">▼</span>
+          <div class="dropdown ms-1 me-1 notranslate lang-dropdown" translate="no">
+            <button class="btn btn-sm border d-flex align-items-center gap-1 shadow-sm px-2.5 rounded-pill notranslate fw-bold" translate="no" type="button" data-bs-toggle="dropdown" style="font-size: 11.5px; height: 34px; background: #e8f5ee; border: 1.5px solid #1A7C4F !important; color: #0F5235; transition: all 0.2s;">
+              <span *ngIf="trans.getLanguage() === 'fr'">🇫🇷 FR</span>
+              <span *ngIf="trans.getLanguage() === 'en'">🇬🇧 EN</span>
+              <span *ngIf="trans.getLanguage() === 'wo'">🇸🇳 WO</span>
+              <span style="font-size: 9px; opacity: 0.7;">▼</span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end lang-dropdown-menu shadow border-light-subtle rounded-3 p-1 notranslate" translate="no" style="min-width: 150px; background: var(--bg-card); border-color: var(--border-color) !important;">
-              <li><a (click)="changeLang('fr')" class="dropdown-item py-2 rounded-2 cursor-pointer d-flex align-items-center justify-content-between notranslate" translate="no" style="font-size: 13px; color: var(--text-primary);"><span>🇫🇷 Français</span> <small *ngIf="trans.getLanguage() === 'fr'">✅</small></a></li>
-              <li><a (click)="changeLang('wo')" class="dropdown-item py-2 rounded-2 cursor-pointer d-flex align-items-center justify-content-between notranslate" translate="no" style="font-size: 13px; color: var(--text-primary);"><span>🇸🇳 Wolof</span> <small *ngIf="trans.getLanguage() === 'wo'">✅</small></a></li>
-              <li><a (click)="changeLang('en')" class="dropdown-item py-2 rounded-2 cursor-pointer d-flex align-items-center justify-content-between notranslate" translate="no" style="font-size: 13px; color: var(--text-primary);"><span>🇬🇧 English</span> <small *ngIf="trans.getLanguage() === 'en'">✅</small></a></li>
+            <ul class="dropdown-menu dropdown-menu-end lang-dropdown-menu shadow border-light-subtle rounded-3 p-1 notranslate" translate="no" style="min-width: 145px; background: var(--bg-card); border-color: var(--border-color) !important;">
+              <li><a (click)="changeLang('fr')" class="dropdown-item py-2 rounded-2 cursor-pointer d-flex align-items-center justify-content-between notranslate" translate="no" style="font-size: 12.5px; color: var(--text-primary);"><span>🇫🇷 Français</span> <small *ngIf="trans.getLanguage() === 'fr'">✅</small></a></li>
+              <li><a (click)="changeLang('wo')" class="dropdown-item py-2 rounded-2 cursor-pointer d-flex align-items-center justify-content-between notranslate" translate="no" style="font-size: 12.5px; color: var(--text-primary);"><span>🇸🇳 Wolof</span> <small *ngIf="trans.getLanguage() === 'wo'">✅</small></a></li>
+              <li><a (click)="changeLang('en')" class="dropdown-item py-2 rounded-2 cursor-pointer d-flex align-items-center justify-content-between notranslate" translate="no" style="font-size: 12.5px; color: var(--text-primary);"><span>🇬🇧 English</span> <small *ngIf="trans.getLanguage() === 'en'">✅</small></a></li>
             </ul>
           </div>
 
