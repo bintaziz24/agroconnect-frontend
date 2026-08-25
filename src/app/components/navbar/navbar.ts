@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit {
   nouveauMessage = '';
 
   theme: 'light' | 'dark' = 'light';
+  currentLang = 'fr';
 
   notificationsCount = 0;
   notifications: AppNotification[] = [];
@@ -49,9 +50,16 @@ export class NavbarComponent implements OnInit {
 
   changeLang(lang: string) {
     this.trans.setLanguage(lang);
+    this.currentLang = lang;
+    this.cdr.detectChanges();
   }
 
   ngOnInit() {
+    this.currentLang = this.trans.getLanguage();
+    this.trans.currentLang$.subscribe(lang => {
+      this.currentLang = lang;
+      this.cdr.detectChanges();
+    });
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme');
       const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
