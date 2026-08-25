@@ -18,6 +18,16 @@
           </a>
         </div>
 
+        <!-- Barre de Sélecteur de Langue Très Visible -->
+        <div class="d-inline-flex align-items-center gap-2 mb-3 px-3 py-1.5 rounded-pill bg-black bg-opacity-30 border border-white border-opacity-25 shadow-sm text-white notranslate" translate="no" style="backdrop-filter: blur(8px);">
+          <span class="small fw-bold opacity-90 me-1" style="font-size: 11.5px;">🌐 Langue / Lakk :</span>
+          <button (click)="changeLang('fr')" class="btn btn-sm rounded-pill px-3 py-1 fw-bold border-0 cursor-pointer" [style.background]="trans.getLanguage() === 'fr' ? '#FFC107' : 'rgba(255,255,255,0.2)'" [style.color]="trans.getLanguage() === 'fr' ? '#000' : '#fff'" style="font-size: 12px; transition: all 0.2s;">🇫🇷 Français</button>
+          <button (click)="changeLang('wo')" class="btn btn-sm rounded-pill px-3 py-1 fw-bold border-0 cursor-pointer" [style.background]="trans.getLanguage() === 'wo' ? '#FFC107' : 'rgba(255,255,255,0.2)'" [style.color]="trans.getLanguage() === 'wo' ? '#000' : '#fff'" style="font-size: 12px; transition: all 0.2s;">🇸🇳 Wolof</button>
+          <button (click)="changeLang('en')" class="btn btn-sm rounded-pill px-3 py-1 fw-bold border-0 cursor-pointer" [style.background]="trans.getLanguage() === 'en' ? '#FFC107' : 'rgba(255,255,255,0.2)'" [style.color]="trans.getLanguage() === 'en' ? '#000' : '#fff'" style="font-size: 12px; transition: all 0.2s;">🇬🇧 English</button>
+        </div>
+
+        <div class="d-block"></div>
+
         <span class="badge rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-1"
           style="background:rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); font-size:11px; letter-spacing:.08em; color: #FFF3DC;">
           {{ t('hero_tag') }}

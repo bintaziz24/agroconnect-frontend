@@ -136,6 +136,10 @@ export class AccueilComponent implements OnInit, OnDestroy, AfterViewInit {
     private cdr: ChangeDetectorRef
   ) {}
 
+  changeLang(lang: string) {
+    this.trans.setLanguage(lang);
+  }
+
   ngAfterViewInit() {
     if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
