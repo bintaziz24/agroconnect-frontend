@@ -1,104 +1,104 @@
-<div class="container py-5" style="max-width: 1100px;">
+<div class="container py-3" style="max-width: 1100px;">
   
   <!-- Bandeau Supervision Nationale -->
-  <div class="p-4 mb-4 text-white rounded-4 shadow-sm position-relative overflow-hidden" 
-       style="background: linear-gradient(135deg, #091729 0%, #152d4a 100%); min-height: 180px;">
+  <div class="p-3 px-4 mb-3 text-white rounded-4 shadow-sm position-relative overflow-hidden" 
+       style="background: linear-gradient(135deg, #091729 0%, #152d4a 100%); min-height: 120px;">
     
     <!-- Grid points layout -->
     <div class="position-absolute w-100 h-100 top-0 start-0 opacity-5" 
          style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
 
-    <div class="d-flex flex-column justify-content-between align-items-start gap-2 position-relative">
-      <span class="badge px-3 py-1.5 rounded-pill mb-2" style="background: rgba(138, 75, 237, 0.25); color: #c4a1ff; font-size: 11px; border: 1px solid rgba(138, 75, 237, 0.4);">
+    <div class="d-flex flex-column justify-content-between align-items-start gap-1 position-relative">
+      <span class="badge px-2.5 py-1 rounded-pill mb-1" style="background: rgba(138, 75, 237, 0.25); color: #c4a1ff; font-size: 10.5px; border: 1px solid rgba(138, 75, 237, 0.4);">
         {{ 'admin_space' | translate }}
       </span>
-      <h2 class="fw-bold mb-2" style="font-family:'Playfair Display',serif; font-size: 32px;">{{ 'admin_title' | translate }}</h2>
-      <p class="text-white-50 mb-0 small" style="max-width: 600px;">
+      <h2 class="fw-bold mb-1" style="font-family:'Playfair Display',serif; font-size: 24px;">{{ 'admin_title' | translate }}</h2>
+      <p class="text-white-50 mb-0 small" style="max-width: 600px; font-size: 12.5px;">
         {{ 'admin_subtitle' | translate }}
       </p>
     </div>
   </div>
 
   <!-- NAVIGATION D'ONGLETS ADMIN -->
-  <div class="d-flex align-items-center gap-2 mb-4 p-1 rounded-3 bg-white border shadow-sm flex-wrap" style="width: fit-content;">
+  <div class="d-flex align-items-center gap-2 mb-3 p-1 rounded-3 bg-white border shadow-sm flex-wrap" style="width: fit-content;">
     <button (click)="changerOnglet('dashboard')" 
-            class="btn btn-sm px-3 py-2 rounded-2 fw-bold border-0 cursor-pointer" 
+            class="btn btn-sm px-3 py-1.5 rounded-2 fw-bold border-0 cursor-pointer" 
             [style.background]="menuActif === 'dashboard' ? '#1A7C4F' : 'transparent'"
             [style.color]="menuActif === 'dashboard' ? '#ffffff' : 'var(--text-secondary)'"
-            style="font-size: 13px; transition: all 0.2s;">
+            style="font-size: 12.5px; transition: all 0.2s;">
       {{ 'admin_tab_dash' | translate }}
     </button>
     <button (click)="changerOnglet('utilisateurs', 'tous')" 
-            class="btn btn-sm px-3 py-2 rounded-2 fw-bold border-0 cursor-pointer" 
+            class="btn btn-sm px-3 py-1.5 rounded-2 fw-bold border-0 cursor-pointer" 
             [style.background]="menuActif === 'utilisateurs' ? '#1A7C4F' : 'transparent'"
             [style.color]="menuActif === 'utilisateurs' ? '#ffffff' : 'var(--text-secondary)'"
-            style="font-size: 13px; transition: all 0.2s;">
+            style="font-size: 12.5px; transition: all 0.2s;">
       {{ 'admin_tab_users' | translate }} ({{ agriculteurs.length }})
     </button>
     <button (click)="changerOnglet('validations')" 
-            class="btn btn-sm px-3 py-2 rounded-2 fw-bold border-0 cursor-pointer" 
+            class="btn btn-sm px-3 py-1.5 rounded-2 fw-bold border-0 cursor-pointer" 
             [style.background]="menuActif === 'validations' || menuActif === 'moderation' || menuActif === 'produits' ? '#1A7C4F' : 'transparent'"
             [style.color]="menuActif === 'validations' || menuActif === 'moderation' || menuActif === 'produits' ? '#ffffff' : 'var(--text-secondary)'"
-            style="font-size: 13px; transition: all 0.2s;">
+            style="font-size: 12.5px; transition: all 0.2s;">
       {{ 'admin_tab_validations' | translate }} ({{ produitsModeration.length }})
     </button>
   </div>
 
   <!-- Cartes d'indicateurs (Stats) -->
-  <div class="row g-3 mb-4 text-start">
+  <div class="row g-3 mb-3 text-start">
     
     <!-- volume des transactions -->
     <div class="col-6 col-md-3">
-      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 110px;">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between" style="min-height: 95px;">
         <div class="d-flex justify-content-between align-items-center mb-1">
           <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Volume des transactions</small>
-          <span class="fs-5">💰</span>
+          <span class="fs-6">💰</span>
         </div>
         <div>
-          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.revenus | number }} FCFA</h4>
-          <small class="text-success fw-semibold" style="font-size: 11px;">📈 Commissions: {{ stats.commissions | number }} FCFA (5%)</small>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 18px;">{{ stats.revenus | number }} FCFA</h4>
+          <small class="text-success fw-semibold" style="font-size: 10.5px;">📈 Commissions: {{ stats.commissions | number }} FCFA (5%)</small>
         </div>
       </div>
     </div>
 
     <!-- Producteurs actifs -->
     <div class="col-6 col-md-3" (click)="changerOnglet('utilisateurs', 'agriculteur')" style="cursor: pointer;">
-      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between floating-card-hover" style="min-height: 110px;">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between floating-card-hover" style="min-height: 95px;">
         <div class="d-flex justify-content-between align-items-center mb-1">
           <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Producteurs Actifs</small>
-          <span class="fs-5">👨‍🌾</span>
+          <span class="fs-6">👨‍🌾</span>
         </div>
         <div>
-          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.agriculteurs || totalAgriculteursCount }}</h4>
-          <small class="text-success fw-semibold" style="font-size: 11px;">🟢 Cliquez pour filtrer producteurs</small>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 18px;">{{ stats.agriculteurs || totalAgriculteursCount }}</h4>
+          <small class="text-success fw-semibold" style="font-size: 10.5px;">🟢 Cliquez pour filtrer</small>
         </div>
       </div>
     </div>
 
     <!-- Flotte de livreurs -->
     <div class="col-6 col-md-3" (click)="changerOnglet('livreurs')" style="cursor: pointer;">
-      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between floating-card-hover" style="min-height: 110px;">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between floating-card-hover" style="min-height: 95px;">
         <div class="d-flex justify-content-between align-items-center mb-1">
           <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Flotte de Livreurs</small>
-          <span class="fs-5">🚚</span>
+          <span class="fs-6">🚚</span>
         </div>
         <div>
-          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.livreurs || livreurs.length }} Livreurs</h4>
-          <small class="text-success fw-semibold" style="font-size: 11px;">🟢 Cliquez pour afficher la flotte</small>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 18px;">{{ stats.livreurs || livreurs.length }} Livreurs</h4>
+          <small class="text-success fw-semibold" style="font-size: 10.5px;">🟢 Afficher la flotte</small>
         </div>
       </div>
     </div>
 
     <!-- Validations en attente -->
     <div class="col-6 col-md-3" (click)="changerOnglet('validations')" style="cursor: pointer;">
-      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between floating-card-hover" style="min-height: 110px;">
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-column justify-content-between floating-card-hover" style="min-height: 95px;">
         <div class="d-flex justify-content-between align-items-center mb-1">
           <small class="text-muted fw-bold text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">Validations en attente</small>
-          <span class="fs-5">⏱️</span>
+          <span class="fs-6">⏱️</span>
         </div>
         <div>
-          <h4 class="fw-bold text-dark mb-1" style="font-size: 22px;">{{ stats.validations_en_attente }}</h4>
-          <small class="text-muted" style="font-size: 11px;">Comptes en attente de modération</small>
+          <h4 class="fw-bold text-dark mb-1" style="font-size: 18px;">{{ stats.validations_en_attente }}</h4>
+          <small class="text-muted" style="font-size: 10.5px;">En attente de modération</small>
         </div>
       </div>
     </div>
