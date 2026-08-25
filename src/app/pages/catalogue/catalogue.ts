@@ -75,6 +75,21 @@ export class CatalogueComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
+  getImageForProduit(nom: string, photo: string): string {
+    const nomLower = (nom || '').toLowerCase();
+    if (nomLower.includes('bissap') || nomLower.includes('hibiscus')) {
+      if (!photo || photo.includes('unsplash') || photo.includes('tea') || !photo.includes('bissap')) {
+        return '/assets/illustrations/bissap.png';
+      }
+    }
+    if (nomLower.includes('arachide')) {
+      if (!photo || photo.includes('unsplash') || photo.includes('boat') || !photo.includes('arachide')) {
+        return '/assets/illustrations/arachides.svg';
+      }
+    }
+    return photo || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400';
+  }
+
   ngOnInit() {
     this.produitsFiltres = [...this.toutLesProduits];
 
@@ -100,7 +115,7 @@ export class CatalogueComponent implements OnInit {
             region:      p.agriculteur?.localisation || 'Sénégal',
             agriculteur: p.agriculteur?.user?.name || p.agriculteur?.user?.nom || p.agriculteur?.nom || (typeof p.agriculteur === 'string' ? p.agriculteur : 'Producteur local'),
             stock:       p.stock || 10,
-            image:       p.photo || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=200&fit=crop'
+            image:       this.getImageForProduit(p.nom, p.photo)
           }));
           this.appliquerFiltres();
         }
