@@ -45,7 +45,7 @@
           </div>
 
           <!-- Formulaire -->
-          <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+          <form (ngSubmit)="onSubmit()" #loginForm="ngForm" autocomplete="off">
 
             <div class="mb-3">
               <label class="form-label fw-semibold" style="font-size:13px">
@@ -57,6 +57,7 @@
                 placeholder="exemple@email.com"
                 [(ngModel)]="formData.email"
                 name="email"
+                autocomplete="off"
                 required
                 style="border-radius:10px;padding:10px 14px;border:1.5px solid #ddd">
             </div>
@@ -77,6 +78,7 @@
                   placeholder="••••••••"
                   [(ngModel)]="formData.password"
                   name="password"
+                  autocomplete="new-password"
                   required
                   style="border-radius:10px;padding:10px 42px 10px 14px;border:1.5px solid #ddd">
                 <button type="button" 

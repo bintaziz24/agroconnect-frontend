@@ -72,6 +72,13 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.formData = {
+      email: '',
+      password: '',
+    };
+    this.erreur = '';
+    this.messageSucces = '';
+
     this.route.queryParams.subscribe(params => {
       if (params['registered']) {
         const role = params['role'];
@@ -124,6 +131,8 @@ export class LoginComponent implements OnInit {
         }
 
         this.panierService.chargerPanier();
+        const loggedUserRole = res.user?.role;
+        this.formData = { email: '', password: '' };
         
         const redirect = this.route.snapshot.queryParams['redirect'];
         if (redirect) {
